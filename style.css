@@ -1,0 +1,104 @@
+body {
+    background-color: #faead4;
+}
+
+#game-container {
+    width: 800px;
+    margin: 0 auto;
+    border: 2px black solid;
+    height: 95vh;
+    display: none;
+}
+
+#title h1 {
+    text-align: center;
+}
+
+#menu ul {
+    list-style-type: none;
+    margin: 0;
+    padding-left: 0px;
+}
+
+#menu .entry {
+    display: block;
+    margin: auto auto;
+    height: auto;
+    background-color: darkgoldenrod;
+}
+
+#menu .entry > a {
+    display: block;
+    color: white;
+    text-decoration: none;
+    font-size: 2em;
+    height: 3em;
+    width: 600px;
+    text-align: center;
+    margin: 0 auto;
+    line-height: 3em;
+}
+
+#gameboard {
+    width: 80%;
+    margin: auto;
+}
+
+#gameboard .background {
+    width: 100%;
+}
+
+#gameboard .background img {
+    width: 100%;
+}
+
+.piece {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    /* Circle background */
+    cursor: pointer;
+    transition: 0.3s;
+    background-color: #f3b655;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2em;
+    font-weight: bold;
+    /* Black border */
+    color: white;
+    border: 2px solid #000000;
+}
+
+.selected-piece {
+    transform: translate(-50%, -50%) scale(1.1);
+    box-shadow: 0 0 15px #00000080 !important;
+}
+.piece:hover {
+    transform: translate(-50%, -50%) scale(1.1);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+#black-pieces span {
+    color: black;
+}
+
+#red-pieces span {
+    color: red;
+}
+
+#action-bar {
+    width: 100%;
+    height: 5vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5em;
+    font-weight: bold;
+    color: white;
+    background-color: gray;
+    margin-top: 10px;
+    text-align: center;
+}
