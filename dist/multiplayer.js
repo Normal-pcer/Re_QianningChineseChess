@@ -1,6 +1,6 @@
-import { Position } from "./position";
-import { Piece, PieceType, Team, pieces } from "./piece";
-import * as Selection from "./selection";
+import { Position } from "./position.js";
+import { Piece, PieceType, Team, pieces } from "./piece.js";
+import * as Selection from "./selection.js";
 import { init } from "./defaultMovingBehaviors.js";
 var term = 0;
 const termMap = [Team.Red, Team.Black];

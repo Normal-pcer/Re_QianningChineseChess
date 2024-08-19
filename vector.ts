@@ -1,5 +1,5 @@
-import { Position } from "./position";
-import { PositionedItem } from "./positionedItem";
+import { Position } from "./position.js";
+import { PositionedItem } from "./positionedItem.js";
 
 export class Vector2 {
     x: number;

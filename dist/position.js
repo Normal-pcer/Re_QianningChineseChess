@@ -1,5 +1,5 @@
-import { pieces } from "./piece";
-import { PositionedItem } from "./positionedItem";
+import { pieces } from "./piece.js";
+import { PositionedItem } from "./positionedItem.js";
 var gameboardRealWidth;
 var gameboardRealHeight;
 var gameboardLeftTopX;

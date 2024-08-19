@@ -1,5 +1,5 @@
-import { Position } from "./position";
-import { Piece, pieces } from "./piece";
+import { Position } from "./position.js";
+import { Piece, pieces } from "./piece.js";
 
 const returnSelf = (obj: any) => obj;
 

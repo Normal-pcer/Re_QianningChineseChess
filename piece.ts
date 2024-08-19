@@ -1,7 +1,7 @@
-import { DefaultMovingBehaviors } from "./defaultMovingBehaviors";
-import { Position } from "./position";
-import { onPieceClick } from "./selection";
-import { stop } from "./multiplayer";
+import { DefaultMovingBehaviors } from "./defaultMovingBehaviors.js";
+import { Position } from "./position.js";
+import { onPieceClick } from "./selection.js";
+import { stop } from "./multiplayer.js";
 
 export var pieces: Piece[] = [];
 
