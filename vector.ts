@@ -1,29 +1,44 @@
+import { Position } from "./position";
+import { PositionedItem } from "./positionedItem";
+
 export class Vector2 {
-    constructor(x, y) {
+    x: number;
+    y: number;
+
+    constructor(x: number, y: number) {
         this.x = x;
         this.y = y;
     }
-    static of(origin, target) {
+
+    static of(origin: PositionedItem, target: PositionedItem) {
         return new Vector2(target.x - origin.x, target.y - origin.y);
     }
-    add(v) {
+
+    add(v: PositionedItem) {
         return new Vector2(this.x + v.x, this.y + v.y);
     }
-    sub(v) {
+
+
+    sub(v: PositionedItem) {
         return new Vector2(this.x - v.x, this.y - v.y);
     }
-    mul(s) {
+
+    mul(s: number) {
         return new Vector2(this.x * s, this.y * s);
     }
-    div(s) {
+
+    div(s: number) {
         return new Vector2(this.x / s, this.y / s);
     }
+
     get length() {
         return Math.sqrt(this.x * this.x + this.y * this.y);
     }
-    dot(v) {
+
+    dot(v: Vector2) {
         return this.x * v.x + this.y * v.y;
     }
+
     normalize() {
         return this.div(this.length);
     }

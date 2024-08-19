@@ -1,34 +1,38 @@
 import { Position } from "./position";
 import { Piece, pieces } from "./piece";
-const returnSelf = (obj) => obj;
-var currentSelection = null;
-var PieceClickListener = (piece) => {
-    let currentSingleSelection = currentSelection === null || currentSelection === void 0 ? void 0 : currentSelection.current;
+
+const returnSelf = (obj: any) => obj;
+
+var currentSelection: SelectionManager | null = null;
+
+var PieceClickListener = (piece: Piece) => {
+    let currentSingleSelection = currentSelection?.current;
     let item = new SelectedItem(piece);
-    if (currentSingleSelection instanceof SingleSelection &&
-        currentSingleSelection.type == ItemType.Piece) {
+    if (
+        currentSingleSelection instanceof SingleSelection &&
+        currentSingleSelection.type == ItemType.Piece
+    ) {
         console.log(piece);
         if (piece.selected) {
             piece.selected = false;
-            currentSelection === null || currentSelection === void 0 ? void 0 : currentSelection.stop();
-        }
-        else if (currentSingleSelection.check(item)) {
+            currentSelection?.stop();
+        } else if (currentSingleSelection.check(item)) {
             piece.selected = true;
             let r = null;
             if (currentSingleSelection.nextCallback != null)
                 r = currentSingleSelection.nextCallback(item);
-            currentSelection === null || currentSelection === void 0 ? void 0 : currentSelection.next(r);
+            currentSelection?.next(r);
             return true;
-        }
-        else {
-            if (currentSingleSelection.autoCancel)
-                currentSelection === null || currentSelection === void 0 ? void 0 : currentSelection.stop();
+        } else {
+            if (currentSingleSelection.autoCancel) currentSelection?.stop();
         }
     }
     return false;
 };
-var GameboardClickListener = (position) => {
-    let currentSingleSelection = currentSelection === null || currentSelection === void 0 ? void 0 : currentSelection.current;
+
+
+var GameboardClickListener = (position: Position) => {
+    let currentSingleSelection = currentSelection?.current;
     let item = new SelectedItem(position);
     if (currentSingleSelection instanceof SingleSelection && currentSingleSelection.type == ItemType.Grid) {
         console.log(currentSingleSelection);
@@ -36,34 +40,44 @@ var GameboardClickListener = (position) => {
             let r = null;
             if (currentSingleSelection.nextCallback != null)
                 r = currentSingleSelection.nextCallback(item);
-            currentSelection === null || currentSelection === void 0 ? void 0 : currentSelection.next(r);
+            currentSelection?.next(r);
             return true;
-        }
-        else {
-            if (currentSingleSelection.autoCancel)
-                currentSelection === null || currentSelection === void 0 ? void 0 : currentSelection.stop();
+        } else {
+            if (currentSingleSelection.autoCancel) currentSelection?.stop();
         }
     }
     return false;
 };
+
 export class SelectionManager {
-    constructor(afterSelection, ...singleSelections) {
-        this.index = 0;
-        this.current = null;
-        this.results = [];
+    afterSelection: void | any;
+    recursions: (((past: SelectedItem[]) => SingleSelection) | SingleSelection)[];
+    index: number = 0;
+    doOnce: boolean;
+    current: SingleSelection | null = null;
+    results: SelectedItem[] = [];
+
+    constructor(
+        afterSelection: (results: SelectedItem[]) => void | any,
+        ...singleSelections: SingleSelection[]
+    ) {
         this.afterSelection = afterSelection;
         this.recursions = singleSelections;
         this.doOnce = false;
+
         this.reset();
     }
-    then(recursion) {
+
+    then(recursion: ((past: SelectedItem[]) => SingleSelection) | SingleSelection) {
         this.recursions.push(recursion);
         return this;
     }
+
     once(once = true) {
         this.doOnce = once;
         return this;
     }
+
     reset() {
         this.index = 0;
         this.results = [];
@@ -71,12 +85,12 @@ export class SelectionManager {
         this.current = first instanceof SingleSelection ? first : first([]);
         this.current.tip();
     }
-    next(result) {
+
+    next(result: SelectedItem) {
         if (this.index >= this.recursions.length - 1) {
             this.results.push(result);
             this.stop(true);
-        }
-        else {
+        } else {
             this.index++;
             let future = this.recursions[this.index];
             this.current = future instanceof SingleSelection ? future : future(this.results);
@@ -84,63 +98,63 @@ export class SelectionManager {
             this.current.tip();
         }
     }
+
     stop(done = false) {
-        var _a;
-        if (this.afterSelection != null && done)
-            this.afterSelection(this.results);
+        if (this.afterSelection != null && done) this.afterSelection(this.results);
         this.reset();
+
         let action_bar = document.querySelector("#action-bar");
-        if (action_bar instanceof HTMLElement)
-            action_bar.style.display = "none";
+        if (action_bar instanceof HTMLElement) action_bar.style.display = "none";
         let action_bar_span = document.querySelector("#action-bar span");
-        if (action_bar_span instanceof HTMLElement)
-            action_bar_span.innerText = "";
-        if (this.doOnce)
-            currentSelection = null;
-        else
-            (_a = this.current) === null || _a === void 0 ? void 0 : _a.tip();
+        if (action_bar_span instanceof HTMLElement) action_bar_span.innerText = "";
+
+        if (this.doOnce) currentSelection = null;
+        else this.current?.tip();
         pieces.forEach((p) => (p.selected = false));
     }
 }
+
 /**
  * @description: Describe the type of single-selection item
  */
 export class ItemType {
+    /**
+     * @description: A position at the gameboard grid, no matter it is occupied or not
+     */
+    static Grid = "grid";
+    /**
+     * @description: An empty position at the gameboard grid. (No piece)
+     * */
+    static Piece = "piece";
+    /**
+     * @description: [PLACEHOLDER] A customized type
+     * */
+    static Custom = "custom";
 }
-/**
- * @description: A position at the gameboard grid, no matter it is occupied or not
- */
-ItemType.Grid = "grid";
-/**
- * @description: An empty position at the gameboard grid. (No piece)
- * */
-ItemType.Piece = "piece";
-/**
- * @description: [PLACEHOLDER] A customized type
- * */
-ItemType.Custom = "custom";
+
 /**
  * @property {string} type - the type of the item
  * @property {Position|Piece} data - the selected position/piece
  */
 export class SelectedItem {
-    constructor(data, type = null) {
-        if (type != null)
-            this.type = type;
+    data: Position | Piece;
+    type: string;
+
+    constructor(data: Position | Piece, type = null) {
+        if (type != null) this.type = type;
         else {
-            if (data instanceof Position)
-                this.type = ItemType.Grid;
-            else if (data instanceof Piece)
-                this.type = ItemType.Piece;
-            else
-                this.type = ItemType.Custom;
+            if (data instanceof Position) this.type = ItemType.Grid;
+            else if (data instanceof Piece) this.type = ItemType.Piece;
+            else this.type = ItemType.Custom;
         }
         this.data = data;
     }
+
     position() {
         return this.data instanceof Position ? this.data : this.data.position;
     }
 }
+
 /**
  * @property {Array{Position}} positions - the positions to be highlighted
  * @property {Function} checkCallback - a function to check if the selection is valid
@@ -150,7 +164,21 @@ export class SelectedItem {
  * @property {boolean} autoCancel - whether to cancel the selection automatically when the selection is not valid
  */
 export class SingleSelection {
-    constructor(positions, type, description = null, checkCallback = null, nextCallback = null, autoCancel = true) {
+    positions: Position[];
+    type: string;
+    description: string;
+    checkCallback: ((item: SelectedItem) => boolean) | null;
+    autoCancel: boolean;
+    nextCallback: Function | null;
+
+    constructor(
+        positions: Position[],
+        type: string,
+        description: string | null = null,
+        checkCallback: ((item: SelectedItem) => boolean) | null = null,
+        nextCallback: Function | null = null,
+        autoCancel = true
+    ) {
         this.positions = positions;
         this.type = type;
         this.description =
@@ -163,14 +191,15 @@ export class SingleSelection {
         this.autoCancel = autoCancel;
         this.nextCallback = nextCallback === null ? returnSelf : nextCallback;
     }
-    check(item) {
+
+    check(item: SelectedItem) {
         if (this.checkCallback != null) {
             return this.checkCallback(item);
-        }
-        else {
+        } else {
             return this.positions.some((pos) => pos.nearby(item.position()));
         }
     }
+
     tip() {
         let element = document.querySelector("#action-bar span");
         if (element instanceof HTMLElement) {
@@ -180,29 +209,35 @@ export class SingleSelection {
         }
     }
 }
+
 export class PieceMoveSelection extends SingleSelection {
-    constructor(piece) {
+    constructor(piece: Piece) {
         super(piece.destinations, ItemType.Piece);
     }
 }
-export function setPieceClickListener(listener) {
+
+export function setPieceClickListener(listener: (piece: Piece) => boolean) {
     PieceClickListener = listener;
 }
-export function setGameboardClickListener(listener) {
+
+export function setGameboardClickListener(listener: (pos: Position) => boolean) {
     GameboardClickListener = listener;
 }
-export function onPieceClick(piece) {
+
+export function onPieceClick(piece: Piece) {
     if (PieceClickListener != null) {
         return PieceClickListener(piece);
     }
     return false;
 }
-export function onGameboardClick(pos) {
+
+export function onGameboardClick(pos: Position) {
     if (GameboardClickListener != null) {
         return GameboardClickListener(pos);
     }
     return false;
 }
-export function setCurrentSelection(selection) {
+
+export function setCurrentSelection(selection: SelectionManager | null) {
     currentSelection = selection;
 }

@@ -1,41 +1,72 @@
-import { pieces } from "./piece";
+import { pieces, Piece } from "./piece";
 import { PositionedItem } from "./positionedItem";
-var gameboardRealWidth;
-var gameboardRealHeight;
-var gameboardLeftTopX;
-var gameboardLeftTopY;
-var gameboardGridWidthPx;
-var gameboardGridHeightPx;
-var gameboardImageWidth;
-var gameboardImageHeight;
+
+var gameboardRealWidth: number;
+var gameboardRealHeight: number;
+var gameboardLeftTopX: number;
+var gameboardLeftTopY: number;
+var gameboardGridWidthPx: number;
+var gameboardGridHeightPx: number;
+var gameboardImageWidth: number;
+var gameboardImageHeight: number;
 const gameboardGridWidth = 9;
 const gameboardGridHeight = 10;
 const gameboardImageMarginTop = 39 / 603;
 const gameboardImageMarginLeft = 39 / 545;
+
 export class Position extends PositionedItem {
-    constructor(x, y, grid = true) {
+    /**
+     * 用于统一屏幕坐标和棋盘坐标
+     * @param {number} x
+     * @param {number} y
+     * @property {number} screenX
+     * @property {number} screenY
+     * @property {number} gridX
+     * @property {number} gridY
+     */
+    screenX: number = NaN;
+    screenY: number = NaN;
+    x: number = NaN;
+    y: number = NaN;
+
+    constructor(x: number, y: number, grid = true) {
         super();
-        /**
-         * 用于统一屏幕坐标和棋盘坐标
-         * @param {number} x
-         * @param {number} y
-         * @property {number} screenX
-         * @property {number} screenY
-         * @property {number} gridX
-         * @property {number} gridY
-         */
-        this.screenX = NaN;
-        this.screenY = NaN;
-        this.x = NaN;
-        this.y = NaN;
         if (grid) {
             this.fromGrid(x, y);
-        }
-        else {
+        } else {
             this.fromScreen(x, y);
         }
     }
-    fromScreen(x, y) {
+
+    static _calculateGameboardSize = () => {
+        // 读取棋盘图片实际显示大小
+        // let gameboardImage = document
+        //     .getElementById("gameboard")
+        //     .getElementsByClassName("background")[0]
+        //     .getElementsByTagName("img")[0];
+        let gameboardImage = document.querySelector(
+            "#gameboard .background img"
+        ) as HTMLImageElement;
+
+        gameboardImageWidth = gameboardImage.width;
+        gameboardImageHeight = gameboardImage.height;
+
+        // 不计图片边距的大小
+        gameboardRealWidth = gameboardImageWidth * (1 - gameboardImageMarginLeft * 2);
+        gameboardRealHeight = gameboardImageHeight * (1 - gameboardImageMarginTop * 2);
+
+        // 获取棋盘左上角格点实际位置（像素）
+        gameboardLeftTopX =
+            gameboardImage.offsetLeft + gameboardImageMarginLeft * gameboardImageWidth;
+        gameboardLeftTopY =
+            gameboardImage.offsetTop + gameboardImageMarginTop * gameboardImageHeight;
+
+        // 获取棋盘格点实际大小（像素）
+        gameboardGridWidthPx = gameboardRealWidth / (gameboardGridWidth - 1);
+        gameboardGridHeightPx = gameboardRealHeight / (gameboardGridHeight - 1);
+    };
+
+    fromScreen(x: number, y: number) {
         this.screenX = x;
         this.screenY = y;
         let leftClientDistance = this.screenX - gameboardLeftTopX;
@@ -44,10 +75,12 @@ export class Position extends PositionedItem {
         this.x = leftClientDistance / gameboardGridWidthPx;
         this.y = topClientDistance / gameboardGridHeightPx;
     }
-    fromGrid(x, y) {
+
+    fromGrid(x: number, y: number) {
         this.x = x;
         this.y = y;
     }
+
     _calculateGridPos() {
         // 根据实际坐标计算网格坐标
         let leftClientDistance = this.screenX - gameboardLeftTopX;
@@ -56,6 +89,7 @@ export class Position extends PositionedItem {
         this.x = leftClientDistance / gameboardGridWidthPx;
         this.y = topClientDistance / gameboardGridHeightPx;
     }
+
     _calculateScreenPos() {
         // 根据网格坐标计算实际坐标
         let leftClientDistance = this.x * gameboardGridWidthPx;
@@ -63,40 +97,47 @@ export class Position extends PositionedItem {
         this.screenX = leftClientDistance + gameboardLeftTopX;
         this.screenY = topClientDistance + gameboardLeftTopY;
     }
+
     getGridPos() {
         return [this.x, this.y];
     }
+
     getScreenPos() {
         this._calculateScreenPos();
         return [this.screenX, this.screenY];
     }
-    nearby(other, distance = null) {
-        if (distance === null)
-            return this.integerGrid.equals(other.integerGrid);
-        else
-            return this.squareEuclideanDistance(other) < distance * distance;
+
+    nearby(other: Position, distance = null) {
+        if (distance === null) return this.integerGrid.equals(other.integerGrid);
+        else return this.squareEuclideanDistance(other) < distance * distance;
     }
-    manhattanDistance(other) {
+
+    manhattanDistance(other: Position) {
         return Math.abs(this.x - other.x) + Math.abs(this.y - other.y);
     }
-    squareEuclideanDistance(other) {
+    squareEuclideanDistance(other: Position) {
         return Math.pow(this.x - other.x, 2) + Math.pow(this.y - other.y, 2);
     }
-    euclideanDistance(other) {
+    euclideanDistance(other: Position) {
         return Math.sqrt(this.squareEuclideanDistance(other));
     }
-    chebyshevDistance(other) {
+    chebyshevDistance(other: Position) {
         return Math.max(Math.abs(this.x - other.x), Math.abs(this.y - other.y));
     }
+
     get integerGrid() {
         return new Position(Math.round(this.x), Math.round(this.y));
     }
-    equals(other) {
+
+    equals(other: Position) {
         return this.x == other.x && this.y == other.y;
     }
-    add(other) {
+
+
+    add(other: PositionedItem) {
         return new Position(this.x + other.x, this.y + other.y, true);
     }
+
     /**
      * @returns {Piece?}
      */
@@ -109,24 +150,3 @@ export class Position extends PositionedItem {
         return null;
     }
 }
-Position._calculateGameboardSize = () => {
-    // 读取棋盘图片实际显示大小
-    // let gameboardImage = document
-    //     .getElementById("gameboard")
-    //     .getElementsByClassName("background")[0]
-    //     .getElementsByTagName("img")[0];
-    let gameboardImage = document.querySelector("#gameboard .background img");
-    gameboardImageWidth = gameboardImage.width;
-    gameboardImageHeight = gameboardImage.height;
-    // 不计图片边距的大小
-    gameboardRealWidth = gameboardImageWidth * (1 - gameboardImageMarginLeft * 2);
-    gameboardRealHeight = gameboardImageHeight * (1 - gameboardImageMarginTop * 2);
-    // 获取棋盘左上角格点实际位置（像素）
-    gameboardLeftTopX =
-        gameboardImage.offsetLeft + gameboardImageMarginLeft * gameboardImageWidth;
-    gameboardLeftTopY =
-        gameboardImage.offsetTop + gameboardImageMarginTop * gameboardImageHeight;
-    // 获取棋盘格点实际大小（像素）
-    gameboardGridWidthPx = gameboardRealWidth / (gameboardGridWidth - 1);
-    gameboardGridHeightPx = gameboardRealHeight / (gameboardGridHeight - 1);
-};
