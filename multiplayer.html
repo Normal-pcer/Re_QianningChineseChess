@@ -4,6 +4,13 @@
         <meta charset="UTF-8" />
         <title>千宁中国象棋 - 多人游戏</title>
         <link rel="stylesheet" href="style.css" />
+        <style>
+            .piece svg {
+                position: absolute;
+                top: 0;
+                left: 0;
+            }
+        </style>
     </head>
 
     <body>
@@ -17,6 +24,7 @@
                     <div id="black-pieces">
                         <div id="black-master1" class="black-master piece">
                             <span class="piece-name">将</span>
+                            
                         </div>
                         <div id="black-guard1" class="black-guard piece">
                             <span class="piece-name">士</span>
@@ -126,8 +134,8 @@
                 </div>
                 <div id="cheating">
                     <form action="">
-                        <input type="text" placeholder="command">
-                        <input type="button" id="submit-cheating" value="LOL">
+                        <input type="text" placeholder="command" />
+                        <input type="button" id="submit-cheating" value="LOL" />
                     </form>
                 </div>
             </div>

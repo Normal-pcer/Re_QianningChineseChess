@@ -77,13 +77,36 @@ class Piece {
             if (onPieceClick(this))
                 event.stopPropagation();
         });
+        // 创建血条
+        this.htmlElement.innerHTML += `<svg viewBox="0 0 200 200" width="100%" height="100%">
+        <path
+            d="M 100,10 A 90,90 0 1,1 10,100"
+            fill="none"
+            stroke="black"
+            stroke-width="4"
+            class="health-bar"
+        />
+        </svg>`;
+        let healthBar = this.htmlElement.querySelector(".health-bar");
+        healthBar.setAttribute("stroke", this.team);
         this.draw();
     }
     draw() {
         if (!this.htmlElement)
             return;
+        // 计算位置
         this.htmlElement.style.left = this.position.getScreenPos()[0] + "px";
         this.htmlElement.style.top = this.position.getScreenPos()[1] + "px";
+        // 计算、刷新血条
+        let healthProportion = this.health / this.maxHealth;
+        let angle = healthProportion * 2 * Math.PI;
+        let sin = Math.sin(angle);
+        let cos = Math.cos(angle);
+        let y = 100 - 90 * cos;
+        let x = 100 + 90 * sin;
+        let largeArcFlag = angle > Math.PI ? 1 : 0;
+        let d = `M 100,10 A 90,90 0 ${largeArcFlag},1 ${x},${y}`;
+        this.htmlElement.querySelector(".health-bar")?.setAttribute("d", d);
     }
     move(position) {
         if (position.integerGrid().piece !== null)
@@ -97,7 +120,7 @@ class Piece {
             return false;
         let damageAmount = this.attackDamage;
         if (Math.random() < this.criticalChance)
-            damageAmount *= (this.criticalDamage + 1);
+            damageAmount *= this.criticalDamage + 1;
         let damageObject = new Damage(this.damageType, damageAmount, this, piece);
         damageObject.apply();
         return true;

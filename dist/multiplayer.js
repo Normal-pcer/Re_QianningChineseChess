@@ -50,7 +50,7 @@ window.onload = () => {
         }
         if (success) {
             term++;
-            console.log("tear" + term + "now");
+            console.log("term" + term + "now");
             let term_tip = document.querySelector("#term-tip>span");
             term_tip.innerText = termMap[term % 2];
         }

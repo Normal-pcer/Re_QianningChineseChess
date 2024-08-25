@@ -16,12 +16,16 @@ export class Damage {
         this.repelTarget = repelTarget ?? defaultQuasiMoveTargets[type];
     }
     apply() {
-        if (this.target?.damaged(this) === true) {
-            this.source?.move(this.target.position);
+        if (this.target === null)
+            return;
+        let position = this.target.position;
+        if (this.target.damaged(this) === true) {
+            this.source?.move(position);
         }
         else {
-            this.target ? this.source?.move(this.quasiMoveTarget(this.source, this.target)) : "qwq";
+            this.source?.move(this.quasiMoveTarget(this.source, this.target));
         }
+        this.target?.draw();
     }
 }
 //# sourceMappingURL=damage.js.map
