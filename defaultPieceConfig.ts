@@ -34,4 +34,5 @@ export const defaultPieceConfigs: { [key: string]: PieceConfig } = {
     horse: new PieceConfig(3000, 2750, 200, DamageType.MeleeMedium),
     chariot: new PieceConfig(4500, 2200, 200, DamageType.MeleeHigh),
     gun: new PieceConfig(5000, 2250, 200, DamageType.Ranged),
+    pawn: new PieceConfig(2250, 1250, 100, DamageType.MeleeLow),
 };
