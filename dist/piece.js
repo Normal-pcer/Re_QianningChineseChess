@@ -99,12 +99,14 @@ class Piece {
         this.htmlElement.style.top = this.position.getScreenPos()[1] + "px";
         // 计算、刷新血条
         let healthProportion = this.health / this.maxHealth;
-        let angle = healthProportion * 2 * Math.PI;
-        let sin = Math.sin(angle);
-        let cos = Math.cos(angle);
+        if (healthProportion == 1)
+            healthProportion = 0.99999; // 防止血条消失😋
+        let arc = healthProportion * 2 * Math.PI;
+        let sin = Math.sin(arc);
+        let cos = Math.cos(arc);
         let y = 100 - 90 * cos;
         let x = 100 + 90 * sin;
-        let largeArcFlag = angle > Math.PI ? 1 : 0;
+        let largeArcFlag = arc > Math.PI ? 1 : 0;
         let d = `M 100,10 A 90,90 0 ${largeArcFlag},1 ${x},${y}`;
         this.htmlElement.querySelector(".health-bar")?.setAttribute("d", d);
     }
