@@ -35,7 +35,13 @@ export const defaultQuasiMoveTargets: {
 };
 
 const positionAvailable = (position: Position) => {
-    return 0 <= position.x && position.x < 9 && 0 <= position.y && position.y < 10;
+    return (
+        0 <= position.x &&
+        position.x < 9 &&
+        0 <= position.y &&
+        position.y < 10 &&
+        position.piece === null
+    );
 };
 
 function repelForward(origin: Position, direction: Vector2, distance_limit = 1) {
@@ -47,7 +53,7 @@ function repelForward(origin: Position, direction: Vector2, distance_limit = 1) 
     );
     let position = origin;
 
-    while (position.add(direction_step).piece === null && distance_limit-- > 0) {
+    while (positionAvailable(position.add(direction_step)) && distance_limit-- > 0) {
         position = position.add(direction_step);
     }
 

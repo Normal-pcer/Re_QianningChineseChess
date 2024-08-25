@@ -24,8 +24,8 @@ export class Position extends PositionedItem {
      * @property {number} gridX
      * @property {number} gridY
      */
-    screenX: number = NaN;
-    screenY: number = NaN;
+    private _screenX: number = NaN;
+    private _screenY: number = NaN;
     x: number = NaN;
     y: number = NaN;
 
@@ -71,10 +71,10 @@ export class Position extends PositionedItem {
     }
 
     fromScreen(x: number, y: number) {
-        this.screenX = x;
-        this.screenY = y;
-        let leftClientDistance = this.screenX - gameboardLeftTopX;
-        let bottomClientDistance = this.screenY - gameboardLeftTopY;
+        this._screenX = x;
+        this._screenY = y;
+        let leftClientDistance = this._screenX - gameboardLeftTopX;
+        let bottomClientDistance = this._screenY - gameboardLeftTopY;
         let topClientDistance = gameboardRealHeight - bottomClientDistance;
         this.x = leftClientDistance / gameboardGridWidthPx;
         this.y = topClientDistance / gameboardGridHeightPx;
@@ -87,8 +87,8 @@ export class Position extends PositionedItem {
 
     _calculateGridPos() {
         // 根据实际坐标计算网格坐标
-        let leftClientDistance = this.screenX - gameboardLeftTopX;
-        let bottomClientDistance = this.screenY - gameboardLeftTopY;
+        let leftClientDistance = this._screenX - gameboardLeftTopX;
+        let bottomClientDistance = this._screenY - gameboardLeftTopY;
         let topClientDistance = gameboardRealHeight - bottomClientDistance;
         this.x = leftClientDistance / gameboardGridWidthPx;
         this.y = topClientDistance / gameboardGridHeightPx;
@@ -98,8 +98,8 @@ export class Position extends PositionedItem {
         // 根据网格坐标计算实际坐标
         let leftClientDistance = this.x * gameboardGridWidthPx;
         let topClientDistance = gameboardRealHeight - this.y * gameboardGridHeightPx;
-        this.screenX = leftClientDistance + gameboardLeftTopX;
-        this.screenY = topClientDistance + gameboardLeftTopY;
+        this._screenX = leftClientDistance + gameboardLeftTopX;
+        this._screenY = topClientDistance + gameboardLeftTopY;
     }
 
     getGridPos() {
@@ -108,7 +108,16 @@ export class Position extends PositionedItem {
 
     getScreenPos() {
         this._calculateScreenPos();
-        return [this.screenX, this.screenY];
+        return [this._screenX, this._screenY];
+    }
+
+    get screenX() {
+        this._calculateScreenPos();
+        return this._screenX;
+    }
+    get screenY() {
+        this._calculateScreenPos();
+        return this._screenY;
     }
 
     nearby(other: Position, distance = null) {
@@ -130,7 +139,7 @@ export class Position extends PositionedItem {
     }
 
     /**
-     * @param toZero 正偏移将倾向于远离0，而非数值更大
+     * @param toZero 为true时，正偏移将倾向于远离0，而非数值更大
      * @returns
      */
     integerGrid(offsetX = 0, offsetY = 0, toZero = false) {

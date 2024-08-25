@@ -121,9 +121,10 @@ class Piece {
         if (piece.team === this.team)
             return false;
         let damageAmount = this.attackDamage;
-        if (Math.random() < this.criticalChance)
+        let isCritical = Math.random() < this.criticalChance;
+        if (isCritical)
             damageAmount *= this.criticalDamage + 1;
-        let damageObject = new Damage(this.damageType, damageAmount, this, piece);
+        let damageObject = new Damage(this.damageType, damageAmount, this, piece, isCritical);
         damageObject.apply();
         return true;
     }

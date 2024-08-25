@@ -102,3 +102,48 @@ body {
     margin-top: 10px;
     text-align: center;
 }
+
+#effects {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+}
+
+#damage-numbers {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+}
+
+#damage-numbers div {
+    position: absolute;
+    font-size: 1.6em;
+    animation: damage-number 750ms ease-out;
+    text-shadow: #000000ff
+}
+
+.critical-damage-effect {
+    font-weight: bold;
+    font-size: 2em;
+}
+
+@keyframes damage-number {
+    0% {
+        opacity: 0;
+    }
+    25% {
+        opacity: 1;
+    }
+    75% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}

@@ -30,13 +30,17 @@ export const defaultQuasiMoveTargets = {
     },
 };
 const positionAvailable = (position) => {
-    return 0 <= position.x && position.x < 9 && 0 <= position.y && position.y < 10;
+    return (0 <= position.x &&
+        position.x < 9 &&
+        0 <= position.y &&
+        position.y < 10 &&
+        position.piece === null);
 };
 function repelForward(origin, direction, distance_limit = 1) {
     let direction_step = direction;
     direction_step = Vector2.of(Position.of(direction_step.div(Math.max(Math.abs(direction_step.x), Math.abs(direction_step.y)))).integerGrid(-0.05, -0.05, true));
     let position = origin;
-    while (position.add(direction_step).piece === null && distance_limit-- > 0) {
+    while (positionAvailable(position.add(direction_step)) && distance_limit-- > 0) {
         position = position.add(direction_step);
     }
     return positionAvailable(position) ? position : origin;
