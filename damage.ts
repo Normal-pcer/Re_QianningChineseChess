@@ -33,8 +33,9 @@ export class Damage {
         if (this.target.damaged(this) === true) {
             this.source?.move(position);
         } else {
-            this.source?.move(this.quasiMoveTarget(this.source, this.target));
+            let virtualMarker = Piece.virtualPiece(this.target.position);
             this.source ? this.target.move(this.repelTarget(this.source, this.target)) : null;
+            this.source?.move(this.quasiMoveTarget(this.source, virtualMarker));
         }
         this.target?.draw();
     }

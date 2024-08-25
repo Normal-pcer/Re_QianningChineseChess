@@ -148,6 +148,13 @@ class Piece {
             this.destroyed();
         return this.health <= 0;
     }
+    static virtualPiece(position) {
+        return new Piece(Team.None, PieceType.None, position, null);
+    }
+    join() {
+        if (!pieces.includes(this))
+            pieces.push(this);
+    }
 }
 class PieceType {
     static Master = "master";
@@ -157,12 +164,21 @@ class PieceType {
     static Chariot = "chariot";
     static Gun = "gun";
     static Pawn = "pawn";
+    static None = "none";
 }
 class Team {
     static Red = "red";
     static Black = "black";
+    static None = "none";
     static enemy(to) {
-        return to === Team.Red ? Team.Black : Team.Red;
+        switch (to) {
+            case Team.Red:
+                return Team.Black;
+            case Team.Black:
+                return Team.Red;
+            default:
+                return Team.None;
+        }
     }
 }
 export { Piece, PieceType, Team };

@@ -109,17 +109,8 @@ export class SelectionManager {
  * @description: Describe the type of single-selection item
  */
 export class ItemType {
-    /**
-     * @description: A position at the gameboard grid, no matter it is occupied or not
-     */
     static Grid = "grid";
-    /**
-     * @description: An empty position at the gameboard grid. (No piece)
-     * */
     static Piece = "piece";
-    /**
-     * @description: [PLACEHOLDER] A customized type
-     * */
     static Custom = "custom";
 }
 /**

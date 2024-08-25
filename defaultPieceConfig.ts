@@ -35,4 +35,5 @@ export const defaultPieceConfigs: { [key: string]: PieceConfig } = {
     chariot: new PieceConfig(4500, 2200, 200, DamageType.MeleeHigh),
     gun: new PieceConfig(5000, 2250, 200, DamageType.Ranged),
     pawn: new PieceConfig(2250, 1250, 100, DamageType.MeleeLow),
+    none: new PieceConfig(1, 0, 0, DamageType.None),
 };

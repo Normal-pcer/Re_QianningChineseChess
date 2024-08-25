@@ -57,9 +57,7 @@ export class SelectionManager {
     current: SingleSelection | null = null;
     results: SelectedItem[] = [];
 
-    constructor(
-        ...singleSelections: SingleSelection[]
-    ) {
+    constructor(...singleSelections: SingleSelection[]) {
         this.recursions = singleSelections;
         this.doOnce = false;
         this.reset();
@@ -119,17 +117,10 @@ export class SelectionManager {
  * @description: Describe the type of single-selection item
  */
 export class ItemType {
-    /**
-     * @description: A position at the gameboard grid, no matter it is occupied or not
-     */
     static Grid = "grid";
-    /**
-     * @description: An empty position at the gameboard grid. (No piece)
-     * */
+
     static Piece = "piece";
-    /**
-     * @description: [PLACEHOLDER] A customized type
-     * */
+
     static Custom = "custom";
 }
 
