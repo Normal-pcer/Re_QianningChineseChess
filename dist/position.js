@@ -112,7 +112,15 @@ export class Position extends PositionedItem {
     chebyshevDistance(other) {
         return Math.max(Math.abs(this.x - other.x), Math.abs(this.y - other.y));
     }
-    integerGrid(offsetX = 0, offsetY = 0) {
+    /**
+     * @param toZero 正偏移将倾向于远离0，而非数值更大
+     * @returns
+     */
+    integerGrid(offsetX = 0, offsetY = 0, toZero = false) {
+        if (toZero) {
+            offsetX *= Math.sign(this.x);
+            offsetY *= Math.sign(this.y);
+        }
         return new Position(Math.floor(this.x + 0.5 + offsetX), Math.floor(this.y + 0.5 + offsetY));
     }
     equals(other) {
