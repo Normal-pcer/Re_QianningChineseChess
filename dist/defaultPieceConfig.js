@@ -1,4 +1,4 @@
-import { DamageType } from "./damage.js";
+import { DamageType } from "./damageType.js";
 export class PieceConfig {
     health = 0;
     maxHealth = 0;

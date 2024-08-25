@@ -1,0 +1,30 @@
+"filename", "language", "TypeScript", "HTML", "JSON with Comments", "Markdown", "JavaScript", "Python", "CSS", "comment", "blank", "total"
+"c:\Users\norma\Documents\normal-pcer.github.io\QianningChineseChess\damage.ts", "TypeScript", 34, 0, 0, 0, 0, 0, 0, 0, 4, 38
+"c:\Users\norma\Documents\normal-pcer.github.io\QianningChineseChess\damageType.ts", "TypeScript", 7, 0, 0, 0, 0, 0, 0, 0, 1, 8
+"c:\Users\norma\Documents\normal-pcer.github.io\QianningChineseChess\defaultDamageBehaviors.ts", "TypeScript", 56, 0, 0, 0, 0, 0, 0, 1, 7, 64
+"c:\Users\norma\Documents\normal-pcer.github.io\QianningChineseChess\defaultMovingBehaviors.ts", "TypeScript", 150, 0, 0, 0, 0, 0, 0, 11, 18, 179
+"c:\Users\norma\Documents\normal-pcer.github.io\QianningChineseChess\defaultPieceConfig.ts", "TypeScript", 34, 0, 0, 0, 0, 0, 0, 0, 4, 38
+"c:\Users\norma\Documents\normal-pcer.github.io\QianningChineseChess\dist\damage.js", "JavaScript", 0, 0, 0, 0, 26, 0, 0, 1, 0, 27
+"c:\Users\norma\Documents\normal-pcer.github.io\QianningChineseChess\dist\damageType.js", "JavaScript", 0, 0, 0, 0, 8, 0, 0, 1, 0, 9
+"c:\Users\norma\Documents\normal-pcer.github.io\QianningChineseChess\dist\defaultDamageBehaviors.js", "JavaScript", 0, 0, 0, 0, 55, 0, 0, 2, 0, 57
+"c:\Users\norma\Documents\normal-pcer.github.io\QianningChineseChess\dist\defaultMovingBehaviors.js", "JavaScript", 0, 0, 0, 0, 128, 0, 0, 12, 0, 140
+"c:\Users\norma\Documents\normal-pcer.github.io\QianningChineseChess\dist\defaultPieceConfig.js", "JavaScript", 0, 0, 0, 0, 27, 0, 0, 1, 0, 28
+"c:\Users\norma\Documents\normal-pcer.github.io\QianningChineseChess\dist\multiplayer.js", "JavaScript", 0, 0, 0, 0, 116, 0, 0, 8, 0, 124
+"c:\Users\norma\Documents\normal-pcer.github.io\QianningChineseChess\dist\piece.js", "JavaScript", 0, 0, 0, 0, 140, 0, 0, 4, 0, 144
+"c:\Users\norma\Documents\normal-pcer.github.io\QianningChineseChess\dist\position.js", "JavaScript", 0, 0, 0, 0, 113, 0, 0, 23, 0, 136
+"c:\Users\norma\Documents\normal-pcer.github.io\QianningChineseChess\dist\positionedItem.js", "JavaScript", 0, 0, 0, 0, 4, 0, 0, 1, 0, 5
+"c:\Users\norma\Documents\normal-pcer.github.io\QianningChineseChess\dist\selection.js", "JavaScript", 0, 0, 0, 0, 195, 0, 0, 25, 0, 220
+"c:\Users\norma\Documents\normal-pcer.github.io\QianningChineseChess\dist\vector.js", "JavaScript", 0, 0, 0, 0, 38, 0, 0, 1, 0, 39
+"c:\Users\norma\Documents\normal-pcer.github.io\QianningChineseChess\index.html", "HTML", 0, 29, 0, 0, 0, 0, 0, 0, 3, 32
+"c:\Users\norma\Documents\normal-pcer.github.io\QianningChineseChess\multiplayer.html", "HTML", 0, 136, 0, 0, 0, 0, 0, 7, 4, 147
+"c:\Users\norma\Documents\normal-pcer.github.io\QianningChineseChess\multiplayer.ts", "TypeScript", 124, 0, 0, 0, 0, 0, 0, 7, 15, 146
+"c:\Users\norma\Documents\normal-pcer.github.io\QianningChineseChess\piece.ts", "TypeScript", 131, 0, 0, 0, 0, 0, 0, 3, 22, 156
+"c:\Users\norma\Documents\normal-pcer.github.io\QianningChineseChess\position.ts", "TypeScript", 112, 0, 0, 0, 0, 0, 0, 22, 24, 158
+"c:\Users\norma\Documents\normal-pcer.github.io\QianningChineseChess\positionedItem.ts", "TypeScript", 4, 0, 0, 0, 0, 0, 0, 0, 1, 5
+"c:\Users\norma\Documents\normal-pcer.github.io\QianningChineseChess\readme.md", "Markdown", 0, 0, 0, 1, 0, 0, 0, 0, 0, 1
+"c:\Users\norma\Documents\normal-pcer.github.io\QianningChineseChess\selection.ts", "TypeScript", 192, 0, 0, 0, 0, 0, 0, 24, 29, 245
+"c:\Users\norma\Documents\normal-pcer.github.io\QianningChineseChess\server.py", "Python", 0, 0, 0, 0, 0, 13, 0, 1, 6, 20
+"c:\Users\norma\Documents\normal-pcer.github.io\QianningChineseChess\style.css", "CSS", 0, 0, 0, 0, 0, 0, 89, 2, 13, 104
+"c:\Users\norma\Documents\normal-pcer.github.io\QianningChineseChess\tsconfig.json", "JSON with Comments", 0, 0, 12, 0, 0, 0, 0, 0, 1, 13
+"c:\Users\norma\Documents\normal-pcer.github.io\QianningChineseChess\vector.ts", "TypeScript", 40, 0, 0, 0, 0, 0, 0, 0, 13, 53
+"Total", "-", 884, 165, 12, 1, 850, 13, 89, 157, 165, 2336

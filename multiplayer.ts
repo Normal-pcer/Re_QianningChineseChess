@@ -22,35 +22,54 @@ window.onload = () => {
     /**
      * @description 主要选择器，在几乎整个游戏周期内使用，用于移动棋子和控制攻击
      */
-    let MainSelection = new Selection.SelectionManager((final: Selection.SelectedItem[]) => {
-        let piece = <Piece>final[0].data;
-
-        let pos = (<Position>final[1].data).integerGrid();
-
-        if (pos.piece == null) {
-            piece.move(pos);
-            term += 1;
-        } else if (
-            piece.attackTargets.some((element) => {
-                return element.equals(pos);
-            })
-        )
-            if (piece.attack(pos.piece)) {
-                term += 1;
+    /*prettier-ignore */
+    const MainSelection = new Selection
+        .SelectionManager(
+            new Selection.SingleSelection(
+                [], Selection.ItemType.Piece, "请选择要移动的棋子", 
+                (piece) => termMap[term%2] === (piece.data as Piece).team))
+        .then(
+            (past) => {
+                let selectedPiece = past[0].data as Piece;
+                let validMove = selectedPiece.destinations;
+                let validTarget = selectedPiece.attackTargets;
+                return new Selection.SingleSelection(
+                    validMove.concat(validTarget),
+                    Selection.ItemType.Grid,
+                    "请选择要移动到的位置",
+                    (selectedGrid) => {
+                        let pos = selectedGrid.data as Position
+                        if (pos.integerGrid().piece !== null) {
+                            return validTarget.some((item)=>item.nearby(pos));
+                        } else {
+                            return validMove.some((item)=>item.nearby(pos));
+                        }
+                    }
+                )
             }
+        )
+        .final(
+            (results) => {
+                let selectedPiece = results[0].data as Piece;
+                let selectedTarget = (results[1].data as Position).integerGrid();
+                let success = false;
 
-        let term_tip_span = document.querySelector("#term-tip span");
-        if (term_tip_span instanceof HTMLElement) term_tip_span.innerText = termMap[term % 2];
-    }, new Selection.SingleSelection([], Selection.ItemType.Piece, "请选择要移动的棋子", (item) => (<Piece>item.data).team === termMap[term % 2])).then(
-        (piece) => {
-            let pieceData = piece[0].data as Piece;
-            return new Selection.SingleSelection(
-                pieceData.destinations.concat(pieceData.attackTargets),
-                Selection.ItemType.Grid,
-                "请选择目标"
-            );
-        }
-    );
+                if (selectedTarget.piece !== null) {
+                    success = selectedPiece.attack(selectedTarget.piece);
+                    console.log(selectedPiece, "attack", selectedTarget.piece, success);
+                } else {
+                    success = selectedPiece.move(selectedTarget);
+                    console.log(selectedPiece, "move", selectedTarget, success);
+                }
+
+                if (success) {
+                    term++;
+                    console.log("term"+term+"now")
+                    let term_tip = document.querySelector("#term-tip>span") as HTMLElement
+                    term_tip.innerText = termMap[term%2];
+                }
+            } 
+        );
     Selection.setCurrentSelection(MainSelection);
 
     Position._calculateGameboardSize();
@@ -72,7 +91,6 @@ window.onload = () => {
         submit_cheating.onclick = (event) => {
             let input = document.querySelector("#cheating input");
             let text = input instanceof HTMLInputElement ? input.value : "0";
-            console.log(text);
             if (text == Team.Red || text == Team.Black) {
                 pieces
                     .filter((piece) => piece.type === PieceType.Master && piece.team != text)[0]

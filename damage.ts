@@ -1,14 +1,7 @@
 import { Piece } from "./piece.js";
 import { defaultQuasiMoveTargets } from "./defaultDamageBehaviors.js";
 import { Position } from "./position.js";
-
-export enum DamageType {
-    None,
-    MeleeLow,
-    MeleeMedium,
-    MeleeHigh,
-    Ranged,
-}
+import { DamageType } from "./damageType.js";
 
 export class Damage {
     type: DamageType = DamageType.None;

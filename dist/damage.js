@@ -1,12 +1,5 @@
 import { defaultQuasiMoveTargets } from "./defaultDamageBehaviors.js";
-export var DamageType;
-(function (DamageType) {
-    DamageType[DamageType["None"] = 0] = "None";
-    DamageType[DamageType["MeleeLow"] = 1] = "MeleeLow";
-    DamageType[DamageType["MeleeMedium"] = 2] = "MeleeMedium";
-    DamageType[DamageType["MeleeHigh"] = 3] = "MeleeHigh";
-    DamageType[DamageType["Ranged"] = 4] = "Ranged";
-})(DamageType || (DamageType = {}));
+import { DamageType } from "./damageType.js";
 export class Damage {
     type = DamageType.None;
     amount = 0;

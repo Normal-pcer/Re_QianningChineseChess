@@ -1,5 +1,5 @@
 import { Piece } from "./piece.js";
-import { DamageType } from "./damage.js";
+import { DamageType } from "./damageType.js";
 import { Vector2 } from "./vector.js";
 import { Position } from "./position.js";
 

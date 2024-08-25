@@ -3,7 +3,8 @@ import { Position } from "./position.js";
 import { onPieceClick } from "./selection.js";
 import { stop } from "./multiplayer.js";
 import { defaultPieceConfigs } from "./defaultPieceConfig.js";
-import { Damage, DamageType } from "./damage.js";
+import { Damage } from "./damage.js";
+import { DamageType } from "./damageType.js";
 export var pieces = [];
 class Piece {
     team;

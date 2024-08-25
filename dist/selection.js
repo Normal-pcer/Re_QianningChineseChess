@@ -7,7 +7,6 @@ var PieceClickListener = (piece) => {
     let item = new SelectedItem(piece);
     if (currentSingleSelection instanceof SingleSelection &&
         currentSingleSelection.type == ItemType.Piece) {
-        console.log(piece);
         if (piece.selected) {
             piece.selected = false;
             currentSelection?.stop();
@@ -32,7 +31,6 @@ var GameboardClickListener = (position) => {
     let item = new SelectedItem(position);
     if (currentSingleSelection instanceof SingleSelection &&
         currentSingleSelection.type == ItemType.Grid) {
-        console.log(currentSingleSelection);
         if (currentSingleSelection.check(item)) {
             let r = null;
             if (currentSingleSelection.nextCallback != null)
@@ -48,17 +46,20 @@ var GameboardClickListener = (position) => {
     return false;
 };
 export class SelectionManager {
-    afterSelection;
+    afterSelection = null;
     recursions;
     index = 0;
     doOnce;
     current = null;
     results = [];
-    constructor(afterSelection, ...singleSelections) {
-        this.afterSelection = afterSelection;
+    constructor(...singleSelections) {
         this.recursions = singleSelections;
         this.doOnce = false;
         this.reset();
+    }
+    final(afterSelection) {
+        this.afterSelection = afterSelection;
+        return this;
     }
     then(recursion) {
         this.recursions.push(recursion);

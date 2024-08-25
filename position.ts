@@ -130,7 +130,7 @@ export class Position extends PositionedItem {
     }
 
     integerGrid(offsetX=0, offsetY=0) {
-        return new Position(Math.floor(this.x+0.5+offsetX), Math.round(this.y+0.5+offsetY));
+        return new Position(Math.floor(this.x+0.5+offsetX), Math.floor(this.y+0.5+offsetY));
     }
 
 

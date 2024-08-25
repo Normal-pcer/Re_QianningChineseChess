@@ -113,7 +113,7 @@ export class Position extends PositionedItem {
         return Math.max(Math.abs(this.x - other.x), Math.abs(this.y - other.y));
     }
     integerGrid(offsetX = 0, offsetY = 0) {
-        return new Position(Math.floor(this.x + 0.5 + offsetX), Math.round(this.y + 0.5 + offsetY));
+        return new Position(Math.floor(this.x + 0.5 + offsetX), Math.floor(this.y + 0.5 + offsetY));
     }
     equals(other) {
         return this.x == other.x && this.y == other.y;
