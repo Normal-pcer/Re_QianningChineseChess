@@ -12,7 +12,7 @@ export const defaultQuasiMoveTargets = {
         let pointer = Vector2.point(piece.position, target.position);
         let steps = piece.position.chebyshevDistance(target.position);
         let step = pointer.div(steps);
-        let position = piece.position;
+        let position = target.position;
         /*prettier-ignore*/
         while (steps-- > 0) {
             let integer_position = position.integerGrid(-0.05);
@@ -29,13 +29,17 @@ export const defaultQuasiMoveTargets = {
         return piece.position;
     },
 };
+const positionAvailable = (position) => {
+    return 0 <= position.x && position.x < 9 && 0 <= position.y && position.y < 10;
+};
 function repelForward(origin, direction, distance_limit = 1) {
     let direction_step = Vector2.of(Position.of(direction).integerGrid(-0.05));
+    direction_step = direction_step.div(Math.max(Math.abs(direction_step.x), Math.abs(direction_step.y)));
     let position = origin;
     while (position.add(direction_step).piece === null && distance_limit-- > 0) {
         position = position.add(direction_step);
     }
-    return position;
+    return positionAvailable(position) ? position : origin;
 }
 export const defaultRepelTargets = {
     [DamageType.None]: (piece, target) => {
@@ -45,10 +49,10 @@ export const defaultRepelTargets = {
         return piece.position;
     },
     [DamageType.MeleeMedium]: (piece, target) => {
-        return repelForward(piece.position, Vector2.point(piece.position, target.position));
+        return repelForward(target.position, Vector2.point(piece.position, target.position));
     },
     [DamageType.MeleeHigh]: (piece, target) => {
-        return repelForward(piece.position, Vector2.point(piece.position, target.position), 2);
+        return repelForward(target.position, Vector2.point(piece.position, target.position), 2);
     },
     [DamageType.Ranged]: (piece, target) => {
         return defaultRepelTargets[DamageType.MeleeMedium](piece, target);

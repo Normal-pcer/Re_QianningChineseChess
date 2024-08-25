@@ -1,4 +1,4 @@
-import { defaultQuasiMoveTargets } from "./defaultDamageBehaviors.js";
+import { defaultQuasiMoveTargets, defaultRepelTargets } from "./defaultDamageBehaviors.js";
 import { DamageType } from "./damageType.js";
 export class Damage {
     type = DamageType.None;
@@ -13,7 +13,7 @@ export class Damage {
         this.source = source;
         this.target = target;
         this.quasiMoveTarget = quasiMoveTarget ?? defaultQuasiMoveTargets[type];
-        this.repelTarget = repelTarget ?? defaultQuasiMoveTargets[type];
+        this.repelTarget = repelTarget ?? defaultRepelTargets[type];
     }
     apply() {
         if (this.target === null)
@@ -24,6 +24,7 @@ export class Damage {
         }
         else {
             this.source?.move(this.quasiMoveTarget(this.source, this.target));
+            this.source ? this.target.move(this.repelTarget(this.source, this.target)) : null;
         }
         this.target?.draw();
     }
