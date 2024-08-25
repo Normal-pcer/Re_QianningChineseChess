@@ -15,7 +15,7 @@ export const defaultQuasiMoveTargets = {
         let position = target.position;
         /*prettier-ignore*/
         while (steps-- > 0) {
-            let integer_position = position.integerGrid(-0.05);
+            let integer_position = position.integerGrid(-0.05, -0.05);
             if (integer_position.piece === null)
                 return integer_position;
             position = Position.of(Vector2.of(position).sub(step));
@@ -33,8 +33,9 @@ const positionAvailable = (position) => {
     return 0 <= position.x && position.x < 9 && 0 <= position.y && position.y < 10;
 };
 function repelForward(origin, direction, distance_limit = 1) {
-    let direction_step = Vector2.of(Position.of(direction).integerGrid(-0.05));
-    direction_step = direction_step.div(Math.max(Math.abs(direction_step.x), Math.abs(direction_step.y)));
+    let direction_step = Vector2.of(Position.of(direction).integerGrid(-0.05, -0.05));
+    direction_step = Vector2.of(Position.of(direction_step.div(Math.max(Math.abs(direction_step.x), Math.abs(direction_step.y)))).integerGrid(-0.05, -0.05) // 我也不知道哪层需要取整 干脆都取了
+    );
     let position = origin;
     while (position.add(direction_step).piece === null && distance_limit-- > 0) {
         position = position.add(direction_step);
