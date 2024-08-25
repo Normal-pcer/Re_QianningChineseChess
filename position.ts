@@ -66,6 +66,10 @@ export class Position extends PositionedItem {
         gameboardGridHeightPx = gameboardRealHeight / (gameboardGridHeight - 1);
     };
 
+    static of(source: PositionedItem) {
+        return new Position(source.x, source.y, true);
+    }
+
     fromScreen(x: number, y: number) {
         this.screenX = x;
         this.screenY = y;
@@ -108,7 +112,7 @@ export class Position extends PositionedItem {
     }
 
     nearby(other: Position, distance = null) {
-        if (distance === null) return this.integerGrid.equals(other.integerGrid);
+        if (distance === null) return this.integerGrid().equals(other.integerGrid());
         else return this.squareEuclideanDistance(other) < distance * distance;
     }
 
@@ -125,9 +129,10 @@ export class Position extends PositionedItem {
         return Math.max(Math.abs(this.x - other.x), Math.abs(this.y - other.y));
     }
 
-    get integerGrid() {
-        return new Position(Math.round(this.x), Math.round(this.y));
+    integerGrid(offsetX=0, offsetY=0) {
+        return new Position(Math.floor(this.x+0.5+offsetX), Math.round(this.y+0.5+offsetY));
     }
+
 
     equals(other: Position) {
         return this.x == other.x && this.y == other.y;

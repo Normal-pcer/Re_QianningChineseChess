@@ -1,10 +1,18 @@
 export class Vector2 {
+    x;
+    y;
     constructor(x, y) {
         this.x = x;
         this.y = y;
     }
-    static of(origin, target) {
+    static point(origin, target) {
         return new Vector2(target.x - origin.x, target.y - origin.y);
+    }
+    static of(source) {
+        return new Vector2(source.x, source.y);
+    }
+    static zero() {
+        return new Vector2(0, 0);
     }
     add(v) {
         return new Vector2(this.x + v.x, this.y + v.y);
@@ -28,3 +36,4 @@ export class Vector2 {
         return this.div(this.length);
     }
 }
+//# sourceMappingURL=vector.js.map

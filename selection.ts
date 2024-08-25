@@ -30,11 +30,13 @@ var PieceClickListener = (piece: Piece) => {
     return false;
 };
 
-
 var GameboardClickListener = (position: Position) => {
     let currentSingleSelection = currentSelection?.current;
     let item = new SelectedItem(position);
-    if (currentSingleSelection instanceof SingleSelection && currentSingleSelection.type == ItemType.Grid) {
+    if (
+        currentSingleSelection instanceof SingleSelection &&
+        currentSingleSelection.type == ItemType.Grid
+    ) {
         console.log(currentSingleSelection);
         if (currentSingleSelection.check(item)) {
             let r = null;
@@ -87,14 +89,13 @@ export class SelectionManager {
     }
 
     next(result: SelectedItem) {
+        this.results.push(result);
         if (this.index >= this.recursions.length - 1) {
-            this.results.push(result);
             this.stop(true);
         } else {
             this.index++;
             let future = this.recursions[this.index];
             this.current = future instanceof SingleSelection ? future : future(this.results);
-            this.results.push(result);
             this.current.tip();
         }
     }

@@ -3,54 +3,58 @@ import { Piece, pieces } from "./piece.js";
 const returnSelf = (obj) => obj;
 var currentSelection = null;
 var PieceClickListener = (piece) => {
-    let currentSingleSelection = currentSelection === null || currentSelection === void 0 ? void 0 : currentSelection.current;
+    let currentSingleSelection = currentSelection?.current;
     let item = new SelectedItem(piece);
     if (currentSingleSelection instanceof SingleSelection &&
         currentSingleSelection.type == ItemType.Piece) {
         console.log(piece);
         if (piece.selected) {
             piece.selected = false;
-            currentSelection === null || currentSelection === void 0 ? void 0 : currentSelection.stop();
+            currentSelection?.stop();
         }
         else if (currentSingleSelection.check(item)) {
             piece.selected = true;
             let r = null;
             if (currentSingleSelection.nextCallback != null)
                 r = currentSingleSelection.nextCallback(item);
-            currentSelection === null || currentSelection === void 0 ? void 0 : currentSelection.next(r);
+            currentSelection?.next(r);
             return true;
         }
         else {
             if (currentSingleSelection.autoCancel)
-                currentSelection === null || currentSelection === void 0 ? void 0 : currentSelection.stop();
+                currentSelection?.stop();
         }
     }
     return false;
 };
 var GameboardClickListener = (position) => {
-    let currentSingleSelection = currentSelection === null || currentSelection === void 0 ? void 0 : currentSelection.current;
+    let currentSingleSelection = currentSelection?.current;
     let item = new SelectedItem(position);
-    if (currentSingleSelection instanceof SingleSelection && currentSingleSelection.type == ItemType.Grid) {
+    if (currentSingleSelection instanceof SingleSelection &&
+        currentSingleSelection.type == ItemType.Grid) {
         console.log(currentSingleSelection);
         if (currentSingleSelection.check(item)) {
             let r = null;
             if (currentSingleSelection.nextCallback != null)
                 r = currentSingleSelection.nextCallback(item);
-            currentSelection === null || currentSelection === void 0 ? void 0 : currentSelection.next(r);
+            currentSelection?.next(r);
             return true;
         }
         else {
             if (currentSingleSelection.autoCancel)
-                currentSelection === null || currentSelection === void 0 ? void 0 : currentSelection.stop();
+                currentSelection?.stop();
         }
     }
     return false;
 };
 export class SelectionManager {
+    afterSelection;
+    recursions;
+    index = 0;
+    doOnce;
+    current = null;
+    results = [];
     constructor(afterSelection, ...singleSelections) {
-        this.index = 0;
-        this.current = null;
-        this.results = [];
         this.afterSelection = afterSelection;
         this.recursions = singleSelections;
         this.doOnce = false;
@@ -72,20 +76,18 @@ export class SelectionManager {
         this.current.tip();
     }
     next(result) {
+        this.results.push(result);
         if (this.index >= this.recursions.length - 1) {
-            this.results.push(result);
             this.stop(true);
         }
         else {
             this.index++;
             let future = this.recursions[this.index];
             this.current = future instanceof SingleSelection ? future : future(this.results);
-            this.results.push(result);
             this.current.tip();
         }
     }
     stop(done = false) {
-        var _a;
         if (this.afterSelection != null && done)
             this.afterSelection(this.results);
         this.reset();
@@ -98,7 +100,7 @@ export class SelectionManager {
         if (this.doOnce)
             currentSelection = null;
         else
-            (_a = this.current) === null || _a === void 0 ? void 0 : _a.tip();
+            this.current?.tip();
         pieces.forEach((p) => (p.selected = false));
     }
 }
@@ -106,24 +108,26 @@ export class SelectionManager {
  * @description: Describe the type of single-selection item
  */
 export class ItemType {
+    /**
+     * @description: A position at the gameboard grid, no matter it is occupied or not
+     */
+    static Grid = "grid";
+    /**
+     * @description: An empty position at the gameboard grid. (No piece)
+     * */
+    static Piece = "piece";
+    /**
+     * @description: [PLACEHOLDER] A customized type
+     * */
+    static Custom = "custom";
 }
-/**
- * @description: A position at the gameboard grid, no matter it is occupied or not
- */
-ItemType.Grid = "grid";
-/**
- * @description: An empty position at the gameboard grid. (No piece)
- * */
-ItemType.Piece = "piece";
-/**
- * @description: [PLACEHOLDER] A customized type
- * */
-ItemType.Custom = "custom";
 /**
  * @property {string} type - the type of the item
  * @property {Position|Piece} data - the selected position/piece
  */
 export class SelectedItem {
+    data;
+    type;
     constructor(data, type = null) {
         if (type != null)
             this.type = type;
@@ -150,6 +154,12 @@ export class SelectedItem {
  * @property {boolean} autoCancel - whether to cancel the selection automatically when the selection is not valid
  */
 export class SingleSelection {
+    positions;
+    type;
+    description;
+    checkCallback;
+    autoCancel;
+    nextCallback;
     constructor(positions, type, description = null, checkCallback = null, nextCallback = null, autoCancel = true) {
         this.positions = positions;
         this.type = type;
@@ -206,3 +216,4 @@ export function onGameboardClick(pos) {
 export function setCurrentSelection(selection) {
     currentSelection = selection;
 }
+//# sourceMappingURL=selection.js.map

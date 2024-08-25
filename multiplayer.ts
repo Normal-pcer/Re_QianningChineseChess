@@ -25,7 +25,7 @@ window.onload = () => {
     let MainSelection = new Selection.SelectionManager((final: Selection.SelectedItem[]) => {
         let piece = <Piece>final[0].data;
 
-        let pos = (<Position>final[1].data).integerGrid;
+        let pos = (<Position>final[1].data).integerGrid();
 
         if (pos.piece == null) {
             piece.move(pos);

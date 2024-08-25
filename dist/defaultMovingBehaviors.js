@@ -1,4 +1,3 @@
-var _a;
 import { Team, PieceType } from "./piece.js";
 import { Position } from "./position.js";
 import { Vector2 } from "./vector.js";
@@ -68,6 +67,68 @@ function ray(origin, direction, barriers = 0, strict = true) {
     return grids;
 }
 export class DefaultMovingBehaviors {
+    static master = (piece) => {
+        console.log(piece);
+        let team = piece.team;
+        let config = team === Team.Red ? RED_BASE : BLACK_BASE;
+        return filterGrids((pos) => piece.position.manhattanDistance(pos) == 1, config);
+    };
+    static masterAttack = (piece) => {
+        console.log(piece);
+        return this.master(piece).concat(ray(piece.position, new Vector2(0, 1))
+            .concat(ray(piece.position, new Vector2(0, -1)))
+            .filter((pos) => pos.piece != null && pos.piece.type === PieceType.Master));
+    };
+    static guard = (piece) => {
+        let team = piece.team;
+        let config = team === Team.Red ? RED_BASE : BLACK_BASE;
+        return filterGrids((pos) => piece.position.manhattanDistance(pos) == 2 &&
+            piece.position.chebyshevDistance(pos) == 1, config);
+    };
+    static elephant = (piece) => {
+        let team = piece.team;
+        let config = team === Team.Red ? RED_TERRITORY : BLACK_TERRITORY;
+        return filterGrids((pos) => {
+            if (piece.position.manhattanDistance(pos) == 4 &&
+                piece.position.chebyshevDistance(pos) == 2) {
+                let pointer = Vector2.point(piece.position, pos);
+                let check = piece.position.add(pointer.div(2));
+                return check.piece === null;
+            }
+            return false;
+        }, config);
+    };
+    static horse = (piece) => {
+        return filterGrids((pos) => {
+            if (piece.position.manhattanDistance(pos) != 3 ||
+                piece.position.chebyshevDistance(pos) != 2)
+                return false;
+            // With a piece
+            let neighbors = filterGrids((pos) => piece.position.manhattanDistance(pos) == 1 && pos.piece !== null);
+            let pointer = Vector2.point(piece.position, pos);
+            return !neighbors.some((neighbor) => pointer.dot(Vector2.point(piece.position, neighbor)) == 2);
+        });
+    };
+    static chariot = (piece) => {
+        return ray(piece.position, new Vector2(1, 0)).concat(ray(piece.position, new Vector2(-1, 0)), ray(piece.position, new Vector2(0, 1)), ray(piece.position, new Vector2(0, -1)));
+    };
+    static gunMove = (piece) => {
+        return this.chariot(piece).filter((pos) => pos.piece === null);
+    };
+    static gunAttack = (piece) => {
+        return ray(piece.position, new Vector2(1, 0), 1).concat(ray(piece.position, new Vector2(-1, 0), 1), ray(piece.position, new Vector2(0, 1), 1), ray(piece.position, new Vector2(0, -1), 1));
+    };
+    static pawn = (piece) => {
+        let team = piece.team;
+        let baseY = team === Team.Red ? 0 : 9;
+        let passed = Math.abs(piece.position.y - baseY) > 4;
+        let directions = [team === Team.Red ? new Vector2(0, 1) : new Vector2(0, -1)];
+        if (passed)
+            directions.push(...[new Vector2(1, 0), new Vector2(-1, 0)]);
+        return filterGrids((pos) => {
+            return directions.some((direction) => Vector2.point(piece.position, pos).dot(direction) == 1);
+        });
+    };
     /**
      * @param {Piece} piece
      * @returns {Position[]}
@@ -76,66 +137,4 @@ export class DefaultMovingBehaviors {
         return attack ? mappingAttack[piece.type](piece) : mapping[piece.type](piece);
     }
 }
-_a = DefaultMovingBehaviors;
-DefaultMovingBehaviors.master = (piece) => {
-    console.log(piece);
-    let team = piece.team;
-    let config = team === Team.Red ? RED_BASE : BLACK_BASE;
-    return filterGrids((pos) => piece.position.manhattanDistance(pos) == 1, config);
-};
-DefaultMovingBehaviors.masterAttack = (piece) => {
-    console.log(piece);
-    return _a.master(piece).concat(ray(piece.position, new Vector2(0, 1))
-        .concat(ray(piece.position, new Vector2(0, -1)))
-        .filter((pos) => pos.piece != null && pos.piece.type === PieceType.Master));
-};
-DefaultMovingBehaviors.guard = (piece) => {
-    let team = piece.team;
-    let config = team === Team.Red ? RED_BASE : BLACK_BASE;
-    return filterGrids((pos) => piece.position.manhattanDistance(pos) == 2 &&
-        piece.position.chebyshevDistance(pos) == 1, config);
-};
-DefaultMovingBehaviors.elephant = (piece) => {
-    let team = piece.team;
-    let config = team === Team.Red ? RED_TERRITORY : BLACK_TERRITORY;
-    return filterGrids((pos) => {
-        if (piece.position.manhattanDistance(pos) == 4 &&
-            piece.position.chebyshevDistance(pos) == 2) {
-            let pointer = Vector2.of(piece.position, pos);
-            let check = piece.position.add(pointer.div(2));
-            return check.piece === null;
-        }
-        return false;
-    }, config);
-};
-DefaultMovingBehaviors.horse = (piece) => {
-    return filterGrids((pos) => {
-        if (piece.position.manhattanDistance(pos) != 3 ||
-            piece.position.chebyshevDistance(pos) != 2)
-            return false;
-        // With a piece
-        let neighbors = filterGrids((pos) => piece.position.manhattanDistance(pos) == 1 && pos.piece !== null);
-        let pointer = Vector2.of(piece.position, pos);
-        return !neighbors.some((neighbor) => pointer.dot(Vector2.of(piece.position, neighbor)) == 2);
-    });
-};
-DefaultMovingBehaviors.chariot = (piece) => {
-    return ray(piece.position, new Vector2(1, 0)).concat(ray(piece.position, new Vector2(-1, 0)), ray(piece.position, new Vector2(0, 1)), ray(piece.position, new Vector2(0, -1)));
-};
-DefaultMovingBehaviors.gunMove = (piece) => {
-    return _a.chariot(piece).filter((pos) => pos.piece === null);
-};
-DefaultMovingBehaviors.gunAttack = (piece) => {
-    return ray(piece.position, new Vector2(1, 0), 1).concat(ray(piece.position, new Vector2(-1, 0), 1), ray(piece.position, new Vector2(0, 1), 1), ray(piece.position, new Vector2(0, -1), 1));
-};
-DefaultMovingBehaviors.pawn = (piece) => {
-    let team = piece.team;
-    let baseY = team === Team.Red ? 0 : 9;
-    let passed = Math.abs(piece.position.y - baseY) > 4;
-    let directions = [team === Team.Red ? new Vector2(0, 1) : new Vector2(0, -1)];
-    if (passed)
-        directions.push(...[new Vector2(1, 0), new Vector2(-1, 0)]);
-    return filterGrids((pos) => {
-        return directions.some((direction) => Vector2.of(piece.position, pos).dot(direction) == 1);
-    });
-};
+//# sourceMappingURL=defaultMovingBehaviors.js.map

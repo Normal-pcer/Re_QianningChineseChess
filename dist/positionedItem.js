@@ -1,6 +1,5 @@
 export class PositionedItem {
-    constructor() {
-        this.x = 0;
-        this.y = 0;
-    }
+    x = 0;
+    y = 0;
 }
+//# sourceMappingURL=positionedItem.js.map

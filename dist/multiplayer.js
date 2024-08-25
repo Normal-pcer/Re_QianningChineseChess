@@ -21,7 +21,7 @@ window.onload = () => {
      */
     let MainSelection = new Selection.SelectionManager((final) => {
         let piece = final[0].data;
-        let pos = final[1].data.integerGrid;
+        let pos = final[1].data.integerGrid();
         if (pos.piece == null) {
             piece.move(pos);
             term += 1;
@@ -106,3 +106,4 @@ const putPieces = () => {
     pieces.push(new Piece(Team.Black, PieceType.Pawn, new Position(6, 6, true), document.getElementById("black-pawn4")));
     pieces.push(new Piece(Team.Black, PieceType.Pawn, new Position(8, 6, true), document.getElementById("black-pawn5")));
 };
+//# sourceMappingURL=multiplayer.js.map

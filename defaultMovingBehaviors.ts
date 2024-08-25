@@ -109,7 +109,7 @@ export class DefaultMovingBehaviors {
                 piece.position.manhattanDistance(pos) == 4 &&
                 piece.position.chebyshevDistance(pos) == 2
             ) {
-                let pointer = Vector2.of(piece.position, pos);
+                let pointer = Vector2.point(piece.position, pos);
                 let check = piece.position.add(pointer.div(2));
                 return check.piece === null;
             }
@@ -128,9 +128,9 @@ export class DefaultMovingBehaviors {
             let neighbors = filterGrids(
                 (pos) => piece.position.manhattanDistance(pos) == 1 && pos.piece !== null
             );
-            let pointer = Vector2.of(piece.position, pos);
+            let pointer = Vector2.point(piece.position, pos);
             return !neighbors.some(
-                (neighbor) => pointer.dot(Vector2.of(piece.position, neighbor)) == 2
+                (neighbor) => pointer.dot(Vector2.point(piece.position, neighbor)) == 2
             );
         });
     };
@@ -163,7 +163,7 @@ export class DefaultMovingBehaviors {
         if (passed) directions.push(...[new Vector2(1, 0), new Vector2(-1, 0)]);
         return filterGrids((pos) => {
             return directions.some(
-                (direction) => Vector2.of(piece.position, pos).dot(direction) == 1
+                (direction) => Vector2.point(piece.position, pos).dot(direction) == 1
             );
         });
     };

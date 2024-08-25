@@ -2,6 +2,9 @@ import { DefaultMovingBehaviors } from "./defaultMovingBehaviors.js";
 import { Position } from "./position.js";
 import { onPieceClick } from "./selection.js";
 import { stop } from "./multiplayer.js";
+import { defaultPieceConfigs, PieceConfig } from "./defaultPieceConfig.js";
+import { PositionedItem } from "./positionedItem.js";
+import { Damage, DamageType } from "./damage.js";
 
 export var pieces: Piece[] = [];
 
@@ -10,11 +13,37 @@ class Piece {
     type: string;
     position: Position;
     htmlElement: HTMLElement | null;
-    constructor(team: string, type: string, position: Position, htmlElement: HTMLElement | null) {
+    health: number = 0;
+
+    maxHealth: number = 0;
+    attackDamage: number = 0;
+    defense: number = 0;
+    criticalChance: number = 0;
+    criticalDamage: number = 0;
+    damageType: DamageType = DamageType.None
+
+    constructor(
+        team: string,
+        type: string,
+        position: Position,
+        htmlElement: HTMLElement | null,
+        config: PieceConfig | null = null
+    ) {
         this.team = team;
         this.type = type;
         this.position = position;
         this.htmlElement = htmlElement;
+
+        config = config ?? defaultPieceConfigs[this.type];
+        if (config) {
+            this.attackDamage = config.attackDamage;
+            this.defense = config.defense;
+            this.criticalChance = config.criticalChance;
+            this.criticalDamage = config.criticalDamage;
+            this.damageType = config.damageType;
+            this.maxHealth = config.maxHealth;
+            this.health = this.maxHealth; 
+        }
     }
 
     toggleSelected() {
@@ -68,27 +97,39 @@ class Piece {
     }
 
     move(position: Position) {
-        if (position.integerGrid.piece !== null) return false;
-        this.position = position.integerGrid;
+        if (position.integerGrid().piece !== null) return false;
+        this.position = position.integerGrid();
         this.draw();
         return true;
     }
 
     attack(piece: Piece) {
         if (piece.team === this.team) return false;
-        let pos = piece.position;
-        piece.damaged();
-        this.move(pos);
+        let damageAmount = this.attackDamage;
+        if (Math.random() < this.criticalChance) damageAmount *= (this.criticalDamage+1)
+        let damageObject = new Damage(this.damageType, damageAmount, this, piece);
+        damageObject.apply();
         return true;
     }
 
-    damaged() {
-        if (this.htmlElement)
-            this.htmlElement.remove();
+    destroyed() {
+        if (this.htmlElement) this.htmlElement.remove();
         this.position = new Position(-10, -10, true);
         pieces = pieces.filter((p) => p !== this);
 
         if (this.type === PieceType.Master) stop(Team.enemy(this.team));
+    }
+
+    /**
+     * @returns Destroyed or not
+     */
+    damaged(damage: Damage | null = null) {
+        if (damage === null)  return
+        let realAmount = damage.amount * Math.pow(2, -this.defense / 1000);  // 1000 防御伤害减半
+        this.health -= realAmount;
+        console.log(damage, realAmount, this.health);
+        if (this.health <= 0)  this.destroyed();
+        return this.health <= 0
     }
 }
 

@@ -10,8 +10,16 @@ export class Vector2 {
         this.y = y;
     }
 
-    static of(origin: PositionedItem, target: PositionedItem) {
+    static point(origin: PositionedItem, target: PositionedItem) {
         return new Vector2(target.x - origin.x, target.y - origin.y);
+    }
+
+    static of(source: PositionedItem) {
+        return new Vector2(source.x, source.y);
+    }
+
+    static zero() {
+        return new Vector2(0, 0);
     }
 
     add(v: PositionedItem) {
