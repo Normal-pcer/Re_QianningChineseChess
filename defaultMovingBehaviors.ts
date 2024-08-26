@@ -4,7 +4,7 @@ import { Vector2 } from "./vector.js";
 
 const BOARD = [0, 8, 0, 9];
 const RED_BASE = [3, 5, 0, 2];
-const BLACK_BASE = [3, 5, 8, 10];
+const BLACK_BASE = [3, 5, 7, 9];
 const RED_TERRITORY = [0, 8, 0, 4];
 const BLACK_TERRITORY = [0, 8, 5, 9];
 

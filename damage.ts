@@ -10,7 +10,7 @@ import { DamageType } from "./damageType.js";
 function showEffect(damage: Damage, targetPosition: Position, lastTime: number = 750) {
     let effectElement = document.createElement("div");
     let parent = document.getElementById("damage-numbers") as HTMLElement;
-    effectElement.innerText = `${damage.amount}`;
+    effectElement.innerText = `${Math.round(damage.realAmount)}`;
     effectElement.className = `damage-effect ${damage.isCritical ? "critical-damage-effect" : ""}`;
     effectElement.style.animation = `damage-number ${lastTime}ms ease-out`;
     if (damage.source?.team === Team.Red) {
@@ -39,6 +39,7 @@ export class Damage {
     isCritical: boolean = false;
     quasiMoveTarget: (piece: Piece, target: Piece) => Position;
     repelTarget: (piece: Piece, target: Piece) => Position;
+    realAmount: number = 0; /*计算目标的防御力*/
 
     constructor(
         type: DamageType,
@@ -56,6 +57,7 @@ export class Damage {
         this.isCritical = isCritical;
         this.quasiMoveTarget = quasiMoveTarget ?? defaultQuasiMoveTargets[type];
         this.repelTarget = repelTarget ?? defaultRepelTargets[type];
+        this.realAmount = amount * (target ? Math.pow(2, -target.defense / 1000) : 1);
     }
 
     public apply() {

@@ -142,7 +142,7 @@ class Piece {
     damaged(damage = null) {
         if (damage === null)
             return;
-        let realAmount = damage.amount * Math.pow(2, -this.defense / 1000); // 1000 防御伤害减半
+        let realAmount = damage.realAmount; // 1000 防御伤害减半
         this.health -= realAmount;
         console.log(damage, realAmount, this.health);
         if (this.health <= 0)
