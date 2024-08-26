@@ -26,7 +26,6 @@ export class Vector2 {
         return new Vector2(this.x + v.x, this.y + v.y);
     }
 
-
     sub(v: PositionedItem) {
         return new Vector2(this.x - v.x, this.y - v.y);
     }
@@ -49,5 +48,9 @@ export class Vector2 {
 
     normalize() {
         return this.div(this.length);
+    }
+    
+    equals(other: PositionedItem): boolean {
+        return this.x === other.x && this.y === other.y;
     }
 }

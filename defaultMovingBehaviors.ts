@@ -163,7 +163,7 @@ export class DefaultMovingBehaviors {
         if (passed) directions.push(...[new Vector2(1, 0), new Vector2(-1, 0)]);
         return filterGrids((pos) => {
             return directions.some(
-                (direction) => Vector2.point(piece.position, pos).dot(direction) == 1
+                (direction) => Vector2.point(piece.position, pos).equals(direction)
             );
         });
     };

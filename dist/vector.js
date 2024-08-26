@@ -35,5 +35,8 @@ export class Vector2 {
     normalize() {
         return this.div(this.length);
     }
+    equals(other) {
+        return this.x === other.x && this.y === other.y;
+    }
 }
 //# sourceMappingURL=vector.js.map
