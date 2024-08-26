@@ -60,6 +60,19 @@ function repelForward(origin: Position, direction: Vector2, distance_limit = 1) 
     return positionAvailable(position) ? position : origin;
 }
 
+function correctDistanceByWeight(distance: number, weight: number) {
+    const constanceK = 80;  // 可以适当调整；constanceK越小越不容易被击退
+    let reduceProbability = 1 - Math.pow(constanceK / (constanceK + weight), 2);
+    console.log('reduceProbability: ' + reduceProbability)
+    let result = 0;
+    for (let i = 1; i <= distance; i++) {
+        if (Math.random() > reduceProbability) {
+            result++;
+        }
+    }
+    return result;
+}
+
 export const defaultRepelTargets: {
     [key in DamageType]: (piece: Piece, target: Piece) => Position;
 } = {
@@ -70,10 +83,18 @@ export const defaultRepelTargets: {
         return piece.position;
     },
     [DamageType.MeleeMedium]: (piece, target) => {
-        return repelForward(target.position, Vector2.point(piece.position, target.position));
+        return repelForward(
+            target.position,
+            Vector2.point(piece.position, target.position),
+            correctDistanceByWeight(1, target.weight)
+        );
     },
     [DamageType.MeleeHigh]: (piece, target) => {
-        return repelForward(target.position, Vector2.point(piece.position, target.position), 2);
+        return repelForward(
+            target.position,
+            Vector2.point(piece.position, target.position),
+            correctDistanceByWeight(2, target.weight)
+        );
     },
     [DamageType.Ranged]: (piece, target) => {
         return defaultRepelTargets[DamageType.MeleeMedium](piece, target);

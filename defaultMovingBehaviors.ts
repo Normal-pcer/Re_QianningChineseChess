@@ -168,10 +168,6 @@ export class DefaultMovingBehaviors {
         });
     };
 
-    /**
-     * @param {Piece} piece
-     * @returns {Position[]}
-     */
     static auto(piece: Piece, attack = false) {
         return attack ? mappingAttack[piece.type](piece) : mapping[piece.type](piece);
     }

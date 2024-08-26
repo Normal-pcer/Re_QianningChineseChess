@@ -18,6 +18,7 @@ class Piece {
     criticalChance = 0;
     criticalDamage = 0;
     damageType = DamageType.None;
+    weight = 0;
     constructor(team, type, position, htmlElement, config = null) {
         this.team = team;
         this.type = type;
@@ -32,6 +33,7 @@ class Piece {
             this.damageType = config.damageType;
             this.maxHealth = config.maxHealth;
             this.health = this.maxHealth;
+            this.weight = config.weight;
         }
     }
     toggleSelected() {

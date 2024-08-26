@@ -129,10 +129,6 @@ export class DefaultMovingBehaviors {
             return directions.some((direction) => Vector2.point(piece.position, pos).equals(direction));
         });
     };
-    /**
-     * @param {Piece} piece
-     * @returns {Position[]}
-     */
     static auto(piece, attack = false) {
         return attack ? mappingAttack[piece.type](piece) : mapping[piece.type](piece);
     }

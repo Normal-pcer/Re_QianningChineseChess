@@ -21,6 +21,7 @@ class Piece {
     criticalChance: number = 0;
     criticalDamage: number = 0;
     damageType: DamageType = DamageType.None;
+    weight: number = 0;
 
     constructor(
         team: string,
@@ -43,6 +44,7 @@ class Piece {
             this.damageType = config.damageType;
             this.maxHealth = config.maxHealth;
             this.health = this.maxHealth;
+            this.weight = config.weight;
         }
     }
 

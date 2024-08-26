@@ -7,7 +7,8 @@ export class PieceConfig {
     criticalChance = 0;
     criticalDamage = 0;
     damageType = DamageType.None;
-    constructor(maxHealth, attackDamage, defense, damageType = DamageType.MeleeLow, criticalChance = 0.1, criticalDamage = 0.75) {
+    weight = 0;
+    constructor(maxHealth, attackDamage, defense, damageType = DamageType.MeleeLow, weight = 0, criticalChance = 0.1, criticalDamage = 0.75) {
         this.health = maxHealth;
         this.maxHealth = maxHealth;
         this.attackDamage = attackDamage;
@@ -15,16 +16,17 @@ export class PieceConfig {
         this.criticalChance = criticalChance;
         this.criticalDamage = criticalDamage;
         this.damageType = damageType;
+        this.weight = weight;
     }
 }
 export const defaultPieceConfigs = {
-    master: new PieceConfig(7500, 800, 500, DamageType.MeleeLow),
-    guard: new PieceConfig(2500, 1500, 100, DamageType.MeleeLow),
-    elephant: new PieceConfig(4000, 2000, 200, DamageType.MeleeMedium),
-    horse: new PieceConfig(3000, 2750, 200, DamageType.MeleeMedium),
-    chariot: new PieceConfig(4500, 2200, 200, DamageType.MeleeHigh),
-    gun: new PieceConfig(5000, 2250, 200, DamageType.Ranged),
-    pawn: new PieceConfig(2250, 1250, 100, DamageType.MeleeLow),
+    master: new PieceConfig(7500, 800, 500, DamageType.MeleeLow, 12),
+    guard: new PieceConfig(2500, 1500, 100, DamageType.MeleeLow, 8),
+    elephant: new PieceConfig(4000, 2000, 200, DamageType.MeleeMedium, 18),
+    horse: new PieceConfig(3000, 2750, 200, DamageType.MeleeMedium, 15),
+    chariot: new PieceConfig(4500, 2200, 200, DamageType.MeleeHigh, 20),
+    gun: new PieceConfig(5000, 2250, 200, DamageType.Ranged, 20),
+    pawn: new PieceConfig(2250, 1250, 100, DamageType.MeleeLow, 8),
     none: new PieceConfig(1, 0, 0, DamageType.None),
 };
 //# sourceMappingURL=defaultPieceConfig.js.map
