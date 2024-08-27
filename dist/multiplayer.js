@@ -2,8 +2,8 @@ import { Position } from "./position.js";
 import { Piece, PieceType, Team, pieces } from "./piece.js";
 import * as Selection from "./selection.js";
 import { init } from "./defaultMovingBehaviors.js";
-var term = 0;
-const termMap = [Team.Red, Team.Black];
+var round = 0;
+const roundMap = [Team.Red, Team.Black];
 init();
 export function stop(victor) {
     Selection.setCurrentSelection(null);
@@ -21,7 +21,7 @@ window.onload = () => {
      */
     /*prettier-ignore */
     const MainSelection = new Selection
-        .SelectionManager(new Selection.SingleSelection([], Selection.ItemType.Piece, "请选择要移动的棋子", (piece) => termMap[term % 2] === piece.data.team))
+        .SelectionManager(new Selection.SingleSelection([], Selection.ItemType.Piece, "请选择要移动的棋子", (piece) => roundMap[round % 2] === piece.data.team))
         .then((past) => {
         let selectedPiece = past[0].data;
         let validMove = selectedPiece.destinations;
@@ -49,10 +49,10 @@ window.onload = () => {
             console.log(selectedPiece, "move", selectedTarget, success);
         }
         if (success) {
-            term++;
-            console.log("term" + term + "now");
-            let term_tip = document.querySelector("#term-tip>span");
-            term_tip.innerText = termMap[term % 2];
+            round++;
+            console.log("round" + round + "now");
+            let round_tip = document.querySelector("#round-tip>span");
+            round_tip.innerText = roundMap[round % 2];
         }
     });
     Selection.setCurrentSelection(MainSelection);

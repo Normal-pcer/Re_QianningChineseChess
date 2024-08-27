@@ -5,6 +5,7 @@ import { stop } from "./multiplayer.js";
 import { defaultPieceConfigs, PieceConfig } from "./defaultPieceConfig.js";
 import { Damage } from "./damage.js";
 import { DamageType } from "./damageType.js";
+import { Team } from "./team.js" 
 
 export var pieces: Piece[] = [];
 
@@ -20,8 +21,8 @@ class Piece {
     defense: number = 0;
     criticalChance: number = 0;
     criticalDamage: number = 0;
-    damageType: DamageType = DamageType.None;
     weight: number = 0;
+    damageType: DamageType = DamageType.None;
 
     constructor(
         team: string,
@@ -180,21 +181,6 @@ class PieceType {
     static None = "none";
 }
 
-class Team {
-    static Red = "red";
-    static Black = "black";
-    static None = "none";
 
-    static enemy(to: string) {
-        switch (to) {
-            case Team.Red:
-                return Team.Black;
-            case Team.Black:
-                return Team.Red;
-            default:
-                return Team.None;
-        }
-    }
-}
 
-export { Piece, PieceType, Team };
+export { Piece, PieceType };

@@ -1,10 +1,9 @@
 import { Position } from "./position.js";
-import { Piece, PieceType, Team, pieces } from "./piece.js";
+import { Piece, PieceType, pieces } from "./piece.js";
 import * as Selection from "./selection.js";
 import { DefaultMovingBehaviors, init } from "./defaultMovingBehaviors.js";
-
-var term = 0;
-const termMap = [Team.Red, Team.Black];
+import { Team } from "./team.js";
+import { nextRound, getRound } from "./round.js";
 
 init();
 
@@ -27,7 +26,7 @@ window.onload = () => {
         .SelectionManager(
             new Selection.SingleSelection(
                 [], Selection.ItemType.Piece, "请选择要移动的棋子", 
-                (piece) => termMap[term%2] === (piece.data as Piece).team))
+                (piece) => getRound() === (piece.data as Piece).team))
         .then(
             (past) => {
                 let selectedPiece = past[0].data as Piece;
@@ -63,10 +62,10 @@ window.onload = () => {
                 }
 
                 if (success) {
-                    term++;
-                    console.log("term"+term+"now")
-                    let term_tip = document.querySelector("#term-tip>span") as HTMLElement
-                    term_tip.innerText = termMap[term%2];
+                    nextRound();
+                    let round = getRound();
+                    let round_tip = document.querySelector("#round-tip>span") as HTMLElement
+                    round_tip.innerText = round;
                 }
             } 
         );

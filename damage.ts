@@ -1,4 +1,5 @@
-import { Piece, Team } from "./piece.js";
+import { Piece } from "./piece.js";
+import { Team } from "./team.js";
 import { defaultQuasiMoveTargets, defaultRepelTargets } from "./defaultDamageBehaviors.js";
 import { Position } from "./position.js";
 import { DamageType } from "./damageType.js";

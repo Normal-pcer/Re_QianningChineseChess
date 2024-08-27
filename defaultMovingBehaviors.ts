@@ -1,4 +1,5 @@
-import { Piece, Team, PieceType } from "./piece.js";
+import { Piece, PieceType } from "./piece.js";
+import { Team } from "./team.js";
 import { Position } from "./position.js";
 import { Vector2 } from "./vector.js";
 
