@@ -65,10 +65,10 @@ export const defaultRepelTargets = {
         return piece.position;
     },
     [DamageType.MeleeMedium]: (piece, target) => {
-        return repelForward(target.position, Vector2.point(piece.position, target.position), correctDistanceByWeight(1, target.weight));
+        return repelForward(target.position, Vector2.point(piece.position, target.position), correctDistanceByWeight(1, target.weight.result));
     },
     [DamageType.MeleeHigh]: (piece, target) => {
-        return repelForward(target.position, Vector2.point(piece.position, target.position), correctDistanceByWeight(2, target.weight));
+        return repelForward(target.position, Vector2.point(piece.position, target.position), correctDistanceByWeight(2, target.weight.result));
     },
     [DamageType.Ranged]: (piece, target) => {
         return defaultRepelTargets[DamageType.MeleeMedium](piece, target);

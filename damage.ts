@@ -58,7 +58,7 @@ export class Damage {
         this.isCritical = isCritical;
         this.quasiMoveTarget = quasiMoveTarget ?? defaultQuasiMoveTargets[type];
         this.repelTarget = repelTarget ?? defaultRepelTargets[type];
-        this.realAmount = amount * (target ? Math.pow(2, -target.defense / 1000) : 1);
+        this.realAmount = amount * (target ? Math.pow(2, -target.defense.result / 1000) : 1);
     }
 
     public apply() {

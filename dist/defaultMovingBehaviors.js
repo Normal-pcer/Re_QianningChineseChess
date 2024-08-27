@@ -1,4 +1,5 @@
-import { Team, PieceType } from "./piece.js";
+import { PieceType } from "./piece.js";
+import { Team } from "./team.js";
 import { Position } from "./position.js";
 import { Vector2 } from "./vector.js";
 const BOARD = [0, 8, 0, 9];
