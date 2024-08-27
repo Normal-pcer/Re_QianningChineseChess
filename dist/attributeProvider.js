@@ -2,7 +2,8 @@ import { round } from "./round.js";
 export class AttributeProvider {
     multiplicationAreas = [];
     constructor(base) {
-        this.multiplicationAreas.push(new MultiplicationArea(base));
+        this.multiplicationAreas.push(new MultiplicationArea(base, "Base"));
+        this.multiplicationAreas.push(new MultiplicationArea(1, "Improvement"));
     }
     get result() {
         let result = 1;
@@ -15,9 +16,11 @@ export class AttributeProvider {
 class MultiplicationArea {
     base = 1;
     modifiers = [];
-    constructor(base, modifiers = []) {
+    description = "";
+    constructor(base, description = "", modifiers = []) {
         this.base = base;
         this.modifiers = modifiers;
+        this.description = description;
     }
     modify(attributeModifier) {
         this.modifiers.push(attributeModifier);
@@ -37,7 +40,7 @@ export class AttributeModifier {
     expire = -1; // -1 表示永不过期
     constructor(amount, expire = -1) {
         this.amount = amount;
-        this.expire = expire;
+        this.expire = expire === -1 ? -1 : round + expire;
     }
 }
 //# sourceMappingURL=attributeProvider.js.map

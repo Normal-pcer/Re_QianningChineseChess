@@ -4,6 +4,8 @@ import * as Selection from "./selection.js";
 import { DefaultMovingBehaviors, init } from "./defaultMovingBehaviors.js";
 import { Team } from "./team.js";
 import { nextRound, getRound } from "./round.js";
+import { AttributeModifier } from "./attributeProvider.js";
+import { testActionCard } from "./actionCard.js";
 
 init();
 
@@ -94,6 +96,9 @@ window.onload = () => {
                 pieces
                     .filter((piece) => piece.type === PieceType.Master && piece.team != text)[0]
                     .damaged();
+            }
+            if (text === "/strength") {
+                testActionCard.apply()
             }
         };
 };
