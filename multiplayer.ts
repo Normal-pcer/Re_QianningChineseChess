@@ -6,6 +6,7 @@ import { Team } from "./team.js";
 import { nextRound, getRound } from "./round.js";
 import { AttributeModifier } from "./attributeProvider.js";
 import { testActionCard } from "./actionCard.js";
+import { runAllSchedules } from "./schedule.js";
 
 init();
 
@@ -65,6 +66,7 @@ window.onload = () => {
 
                 if (success) {
                     nextRound();
+                    runAllSchedules();
                     let round = getRound();
                     let round_tip = document.querySelector("#round-tip>span") as HTMLElement
                     round_tip.innerText = round;

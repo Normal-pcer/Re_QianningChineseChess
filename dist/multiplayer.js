@@ -5,6 +5,7 @@ import { init } from "./defaultMovingBehaviors.js";
 import { Team } from "./team.js";
 import { nextRound, getRound } from "./round.js";
 import { testActionCard } from "./actionCard.js";
+import { runAllSchedules } from "./schedule.js";
 init();
 export function stop(victor) {
     Selection.setCurrentSelection(null);
@@ -51,6 +52,7 @@ window.onload = () => {
         }
         if (success) {
             nextRound();
+            runAllSchedules();
             let round = getRound();
             let round_tip = document.querySelector("#round-tip>span");
             round_tip.innerText = round;
