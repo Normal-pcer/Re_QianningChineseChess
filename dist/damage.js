@@ -2,6 +2,7 @@ import { Piece } from "./piece.js";
 import { Team } from "./team.js";
 import { defaultQuasiMoveTargets, defaultRepelTargets } from "./defaultDamageBehaviors.js";
 import { DamageType } from "./damageType.js";
+import { DamageTrigger, TriggerManager } from "./trigger.js";
 /**
  * @description 展示一个伤害数字特效
  * @param lastTime 特效持续时间，单位毫秒
@@ -60,6 +61,7 @@ export class Damage {
             this.source ? this.target.move(this.repelTarget(this.source, this.target)) : null;
             this.source?.move(this.quasiMoveTarget(this.source, virtualMarker));
         }
+        TriggerManager.trigger(DamageTrigger.event, this);
         this.target?.draw();
         showEffect(this, position);
     }

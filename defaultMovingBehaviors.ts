@@ -57,15 +57,20 @@ function filterGrids(condition: (pos: Position) => boolean, config = BOARD) {
     return grids;
 }
 
-function ray(origin: Position, direction: Vector2, barriers = 0, strict = true) {
+/**
+ * @param barriers_min 默认值-1表示限制为和barriers_max相同
+ * @returns 
+ */
+export function ray(origin: Position, direction: Vector2, barriers_max = 0, barriers_min = -1) {
     let grids = [];
     let pos = origin.add(direction);
     let barriersCount = 0;
+    if (barriers_min == -1) barriers_min = barriers_max;
     while (GridAvailable(pos)) {
-        if (!strict || barriersCount == barriers) grids.push(pos);
+        if (barriersCount >= barriers_min && barriersCount <= barriers_max) grids.push(pos);
         if (pos.piece != null) {
             barriersCount++;
-            if (barriersCount > barriers) {
+            if (barriersCount > barriers_max) {
                 break;
             }
         }
@@ -163,8 +168,8 @@ export class DefaultMovingBehaviors {
         let directions = [team === Team.Red ? new Vector2(0, 1) : new Vector2(0, -1)];
         if (passed) directions.push(...[new Vector2(1, 0), new Vector2(-1, 0)]);
         return filterGrids((pos) => {
-            return directions.some(
-                (direction) => Vector2.point(piece.position, pos).equals(direction)
+            return directions.some((direction) =>
+                Vector2.point(piece.position, pos).equals(direction)
             );
         });
     };

@@ -5,7 +5,7 @@ import { DefaultMovingBehaviors, init } from "./defaultMovingBehaviors.js";
 import { Team } from "./team.js";
 import { nextRound, getRound } from "./round.js";
 import { AttributeModifier } from "./attributeProvider.js";
-import { testActionCard } from "./actionCard.js";
+import { highGunActionCard, testActionCard } from "./actionCard.js";
 import { runAllSchedules } from "./schedule.js";
 
 init();
@@ -99,8 +99,8 @@ window.onload = () => {
                     .filter((piece) => piece.type === PieceType.Master && piece.team != text)[0]
                     .damaged();
             }
-            if (text === "/strength") {
-                testActionCard.apply()
+            if (text === "/high") {
+                highGunActionCard.apply()
             }
         };
 };

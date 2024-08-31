@@ -99,9 +99,7 @@ export class SelectionManager {
     }
 
     stop(done = false) {
-        if (this.afterSelection != null && done) this.afterSelection(this.results);
-        this.reset();
-
+        // 删除现有的提示
         let action_bar = document.querySelector("#action-bar");
         if (action_bar instanceof HTMLElement) action_bar.style.display = "none";
         let action_bar_span = document.querySelector("#action-bar span");
@@ -109,6 +107,11 @@ export class SelectionManager {
 
         if (this.doOnce) currentSelection = null;
         else this.current?.tip();
+        if (this.afterSelection != null && done) this.afterSelection(this.results);
+        this.reset();
+
+        console.log("stop: ", this)
+
         pieces.forEach((p) => (p.selected = false));
     }
 }
@@ -232,4 +235,9 @@ export function onGameboardClick(pos: Position) {
 
 export function setCurrentSelection(selection: SelectionManager | null) {
     currentSelection = selection;
+    currentSelection?.current?.tip();
+}
+
+export function getCurrentSelection() {
+    return currentSelection;
 }

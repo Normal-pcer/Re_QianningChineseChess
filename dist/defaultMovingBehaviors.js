@@ -50,16 +50,22 @@ function filterGrids(condition, config = BOARD) {
     }
     return grids;
 }
-function ray(origin, direction, barriers = 0, strict = true) {
+/**
+ * @param barriers_min 默认值-1表示限制为和barriers_max相同
+ * @returns
+ */
+export function ray(origin, direction, barriers_max = 0, barriers_min = -1) {
     let grids = [];
     let pos = origin.add(direction);
     let barriersCount = 0;
+    if (barriers_min == -1)
+        barriers_min = barriers_max;
     while (GridAvailable(pos)) {
-        if (!strict || barriersCount == barriers)
+        if (barriersCount >= barriers_min && barriersCount <= barriers_max)
             grids.push(pos);
         if (pos.piece != null) {
             barriersCount++;
-            if (barriersCount > barriers) {
+            if (barriersCount > barriers_max) {
                 break;
             }
         }

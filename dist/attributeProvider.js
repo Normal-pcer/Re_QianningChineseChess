@@ -1,7 +1,6 @@
 import { round } from "./round.js";
 export const operaPlus = (arg1, arg2) => arg1 + arg2;
 export const operaOverride = (arg1, arg2) => arg2;
-// 本段代码大量使用as any跳过检查，因为TypeScript无法正确推断类型qwq
 /**
  * 属性提供器
  * 如果T不是数字，则只有首个乘区会生效
@@ -57,7 +56,7 @@ class MultiplicationArea {
     get result() {
         let result = this.base;
         for (let modifier of this.modifiers) {
-            if (modifier.expire == -1 || modifier.expire >= round) {
+            if (modifier.enabled && (modifier.expire == -1 || modifier.expire >= round)) {
                 result = modifier.operation(result, modifier.amount);
             }
         }
@@ -68,6 +67,7 @@ export class AttributeModifier {
     amount;
     expire = -1; // -1 表示永不过期
     operation;
+    enabled = true;
     /**
      * 如果operation为null，则会应用如下默认操作：
      * 1. 如果T是数字，则使用加法

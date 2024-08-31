@@ -89,9 +89,7 @@ export class SelectionManager {
         }
     }
     stop(done = false) {
-        if (this.afterSelection != null && done)
-            this.afterSelection(this.results);
-        this.reset();
+        // 删除现有的提示
         let action_bar = document.querySelector("#action-bar");
         if (action_bar instanceof HTMLElement)
             action_bar.style.display = "none";
@@ -102,6 +100,10 @@ export class SelectionManager {
             currentSelection = null;
         else
             this.current?.tip();
+        if (this.afterSelection != null && done)
+            this.afterSelection(this.results);
+        this.reset();
+        console.log("stop: ", this);
         pieces.forEach((p) => (p.selected = false));
     }
 }
@@ -207,5 +209,9 @@ export function onGameboardClick(pos) {
 }
 export function setCurrentSelection(selection) {
     currentSelection = selection;
+    currentSelection?.current?.tip();
+}
+export function getCurrentSelection() {
+    return currentSelection;
 }
 //# sourceMappingURL=selection.js.map

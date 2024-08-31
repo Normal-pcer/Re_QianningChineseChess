@@ -21,6 +21,8 @@ class Piece {
     criticalDamage = new AttributeProvider(0);
     weight = new AttributeProvider(0);
     damageType = DamageType.None;
+    movingDestinationsCallback;
+    attackingTargetsCallback;
     constructor(team, type, position, htmlElement, config = null) {
         this.team = team;
         this.type = type;
@@ -37,6 +39,8 @@ class Piece {
             this.health = this.maxHealth.result;
             this.weight = new AttributeProvider(config.weight);
         }
+        this.movingDestinationsCallback = new AttributeProvider(() => DefaultMovingBehaviors.auto(this, false));
+        this.attackingTargetsCallback = new AttributeProvider(() => DefaultMovingBehaviors.auto(this, true));
     }
     toggleSelected() {
         if (!this.htmlElement)
@@ -69,10 +73,10 @@ class Piece {
         }
     }
     get destinations() {
-        return DefaultMovingBehaviors.auto(this);
+        return this.movingDestinationsCallback.result();
     }
     get attackTargets() {
-        return DefaultMovingBehaviors.auto(this, true);
+        return this.attackingTargetsCallback.result();
     }
     init() {
         if (!this.htmlElement)
