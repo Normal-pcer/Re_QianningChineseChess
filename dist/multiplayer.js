@@ -86,7 +86,7 @@ window.onload = () => {
         };
     // 开局三回合攻击无效，避免开局打马
     pieces.forEach((piece) => {
-        piece.defense.area(0).modify(new AttributeModifier(10000, 3 * 2));
+        piece.defense.area(0).modify(new AttributeModifier(8000, 3 * 2));
     });
 };
 // 当页面大小改变

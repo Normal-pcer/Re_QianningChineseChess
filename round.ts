@@ -5,6 +5,7 @@ export const roundMap = [Team.Red, Team.Black];
 
 export function nextRound() {
     round++;
+    console.log(`Round ${round}`)
 }
 
 export function getRound() {

@@ -65,6 +65,7 @@ class MultiplicationArea<T> {
         let result = this.base;
         for (let modifier of this.modifiers) {
             if (modifier.enabled && (modifier.expire == -1 || modifier.expire >= round)) {
+                console.log(modifier, "expire: ", modifier.expire);
                 result = modifier.operation(result, modifier.amount);
             }
         }
@@ -82,10 +83,14 @@ export class AttributeModifier<T> {
      * 如果operation为null，则会应用如下默认操作：
      * 1. 如果T是数字，则使用加法
      * 2. 如果T不是数字，则使用覆盖
+     *
+     * @param expireOffset -当为数字时，表示参数expire的偏移量，此时实际过期时间为当前时间之后再经过
+     * ($expire-$expireOffset)回合；当为null时，表示参数expire直接作为过期回合号
      */
     constructor(
         amount: T,
         expire: number = -1,
+        expireOffset: number | null = -1,
         operation: null | ((arg1: T, arg2: T) => T) = null
     ) {
         this.amount = amount;
@@ -98,6 +103,7 @@ export class AttributeModifier<T> {
         } else {
             this.operation = operation;
         }
-        this.expire = expire === -1 ? -1 : round + expire;
+        if (expireOffset === null) this.expire = expire;
+        else this.expire = expire === -1 ? -1 : round + expire + expireOffset;
     }
 }

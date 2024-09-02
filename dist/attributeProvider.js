@@ -57,6 +57,7 @@ class MultiplicationArea {
         let result = this.base;
         for (let modifier of this.modifiers) {
             if (modifier.enabled && (modifier.expire == -1 || modifier.expire >= round)) {
+                console.log(modifier, "expire: ", modifier.expire);
                 result = modifier.operation(result, modifier.amount);
             }
         }
