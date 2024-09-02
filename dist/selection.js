@@ -74,7 +74,7 @@ export class SelectionManager {
         this.results = [];
         let first = this.recursions[this.index];
         this.current = first instanceof SingleSelection ? first : first([]);
-        this.current.tip();
+        // this.current.tip();
     }
     next(result) {
         this.results.push(result);
@@ -96,13 +96,14 @@ export class SelectionManager {
         let action_bar_span = document.querySelector("#action-bar span");
         if (action_bar_span instanceof HTMLElement)
             action_bar_span.innerText = "";
+        let results = this.results;
+        this.reset();
         if (this.doOnce)
             currentSelection = null;
         else
             this.current?.tip();
         if (this.afterSelection != null && done)
-            this.afterSelection(this.results);
-        this.reset();
+            this.afterSelection(results);
         console.log("stop: ", this);
         pieces.forEach((p) => (p.selected = false));
     }
