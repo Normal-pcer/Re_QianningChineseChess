@@ -5,7 +5,7 @@
     "tasks": [
         {
             "label": "Typescript Build",
-            "command": "cd ${workspaceFolder} && tsc",
+            "command": "cd ${workspaceFolder} && tsc && python pre.py",
             "type": "shell"
         }
     ]
