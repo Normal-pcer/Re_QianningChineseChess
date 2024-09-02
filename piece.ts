@@ -27,6 +27,7 @@ class Piece {
 
     movingDestinationsCallback: AttributeProvider<() => Position[]>;
     attackingTargetsCallback: AttributeProvider<() => Position[]>;
+    attackActionCallback: AttributeProvider<(target: Piece) => boolean>;
 
     constructor(
         team: string,
@@ -58,6 +59,15 @@ class Piece {
         this.attackingTargetsCallback = new AttributeProvider(() =>
             DefaultMovingBehaviors.auto(this, true)
         );
+        this.attackActionCallback = new AttributeProvider((piece) => {
+            if (piece.team === this.team) return false;
+            let damageAmount = this.attackDamage.result;
+            let isCritical = Math.random() < this.criticalChance.result;
+            if (isCritical) damageAmount *= this.criticalDamage.result + 1;
+            let damageObject = new Damage(this.damageType, damageAmount, this, piece, isCritical);
+            damageObject.apply();
+            return true;
+        });
     }
 
     toggleSelected() {
@@ -143,13 +153,7 @@ class Piece {
     }
 
     attack(piece: Piece) {
-        if (piece.team === this.team) return false;
-        let damageAmount = this.attackDamage.result;
-        let isCritical = Math.random() < this.criticalChance.result;
-        if (isCritical) damageAmount *= this.criticalDamage.result + 1;
-        let damageObject = new Damage(this.damageType, damageAmount, this, piece, isCritical);
-        damageObject.apply();
-        return true;
+        return this.attackActionCallback.result(piece);
     }
 
     destroyed() {

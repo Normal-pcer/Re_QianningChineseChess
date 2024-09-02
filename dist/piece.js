@@ -23,6 +23,7 @@ class Piece {
     damageType = DamageType.None;
     movingDestinationsCallback;
     attackingTargetsCallback;
+    attackActionCallback;
     constructor(team, type, position, htmlElement, config = null) {
         this.team = team;
         this.type = type;
@@ -41,6 +42,17 @@ class Piece {
         }
         this.movingDestinationsCallback = new AttributeProvider(() => DefaultMovingBehaviors.auto(this, false));
         this.attackingTargetsCallback = new AttributeProvider(() => DefaultMovingBehaviors.auto(this, true));
+        this.attackActionCallback = new AttributeProvider((piece) => {
+            if (piece.team === this.team)
+                return false;
+            let damageAmount = this.attackDamage.result;
+            let isCritical = Math.random() < this.criticalChance.result;
+            if (isCritical)
+                damageAmount *= this.criticalDamage.result + 1;
+            let damageObject = new Damage(this.damageType, damageAmount, this, piece, isCritical);
+            damageObject.apply();
+            return true;
+        });
     }
     toggleSelected() {
         if (!this.htmlElement)
@@ -126,15 +138,7 @@ class Piece {
         return true;
     }
     attack(piece) {
-        if (piece.team === this.team)
-            return false;
-        let damageAmount = this.attackDamage.result;
-        let isCritical = Math.random() < this.criticalChance.result;
-        if (isCritical)
-            damageAmount *= this.criticalDamage.result + 1;
-        let damageObject = new Damage(this.damageType, damageAmount, this, piece, isCritical);
-        damageObject.apply();
-        return true;
+        return this.attackActionCallback.result(piece);
     }
     destroyed() {
         if (this.htmlElement)
