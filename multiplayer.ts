@@ -8,7 +8,7 @@ import { AttributeModifier } from "./attributeProvider.js";
 import { highGunActionCard, limitlessHorseActionCard, testActionCard } from "./actionCard.js";
 import { runAllSchedules } from "./schedule.js";
 import { lootCard } from "./cardLooting.js";
-import { recall, Save } from "./save.js";
+import { recall, Save, saveCurrent } from "./save.js";
 
 init();
 
@@ -119,7 +119,10 @@ window.onload = () => {
     };
     (document.getElementById("recall-button") as HTMLParagraphElement).onclick = () => {
         recall();
+        console.log("recall");
     }
+
+    saveCurrent();
 };
 
 // 当页面大小改变

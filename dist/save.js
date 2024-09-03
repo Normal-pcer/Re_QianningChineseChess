@@ -20,7 +20,7 @@ export function saveCurrent() {
     }, round));
 }
 export function recall() {
-    if (saves.length > 0) {
+    if (saves.length > 1) {
         saves.pop();
         const lastSave = saves[saves.length - 1];
         if (lastSave) {

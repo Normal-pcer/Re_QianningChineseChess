@@ -8,7 +8,7 @@ import { AttributeModifier } from "./attributeProvider.js";
 import { highGunActionCard, limitlessHorseActionCard } from "./actionCard.js";
 import { runAllSchedules } from "./schedule.js";
 import { lootCard } from "./cardLooting.js";
-import { recall } from "./save.js";
+import { recall, saveCurrent } from "./save.js";
 init();
 export function stop(victor) {
     Selection.setCurrentSelection(null);
@@ -99,7 +99,9 @@ window.onload = () => {
     };
     document.getElementById("recall-button").onclick = () => {
         recall();
+        console.log("recall");
     };
+    saveCurrent();
 };
 // 当页面大小改变
 window.onresize = () => {
