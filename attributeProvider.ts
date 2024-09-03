@@ -35,7 +35,7 @@ export class AttributeProvider<T = number> {
     }
 
     area(index: number) {
-        if (typeof this.multiplicationAreas[0] !== "number") {
+        if (typeof this.multiplicationAreas[0].base !== "number") {
             return this.multiplicationAreas[0];
         }
         while (index >= this.multiplicationAreas.length) {

@@ -9,7 +9,9 @@ export class Player {
         targetUlElement.innerHTML = this.team + ":";
         for (let i = 0; i < this.actionCards.length; i++) {
             let targetLiElement = document.createElement("li");
-            targetLiElement.innerHTML = this.actionCards[i].name;
+            targetLiElement.innerHTML =
+                this.actionCards[i].name +
+                    ` <span style="color: gray;">(${this.actionCards[i].description})</span>`;
             targetUlElement.appendChild(targetLiElement);
             targetLiElement.addEventListener("click", () => {
                 this.actionCards[i].apply();

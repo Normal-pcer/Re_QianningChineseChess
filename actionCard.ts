@@ -44,13 +44,14 @@ export const testActionCard = new ActionCard(
 
 /**
  * 进行一次单选棋子，然后基于选择的棋子进行接下来的操作
+ * @pieceType 指定棋子类型，None表示不限制
  */
 const singleTargetSelectorTemplate =
     (name: string, pieceType: string, final: (results: SelectedItem[]) => void) => () => {
         let currentSelection = getCurrentSelection();
         let targetSelection = new SelectionManager(
             new SingleSelection([], ItemType.Piece, `请选择要应用「${name}」的棋子`, (item) => {
-                return (item.data as Piece).type === pieceType;
+                return (item.data as Piece).type === pieceType || pieceType === PieceType.None;
             })
         ).final((results) => {
             final(results);
@@ -99,5 +100,40 @@ export const limitlessHorseActionCard = new ActionCard(
         }, 3 * 2);
         piece.attackingTargetsCallback.area(0).modify(modifier);
         piece.movingDestinationsCallback.area(0).modify(modifier);
+    })
+);
+
+export const strengthPotionActionCard = new ActionCard(
+    "力量药水",
+    "strengthPotion",
+    "持续3回合-选中棋子的攻击力提升15%",
+    singleTargetSelectorTemplate("力量药水", PieceType.None, (results) => {
+        let piece = results[0].data as Piece;
+        let modifier = new AttributeModifier(0.15, 3 * 2);
+        piece.attackDamage.area(1).modify(modifier);
+        console.log(modifier);
+    })
+);
+
+export const weaknessPotionActionCard = new ActionCard(
+    "虚弱药水",
+    "weaknessPotion",
+    "持续3回合-选中棋子的攻击力降低15%",
+    singleTargetSelectorTemplate("虚弱药水", PieceType.None, (results) => {
+        let piece = results[0].data as Piece;
+        let modifier = new AttributeModifier(-0.15, 3 * 2);
+        piece.attackDamage.area(1).modify(modifier);
+        console.log(modifier);
+    })
+);
+
+export const healthInstantPotionActionCard = new ActionCard(
+    "治疗药水",
+    "healthInstantPotion",
+    "选中棋子回复500点生命值",
+    singleTargetSelectorTemplate("治疗药水", PieceType.None, (results) => {
+        let piece = results[0].data as Piece;
+        piece.health = Math.min(piece.health + 500, piece.maxHealth.result);
+        piece.draw();
     })
 );
