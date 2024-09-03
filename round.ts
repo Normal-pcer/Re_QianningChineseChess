@@ -8,6 +8,6 @@ export function nextRound() {
     console.log(`Round ${round}`)
 }
 
-export function getRound() {
+export function getCurrentTeam() {
     return roundMap[round % 2];
 }

@@ -2,11 +2,12 @@ import { Position } from "./position.js";
 import { Piece, PieceType, pieces } from "./piece.js";
 import * as Selection from "./selection.js";
 import { init } from "./defaultMovingBehaviors.js";
-import { Team } from "./team.js";
-import { nextRound, getRound } from "./round.js";
+import { getPlayerFromTeam, Team } from "./team.js";
+import { nextRound, getCurrentTeam } from "./round.js";
 import { AttributeModifier } from "./attributeProvider.js";
 import { highGunActionCard, limitlessHorseActionCard } from "./actionCard.js";
 import { runAllSchedules } from "./schedule.js";
+import { lootCard } from "./cardLooting.js";
 init();
 export function stop(victor) {
     Selection.setCurrentSelection(null);
@@ -24,7 +25,7 @@ window.onload = () => {
      */
     /*prettier-ignore */
     const MainSelection = new Selection
-        .SelectionManager(new Selection.SingleSelection([], Selection.ItemType.Piece, "请选择要移动的棋子", (piece) => getRound() === piece.data.team))
+        .SelectionManager(new Selection.SingleSelection([], Selection.ItemType.Piece, "请选择要移动的棋子", (piece) => getCurrentTeam() === piece.data.team))
         .then((past) => {
         let selectedPiece = past[0].data;
         let validMove = selectedPiece.destinations;
@@ -54,7 +55,7 @@ window.onload = () => {
         if (success) {
             nextRound();
             runAllSchedules();
-            let round = getRound();
+            let round = getCurrentTeam();
             let round_tip = document.querySelector("#round-tip>span");
             round_tip.innerText = round;
         }
@@ -91,6 +92,10 @@ window.onload = () => {
     pieces.forEach((piece) => {
         piece.defense.area(0).modify(new AttributeModifier(8000, 3 * 2));
     });
+    document.getElementById("loot-card-button").onclick = () => {
+        lootCard();
+        getPlayerFromTeam(getCurrentTeam()).showActionCards();
+    };
 };
 // 当页面大小改变
 window.onresize = () => {

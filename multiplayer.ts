@@ -2,11 +2,12 @@ import { Position } from "./position.js";
 import { Piece, PieceType, pieces } from "./piece.js";
 import * as Selection from "./selection.js";
 import { DefaultMovingBehaviors, init } from "./defaultMovingBehaviors.js";
-import { Team } from "./team.js";
-import { nextRound, getRound } from "./round.js";
+import { getPlayerFromTeam, Team } from "./team.js";
+import { nextRound, getCurrentTeam } from "./round.js";
 import { AttributeModifier } from "./attributeProvider.js";
 import { highGunActionCard, limitlessHorseActionCard, testActionCard } from "./actionCard.js";
 import { runAllSchedules } from "./schedule.js";
+import { lootCard } from "./cardLooting.js";
 
 init();
 
@@ -29,7 +30,7 @@ window.onload = () => {
         .SelectionManager(
             new Selection.SingleSelection(
                 [], Selection.ItemType.Piece, "请选择要移动的棋子", 
-                (piece) => getRound() === (piece.data as Piece).team))
+                (piece) => getCurrentTeam() === (piece.data as Piece).team))
         .then(
             (past) => {
                 let selectedPiece = past[0].data as Piece;
@@ -67,7 +68,7 @@ window.onload = () => {
                 if (success) {
                     nextRound();
                     runAllSchedules();
-                    let round = getRound();
+                    let round = getCurrentTeam();
                     let round_tip = document.querySelector("#round-tip>span") as HTMLElement
                     round_tip.innerText = round;
                 }
@@ -99,17 +100,22 @@ window.onload = () => {
                     .damaged();
             }
             if (text === "/high") {
-                highGunActionCard.apply()
+                highGunActionCard.apply();
             }
             if (text === "/limitlessHorse") {
-                limitlessHorseActionCard.apply()
+                limitlessHorseActionCard.apply();
             }
         };
-    
+
     // 开局三回合攻击无效，避免开局打马
     pieces.forEach((piece) => {
-        piece.defense.area(0).modify(new AttributeModifier(8000, 3*2)); 
-    })
+        piece.defense.area(0).modify(new AttributeModifier(8000, 3 * 2));
+    });
+
+    (document.getElementById("loot-card-button") as HTMLParagraphElement).onclick = () => {
+        lootCard();
+        getPlayerFromTeam(getCurrentTeam()).showActionCards();
+    };
 };
 
 // 当页面大小改变

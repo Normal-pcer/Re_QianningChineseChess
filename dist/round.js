@@ -5,7 +5,7 @@ export function nextRound() {
     round++;
     console.log(`Round ${round}`);
 }
-export function getRound() {
+export function getCurrentTeam() {
     return roundMap[round % 2];
 }
 //# sourceMappingURL=round.js.map
