@@ -5,7 +5,7 @@ import { DefaultMovingBehaviors, init } from "./defaultMovingBehaviors.js";
 import { Team } from "./team.js";
 import { nextRound, getRound } from "./round.js";
 import { AttributeModifier } from "./attributeProvider.js";
-import { highGunActionCard, testActionCard } from "./actionCard.js";
+import { highGunActionCard, limitlessHorseActionCard, testActionCard } from "./actionCard.js";
 import { runAllSchedules } from "./schedule.js";
 
 init();
@@ -100,6 +100,9 @@ window.onload = () => {
             }
             if (text === "/high") {
                 highGunActionCard.apply()
+            }
+            if (text === "/limitlessHorse") {
+                limitlessHorseActionCard.apply()
             }
         };
     

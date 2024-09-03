@@ -5,7 +5,7 @@ import { init } from "./defaultMovingBehaviors.js";
 import { Team } from "./team.js";
 import { nextRound, getRound } from "./round.js";
 import { AttributeModifier } from "./attributeProvider.js";
-import { highGunActionCard } from "./actionCard.js";
+import { highGunActionCard, limitlessHorseActionCard } from "./actionCard.js";
 import { runAllSchedules } from "./schedule.js";
 init();
 export function stop(victor) {
@@ -82,6 +82,9 @@ window.onload = () => {
             }
             if (text === "/high") {
                 highGunActionCard.apply();
+            }
+            if (text === "/limitlessHorse") {
+                limitlessHorseActionCard.apply();
             }
         };
     // 开局三回合攻击无效，避免开局打马

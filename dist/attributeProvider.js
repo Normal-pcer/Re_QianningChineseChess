@@ -73,8 +73,11 @@ export class AttributeModifier {
      * 如果operation为null，则会应用如下默认操作：
      * 1. 如果T是数字，则使用加法
      * 2. 如果T不是数字，则使用覆盖
+     *
+     * @param expireOffset -当为数字时，表示参数expire的偏移量，此时实际过期时间为当前时间之后再经过
+     * ($expire-$expireOffset)回合；当为null时，表示参数expire直接作为过期回合号
      */
-    constructor(amount, expire = -1, operation = null) {
+    constructor(amount, expire = -1, expireOffset = -1, operation = null) {
         this.amount = amount;
         if (operation === null) {
             if (typeof amount == "number") {
@@ -87,7 +90,10 @@ export class AttributeModifier {
         else {
             this.operation = operation;
         }
-        this.expire = expire === -1 ? -1 : round + expire;
+        if (expireOffset === null)
+            this.expire = expire;
+        else
+            this.expire = expire === -1 ? -1 : round + expire + expireOffset;
     }
 }
 //# sourceMappingURL=attributeProvider.js.map

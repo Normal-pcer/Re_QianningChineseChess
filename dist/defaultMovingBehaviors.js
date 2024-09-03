@@ -32,13 +32,7 @@ export function init() {
 function GridAvailable(pos, config = BOARD) {
     return config[0] <= pos.x && pos.x <= config[1] && config[2] <= pos.y && pos.y <= config[3];
 }
-/**
- *
- * @param {Function} condition
- * @param {number[]} config
- * @returns {Position[]}
- */
-function filterGrids(condition, config = BOARD) {
+export function filterGrids(condition, config = BOARD) {
     let grids = [];
     for (let i = config[0]; i <= config[1]; i++) {
         for (let j = config[2]; j <= config[3]; j++) {
@@ -110,7 +104,6 @@ export class DefaultMovingBehaviors {
             if (piece.position.manhattanDistance(pos) != 3 ||
                 piece.position.chebyshevDistance(pos) != 2)
                 return false;
-            // With a piece
             let neighbors = filterGrids((pos) => piece.position.manhattanDistance(pos) == 1 && pos.piece !== null);
             let pointer = Vector2.point(piece.position, pos);
             return !neighbors.some((neighbor) => pointer.dot(Vector2.point(piece.position, neighbor)) == 2);

@@ -38,13 +38,8 @@ function GridAvailable(pos: Position, config = BOARD) {
     return config[0] <= pos.x && pos.x <= config[1] && config[2] <= pos.y && pos.y <= config[3];
 }
 
-/**
- *
- * @param {Function} condition
- * @param {number[]} config
- * @returns {Position[]}
- */
-function filterGrids(condition: (pos: Position) => boolean, config = BOARD) {
+
+export function filterGrids(condition: (pos: Position) => boolean, config = BOARD) {
     let grids = [];
     for (let i = config[0]; i <= config[1]; i++) {
         for (let j = config[2]; j <= config[3]; j++) {
@@ -130,7 +125,6 @@ export class DefaultMovingBehaviors {
                 piece.position.chebyshevDistance(pos) != 2
             )
                 return false;
-            // With a piece
             let neighbors = filterGrids(
                 (pos) => piece.position.manhattanDistance(pos) == 1 && pos.piece !== null
             );

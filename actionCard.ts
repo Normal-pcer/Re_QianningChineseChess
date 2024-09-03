@@ -1,5 +1,5 @@
 import { AttributeModifier } from "./attributeProvider.js";
-import { ray } from "./defaultMovingBehaviors.js";
+import { filterGrids, ray } from "./defaultMovingBehaviors.js";
 import { Piece, pieces, PieceType } from "./piece.js";
 import {
     getCurrentSelection,
@@ -63,7 +63,7 @@ const singleTargetSelectorTemplate =
 export const highGunActionCard = new ActionCard(
     "高射炮",
     "highGun",
-    "允许炮至多隔两个棋子攻击",
+    "一次性-允许炮至多隔两个棋子攻击",
     singleTargetSelectorTemplate("高射炮", PieceType.Gun, (results) => {
         let piece = results[0].data as Piece;
         let modifier = new AttributeModifier(() => {
@@ -72,7 +72,7 @@ export const highGunActionCard = new ActionCard(
                 ray(piece.position, new Vector2(0, 1), 2, 1),
                 ray(piece.position, new Vector2(0, -1), 2, 1)
             );
-        }, 3 * 2);
+        });
         piece.attackingTargetsCallback.area(0).modify(modifier);
         TriggerManager.addTrigger(
             new DamageTrigger((damage) => {
@@ -81,5 +81,23 @@ export const highGunActionCard = new ActionCard(
                 }
             })
         );
+    })
+);
+
+export const limitlessHorseActionCard = new ActionCard(
+    "一马平川",
+    "limitlessHorse",
+    "持续3回合-马的行动不再受「蹩马腿」限制",
+    singleTargetSelectorTemplate("一马平川", PieceType.Horse, (results) => {
+        let piece = results[0].data as Piece;
+        let modifier = new AttributeModifier(() => {
+            return filterGrids(
+                (pos) =>
+                    piece.position.manhattanDistance(pos) == 3 &&
+                    piece.position.chebyshevDistance(pos) == 2
+            );
+        }, 3 * 2);
+        piece.attackingTargetsCallback.area(0).modify(modifier);
+        piece.movingDestinationsCallback.area(0).modify(modifier);
     })
 );
