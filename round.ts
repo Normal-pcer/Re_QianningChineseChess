@@ -1,11 +1,14 @@
-import { Team } from "./team.js";
+import { getPlayerFromTeam, Team } from "./team.js";
 
 export var round = 0;
 export const roundMap = [Team.Red, Team.Black];
 
 export function nextRound() {
     round++;
-    console.log(`Round ${round}`)
+    console.log(`Round ${round}`);
+    getPlayerFromTeam(getCurrentTeam()).showActionCards();
+    let round_tip = document.querySelector("#round-tip>span") as HTMLElement;
+    round_tip.innerText = getCurrentTeam();
 }
 
 export function getCurrentTeam() {

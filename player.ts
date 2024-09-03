@@ -20,6 +20,7 @@ export class Player {
             targetLiElement.addEventListener("click", () => {
                 this.actionCards[i].apply();
                 this.actionCards.splice(i, 1);
+                this.showActionCards();
             });
         }
     }

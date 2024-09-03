@@ -68,9 +68,6 @@ window.onload = () => {
                 if (success) {
                     nextRound();
                     runAllSchedules();
-                    let round = getCurrentTeam();
-                    let round_tip = document.querySelector("#round-tip>span") as HTMLElement
-                    round_tip.innerText = round;
                 }
             } 
         );
@@ -109,7 +106,7 @@ window.onload = () => {
 
     // 开局三回合攻击无效，避免开局打马
     pieces.forEach((piece) => {
-        piece.defense.area(0).modify(new AttributeModifier(8000, 3 * 2));
+        piece.defense.area(0).modify(new AttributeModifier(11000, 3 * 2));
     });
 
     (document.getElementById("loot-card-button") as HTMLParagraphElement).onclick = () => {
