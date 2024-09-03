@@ -10,6 +10,10 @@ import { AttributeProvider } from "./attributeProvider.js";
 
 export var pieces: Piece[] = [];
 
+export function modifyPieces(newList: Piece[]) {
+    pieces = newList;
+}
+
 class Piece {
     team: string;
     type: string;
@@ -28,6 +32,8 @@ class Piece {
     movingDestinationsCallback: AttributeProvider<() => Position[]>;
     attackingTargetsCallback: AttributeProvider<() => Position[]>;
     attackActionCallback: AttributeProvider<(target: Piece) => boolean>;
+
+    clickListener: null | ((ev: MouseEvent) => void) = null;
 
     constructor(
         team: string,
@@ -108,12 +114,15 @@ class Piece {
 
     init() {
         if (!this.htmlElement) return;
-        this.htmlElement.addEventListener("click", (event) => {
+        let listener = (event: MouseEvent) => {
             if (onPieceClick(this)) event.stopPropagation();
-        });
+        };
+        this.htmlElement.addEventListener("click", listener);
+        this.clickListener = listener; 
 
-        // 创建血条
-        this.htmlElement.innerHTML += `<svg viewBox="0 0 200 200" width="100%" height="100%">
+        // 创建血条（如果没有）
+        if (!this.htmlElement.querySelector(".health-bar")) {
+            this.htmlElement.innerHTML += `<svg viewBox="0 0 200 200" width="100%" height="100%">
         <path
             d="M 100,10 A 90,90 0 1,1 10,100"
             fill="none"
@@ -122,8 +131,9 @@ class Piece {
             class="health-bar"
         />
         </svg>`;
-        let healthBar = this.htmlElement.querySelector(".health-bar") as SVGPathElement;
-        healthBar.setAttribute("stroke", this.team);
+            let healthBar = this.htmlElement.querySelector(".health-bar") as SVGPathElement;
+            healthBar.setAttribute("stroke", this.team);
+        }
         this.draw();
     }
 

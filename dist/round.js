@@ -1,7 +1,9 @@
+import { saveCurrent } from "./save.js";
 import { getPlayerFromTeam, Team } from "./team.js";
 export var round = 0;
 export const roundMap = [Team.Red, Team.Black];
 export function nextRound() {
+    saveCurrent();
     round++;
     console.log(`Round ${round}`);
     getPlayerFromTeam(getCurrentTeam()).showActionCards();

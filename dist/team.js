@@ -22,4 +22,7 @@ export const TeamPlayerMap = {
 export function getPlayerFromTeam(team) {
     return TeamPlayerMap[team] ?? TeamPlayerMap[Team.None];
 }
+export function setPlayerFromTeam(team, player) {
+    TeamPlayerMap[team] = player;
+}
 //# sourceMappingURL=team.js.map

@@ -26,3 +26,7 @@ export const TeamPlayerMap = {
 export function getPlayerFromTeam(team: string) {
     return TeamPlayerMap[team] ?? TeamPlayerMap[Team.None];
 }
+
+export function setPlayerFromTeam(team: string, player: Player) {
+    TeamPlayerMap[team] = player;
+}

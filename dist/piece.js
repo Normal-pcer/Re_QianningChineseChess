@@ -8,6 +8,9 @@ import { DamageType } from "./damageType.js";
 import { Team } from "./team.js";
 import { AttributeProvider } from "./attributeProvider.js";
 export var pieces = [];
+export function modifyPieces(newList) {
+    pieces = newList;
+}
 class Piece {
     team;
     type;
@@ -24,6 +27,7 @@ class Piece {
     movingDestinationsCallback;
     attackingTargetsCallback;
     attackActionCallback;
+    clickListener = null;
     constructor(team, type, position, htmlElement, config = null) {
         this.team = team;
         this.type = type;
@@ -93,12 +97,15 @@ class Piece {
     init() {
         if (!this.htmlElement)
             return;
-        this.htmlElement.addEventListener("click", (event) => {
+        let listener = (event) => {
             if (onPieceClick(this))
                 event.stopPropagation();
-        });
-        // 创建血条
-        this.htmlElement.innerHTML += `<svg viewBox="0 0 200 200" width="100%" height="100%">
+        };
+        this.htmlElement.addEventListener("click", listener);
+        this.clickListener = listener;
+        // 创建血条（如果没有）
+        if (!this.htmlElement.querySelector(".health-bar")) {
+            this.htmlElement.innerHTML += `<svg viewBox="0 0 200 200" width="100%" height="100%">
         <path
             d="M 100,10 A 90,90 0 1,1 10,100"
             fill="none"
@@ -107,8 +114,9 @@ class Piece {
             class="health-bar"
         />
         </svg>`;
-        let healthBar = this.htmlElement.querySelector(".health-bar");
-        healthBar.setAttribute("stroke", this.team);
+            let healthBar = this.htmlElement.querySelector(".health-bar");
+            healthBar.setAttribute("stroke", this.team);
+        }
         this.draw();
     }
     draw() {

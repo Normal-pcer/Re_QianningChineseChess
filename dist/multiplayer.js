@@ -8,6 +8,7 @@ import { AttributeModifier } from "./attributeProvider.js";
 import { highGunActionCard, limitlessHorseActionCard } from "./actionCard.js";
 import { runAllSchedules } from "./schedule.js";
 import { lootCard } from "./cardLooting.js";
+import { recall } from "./save.js";
 init();
 export function stop(victor) {
     Selection.setCurrentSelection(null);
@@ -84,6 +85,9 @@ window.onload = () => {
             if (text === "/limitlessHorse") {
                 limitlessHorseActionCard.apply();
             }
+            if (text === "/recall") {
+                recall();
+            }
         };
     // 开局三回合攻击无效，避免开局打马
     pieces.forEach((piece) => {
@@ -92,6 +96,9 @@ window.onload = () => {
     document.getElementById("loot-card-button").onclick = () => {
         lootCard();
         getPlayerFromTeam(getCurrentTeam()).showActionCards();
+    };
+    document.getElementById("recall-button").onclick = () => {
+        recall();
     };
 };
 // 当页面大小改变
