@@ -1,5 +1,5 @@
 import { pieces } from "./piece.js";
-import { nextRound, round } from "./round.js";
+import { nextRound, round, setRound } from "./round.js";
 import { getPlayerFromTeam, setPlayerFromTeam, Team } from "./team.js";
 const saves = [];
 export class Save {
@@ -20,9 +20,10 @@ export function saveCurrent() {
     }, round));
 }
 export function recall() {
+    console.log(saves);
     if (saves.length > 1) {
         saves.pop();
-        const lastSave = saves[saves.length - 1];
+        const lastSave = saves.pop();
         if (lastSave) {
             pieces.forEach((piece) => {
                 if (piece.clickListener)
@@ -30,11 +31,12 @@ export function recall() {
             });
             setPlayerFromTeam(Team.Red, lastSave.players[Team.Red]);
             setPlayerFromTeam(Team.Black, lastSave.players[Team.Black]);
-            nextRound();
             for (let index = 0; index < pieces.length; index++) {
                 Object.assign(pieces[index], lastSave.pieces[index]);
                 pieces[index].init();
             }
+            setRound(lastSave.round);
+            nextRound();
         }
     }
 }

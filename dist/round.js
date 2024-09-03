@@ -13,4 +13,7 @@ export function nextRound() {
 export function getCurrentTeam() {
     return roundMap[round % 2];
 }
+export function setRound(r) {
+    round = r;
+}
 //# sourceMappingURL=round.js.map

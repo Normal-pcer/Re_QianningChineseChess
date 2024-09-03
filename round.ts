@@ -16,3 +16,7 @@ export function nextRound() {
 export function getCurrentTeam() {
     return roundMap[round % 2];
 }
+
+export function setRound(r: number) {
+    round = r;
+}
