@@ -38,7 +38,6 @@ function GridAvailable(pos: Position, config = BOARD) {
     return config[0] <= pos.x && pos.x <= config[1] && config[2] <= pos.y && pos.y <= config[3];
 }
 
-
 export function filterGrids(condition: (pos: Position) => boolean, config = BOARD) {
     let grids = [];
     for (let i = config[0]; i <= config[1]; i++) {
@@ -54,7 +53,7 @@ export function filterGrids(condition: (pos: Position) => boolean, config = BOAR
 
 /**
  * @param barriers_min 默认值-1表示限制为和barriers_max相同
- * @returns 
+ * @returns
  */
 export function ray(origin: Position, direction: Vector2, barriers_max = 0, barriers_min = -1) {
     let grids = [];
@@ -76,10 +75,27 @@ export function ray(origin: Position, direction: Vector2, barriers_max = 0, barr
 
 export class DefaultMovingBehaviors {
     static master = (piece: Piece) => {
+        const RED_ORIGIN = new Position(4, 0, true);
+        const BLACK_ORIGIN = new Position(4, 9, true);
         console.log(piece);
         let team = piece.team;
         let config = team === Team.Red ? RED_BASE : BLACK_BASE;
-        return filterGrids((pos) => piece.position.manhattanDistance(pos) == 1, config);
+        let origin = team === Team.Red ? RED_ORIGIN : BLACK_ORIGIN;
+        if (
+            piece.position.x >= config[0] &&
+            piece.position.x <= config[1] &&
+            piece.position.y >= config[2] &&
+            piece.position.y <= config[3]
+        ) {
+            // 位于九宫格
+            return filterGrids((pos) => piece.position.manhattanDistance(pos) == 1, config);
+        } else
+            return filterGrids(
+                (pos) =>
+                    piece.position.manhattanDistance(origin) > pos.manhattanDistance(origin) &&
+                    piece.position.manhattanDistance(pos) == 1,
+                BOARD
+            ); // 被击出九宫格，可以向靠近九宫格的方向移动
     };
 
     static masterAttack = (piece: Piece) => {

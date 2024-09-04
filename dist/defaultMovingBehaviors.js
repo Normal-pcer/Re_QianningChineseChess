@@ -69,10 +69,22 @@ export function ray(origin, direction, barriers_max = 0, barriers_min = -1) {
 }
 export class DefaultMovingBehaviors {
     static master = (piece) => {
+        const RED_ORIGIN = new Position(4, 0, true);
+        const BLACK_ORIGIN = new Position(4, 9, true);
         console.log(piece);
         let team = piece.team;
         let config = team === Team.Red ? RED_BASE : BLACK_BASE;
-        return filterGrids((pos) => piece.position.manhattanDistance(pos) == 1, config);
+        let origin = team === Team.Red ? RED_ORIGIN : BLACK_ORIGIN;
+        if (piece.position.x >= config[0] &&
+            piece.position.x <= config[1] &&
+            piece.position.y >= config[2] &&
+            piece.position.y <= config[3]) {
+            // 位于九宫格
+            return filterGrids((pos) => piece.position.manhattanDistance(pos) == 1, config);
+        }
+        else
+            return filterGrids((pos) => piece.position.manhattanDistance(origin) > pos.manhattanDistance(origin) &&
+                piece.position.manhattanDistance(pos) == 1, BOARD); // 被击出九宫格，可以向靠近九宫格的方向移动
     };
     static masterAttack = (piece) => {
         console.log(piece);

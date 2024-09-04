@@ -61,7 +61,7 @@ function repelForward(origin: Position, direction: Vector2, distance_limit = 1) 
 }
 
 function correctDistanceByWeight(distance: number, weight: number) {
-    const constanceK = 80;  // 可以适当调整；constanceK越小越不容易被击退
+    const constanceK = 90;  // 可以适当调整；constanceK越小越不容易被击退
     let reduceProbability = 1 - Math.pow(constanceK / (constanceK + weight), 2);
     console.log('reduceProbability: ' + reduceProbability)
     let result = 0;
