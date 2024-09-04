@@ -118,10 +118,10 @@ export const strengthPotionActionCard = new ActionCard(
 export const weaknessPotionActionCard = new ActionCard(
     "虚弱药水",
     "weaknessPotion",
-    "持续3回合-选中棋子的攻击力降低15%",
+    "持续3回合-选中棋子的攻击力降低20%",
     singleTargetSelectorTemplate("虚弱药水", PieceType.None, (results) => {
         let piece = results[0].data as Piece;
-        let modifier = new AttributeModifier(-0.15, 3 * 2);
+        let modifier = new AttributeModifier(-0.2, 3 * 2);
         piece.attackDamage.area(1).modify(modifier);
         console.log(modifier);
     })
@@ -130,10 +130,48 @@ export const weaknessPotionActionCard = new ActionCard(
 export const healthInstantPotionActionCard = new ActionCard(
     "治疗药水",
     "healthInstantPotion",
-    "选中棋子回复500点生命值",
+    "选中棋子回复600点生命值",
     singleTargetSelectorTemplate("治疗药水", PieceType.None, (results) => {
         let piece = results[0].data as Piece;
-        piece.health = Math.min(piece.health + 500, piece.maxHealth.result);
+        piece.health = Math.min(piece.health + 600, piece.maxHealth.result);
         piece.draw();
+    })
+);
+
+export const strengthPotionEnhancedActionCard = new ActionCard(
+    "力量药水（加强）",
+    "strengthPotionEnhanced",
+    "持续2回合-选中棋子的攻击力提升25%",
+    singleTargetSelectorTemplate("力量药水（加强）", PieceType.None, (results) => {
+        let piece = results[0].data as Piece;
+        let modifier = new AttributeModifier(0.25, 1);
+        piece.attackDamage.area(1).modify(modifier);
+        console.log(modifier);
+    })
+);
+
+export const strengthPotionExtendedActionCard = new ActionCard(
+    "力量药水（延长）",
+    "strengthPotionExtended",
+    "持续5回合-选中棋子的攻击力提升15%",
+    singleTargetSelectorTemplate("力量药水（延长）", PieceType.None, (results) => {
+        let piece = results[0].data as Piece;
+        let modifier = new AttributeModifier(0.15, 5 * 2);
+        piece.attackDamage.area(1).modify(modifier);
+        console.log(modifier);
+    })
+);
+
+export const superLaughingActionCard = new ActionCard(
+    "忍俊不禁",
+    "superLaughing",
+    "持续3回合-选中棋子不能移动",
+    singleTargetSelectorTemplate("忍俊不禁", PieceType.None, (results) => {
+        let piece = results[0].data as Piece;
+        let modifier = new AttributeModifier(() => {
+            return filterGrids((pos) => false);
+        }, 3 * 2);
+        piece.movingDestinationsCallback.area(0).modify(modifier);
+        piece.attackingTargetsCallback.area(0).modify(modifier);
     })
 );

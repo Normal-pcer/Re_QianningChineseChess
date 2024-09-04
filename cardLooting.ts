@@ -4,6 +4,9 @@ import {
     highGunActionCard,
     limitlessHorseActionCard,
     strengthPotionActionCard,
+    strengthPotionEnhancedActionCard,
+    strengthPotionExtendedActionCard,
+    superLaughingActionCard,
     weaknessPotionActionCard,
 } from "./actionCard.js";
 import { Player } from "./player.js";
@@ -26,6 +29,9 @@ const pool = [
     new poolItem(strengthPotionActionCard),
     new poolItem(weaknessPotionActionCard),
     new poolItem(healthInstantPotionActionCard),
+    new poolItem(strengthPotionEnhancedActionCard, 0.5),
+    new poolItem(strengthPotionExtendedActionCard, 0.5),
+    new poolItem(superLaughingActionCard),
 ];
 
 function giveCard(card: ActionCard, to: Player) {

@@ -31,12 +31,12 @@ export class PieceConfig {
 }
 
 export const defaultPieceConfigs: { [key: string]: PieceConfig } = {
-    master: new PieceConfig(7500, 800, 500, DamageType.MeleeLow, 12),
+    master: new PieceConfig(7500, 1700, 500, DamageType.MeleeLow, 12),
     guard: new PieceConfig(2500, 1500, 100, DamageType.MeleeLow, 8),
     elephant: new PieceConfig(3500, 2000, 100, DamageType.MeleeMedium, 18),
     horse: new PieceConfig(3000, 2750, 200, DamageType.MeleeMedium, 15),
     chariot: new PieceConfig(4500, 2200, 200, DamageType.MeleeHigh, 20),
-    gun: new PieceConfig(5000, 2250, 200, DamageType.Ranged, 20),
+    gun: new PieceConfig(4750, 2250, 150, DamageType.Ranged, 20),
     pawn: new PieceConfig(2250, 1250, 100, DamageType.MeleeLow, 8),
     none: new PieceConfig(1, 0, 0, DamageType.None),
 };
