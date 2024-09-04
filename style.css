@@ -147,3 +147,25 @@ body {
         opacity: 0;
     }
 }
+
+#buttons span {
+    margin: 0 20px;
+    display: inline-block;
+}
+
+#action-cards-list {
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    list-style: none;
+}
+
+#action-cards-list .card {
+    width: 100px;
+    height: 150px;
+    margin: 10px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

@@ -1,6 +1,7 @@
 import { healthInstantPotionActionCard, highGunActionCard, limitlessHorseActionCard, strengthPotionActionCard, weaknessPotionActionCard, } from "./actionCard.js";
 import { getCurrentTeam, nextRound } from "./round.js";
 import { getPlayerFromTeam } from "./team.js";
+import { deepCopy } from "./utils.js";
 class poolItem {
     card;
     weight;
@@ -17,11 +18,20 @@ const pool = [
     new poolItem(healthInstantPotionActionCard),
 ];
 function giveCard(card, to) {
-    to.actionCards.push(card);
+    to.actionCards.push(deepCopy(card));
 }
 export function lootCard() {
     let player = getPlayerFromTeam(getCurrentTeam());
-    giveCard(pool[Math.floor(Math.random() * pool.length)].card, player);
+    let weightSum = pool.reduce((sum, item) => sum + item.weight, 0);
+    let random = Math.random() * weightSum;
+    let sum = 0;
+    for (let item of pool) {
+        sum += item.weight;
+        if (random < sum) {
+            giveCard(item.card, player);
+            break;
+        }
+    }
     nextRound();
 }
 //# sourceMappingURL=cardLooting.js.map

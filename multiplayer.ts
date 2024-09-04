@@ -8,7 +8,7 @@ import { AttributeModifier } from "./attributeProvider.js";
 import { highGunActionCard, limitlessHorseActionCard, testActionCard } from "./actionCard.js";
 import { runAllSchedules } from "./schedule.js";
 import { lootCard } from "./cardLooting.js";
-import { deepCopy, loadSave, recall, Save, saveCurrent, storeSave } from "./save.js";
+import { loadSave, recall, Save, saveCurrent, storeSave } from "./save.js";
 
 init();
 
@@ -120,11 +120,11 @@ window.onload = () => {
         piece.defense.area(0).modify(new AttributeModifier(11000, 3 * 2));
     });
 
-    (document.getElementById("loot-card-button") as HTMLParagraphElement).onclick = () => {
+    (document.getElementById("loot-card-button") as HTMLElement).onclick = () => {
         lootCard();
         getPlayerFromTeam(getCurrentTeam()).showActionCards();
     };
-    (document.getElementById("recall-button") as HTMLParagraphElement).onclick = () => {
+    (document.getElementById("recall-button") as HTMLElement).onclick = () => {
         recall();
         console.log("recall");
     };
