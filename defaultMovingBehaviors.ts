@@ -2,6 +2,7 @@ import { Piece, PieceType } from "./piece.js";
 import { Team } from "./team.js";
 import { Position } from "./position.js";
 import { Vector2 } from "./vector.js";
+import { registerCallback } from "./callbackRegister.js";
 
 const BOARD = [0, 8, 0, 9];
 const RED_BASE = [3, 5, 0, 2];
@@ -32,6 +33,15 @@ export function init() {
         [PieceType.Guard]: DefaultMovingBehaviors.guard,
         [PieceType.Pawn]: DefaultMovingBehaviors.pawn,
     };
+
+    // 注册所有函数
+    for (let key in mapping) {
+        registerCallback(mapping[key]);
+    }
+    for (let key in mappingAttack) {
+        registerCallback(mappingAttack[key]);
+    }
+    registerCallback(DefaultMovingBehaviors.auto, "auto");
 }
 
 function GridAvailable(pos: Position, config = BOARD) {
@@ -100,7 +110,7 @@ export class DefaultMovingBehaviors {
 
     static masterAttack = (piece: Piece) => {
         console.log(piece);
-        return this.master(piece).concat(
+        return DefaultMovingBehaviors.master(piece).concat(
             ray(piece.position, new Vector2(0, 1))
                 .concat(ray(piece.position, new Vector2(0, -1)))
                 .filter((pos) => pos.piece != null && pos.piece.type === PieceType.Master)
@@ -160,7 +170,7 @@ export class DefaultMovingBehaviors {
     };
 
     static gunMove = (piece: Piece) => {
-        return this.chariot(piece).filter((pos) => pos.piece === null);
+        return DefaultMovingBehaviors.chariot(piece).filter((pos) => pos.piece === null);
     };
 
     static gunAttack = (piece: Piece) => {
@@ -185,6 +195,6 @@ export class DefaultMovingBehaviors {
     };
 
     static auto(piece: Piece, attack = false) {
-        return attack ? mappingAttack[piece.type](piece) : mapping[piece.type](piece);
+        return attack ? mappingAttack[piece.type] : mapping[piece.type];
     }
 }

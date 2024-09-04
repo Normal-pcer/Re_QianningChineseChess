@@ -67,11 +67,11 @@ export const highGunActionCard = new ActionCard(
     "一次性-允许炮至多隔两个棋子攻击",
     singleTargetSelectorTemplate("高射炮", PieceType.Gun, (results) => {
         let piece = results[0].data as Piece;
-        let modifier = new AttributeModifier(() => {
-            return ray(piece.position, new Vector2(1, 0), 2, 1).concat(
-                ray(piece.position, new Vector2(-1, 0), 2, 1),
-                ray(piece.position, new Vector2(0, 1), 2, 1),
-                ray(piece.position, new Vector2(0, -1), 2, 1)
+        let modifier = new AttributeModifier((piece_: Piece) => {
+            return ray(piece_.position, new Vector2(1, 0), 2, 1).concat(
+                ray(piece_.position, new Vector2(-1, 0), 2, 1),
+                ray(piece_.position, new Vector2(0, 1), 2, 1),
+                ray(piece_.position, new Vector2(0, -1), 2, 1)
             );
         });
         piece.attackingTargetsCallback.area(0).modify(modifier);
@@ -91,7 +91,7 @@ export const limitlessHorseActionCard = new ActionCard(
     "持续3回合-马的行动不再受「蹩马腿」限制",
     singleTargetSelectorTemplate("一马平川", PieceType.Horse, (results) => {
         let piece = results[0].data as Piece;
-        let modifier = new AttributeModifier(() => {
+        let modifier = new AttributeModifier((piece2: Piece) => {
             return filterGrids(
                 (pos) =>
                     piece.position.manhattanDistance(pos) == 3 &&
@@ -168,7 +168,7 @@ export const superLaughingActionCard = new ActionCard(
     "持续3回合-选中棋子不能移动",
     singleTargetSelectorTemplate("忍俊不禁", PieceType.None, (results) => {
         let piece = results[0].data as Piece;
-        let modifier = new AttributeModifier(() => {
+        let modifier = new AttributeModifier((piece_: Piece) => {
             return filterGrids((pos) => false);
         }, 3 * 2);
         piece.movingDestinationsCallback.area(0).modify(modifier);

@@ -17,7 +17,8 @@ export function deepCopy<T>(target: T): T {
             }
             return result;
         }
-        if (typeof data === "function") return generateSafeFunction(data);
+        if (typeof data === "function") 
+            return generateSafeFunction(data);
 
         if (stack.has(data)) {
             throw new Error("Cannot clone object with circular reference");
@@ -70,4 +71,8 @@ export function deepCopy<T>(target: T): T {
     }
 
     return cloneData(target) as T;
+}
+
+export function notNull(value: any) {
+    return value !== null && value !== undefined;
 }

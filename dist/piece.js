@@ -16,6 +16,7 @@ class Piece {
     type;
     position;
     htmlElement;
+    htmlElementId;
     health = 0;
     dead = false;
     maxHealth = new AttributeProvider(0);
@@ -34,6 +35,7 @@ class Piece {
         this.type = type;
         this.position = position;
         this.htmlElement = htmlElement;
+        this.htmlElementId = htmlElement?.id ?? null;
         config = config ?? defaultPieceConfigs[this.type];
         if (config) {
             this.attackDamage = new AttributeProvider(config.attackDamage);
@@ -45,16 +47,16 @@ class Piece {
             this.health = this.maxHealth.result;
             this.weight = new AttributeProvider(config.weight);
         }
-        this.movingDestinationsCallback = new AttributeProvider(() => DefaultMovingBehaviors.auto(this, false));
-        this.attackingTargetsCallback = new AttributeProvider(() => DefaultMovingBehaviors.auto(this, true));
-        this.attackActionCallback = new AttributeProvider((piece) => {
-            if (piece.team === this.team)
+        this.movingDestinationsCallback = new AttributeProvider(DefaultMovingBehaviors.auto(this, false));
+        this.attackingTargetsCallback = new AttributeProvider(DefaultMovingBehaviors.auto(this, true));
+        this.attackActionCallback = new AttributeProvider((piece, target) => {
+            if (target.team === piece.team)
                 return false;
-            let damageAmount = this.attackDamage.result;
-            let isCritical = Math.random() < this.criticalChance.result;
+            let damageAmount = piece.attackDamage.result;
+            let isCritical = Math.random() < piece.criticalChance.result;
             if (isCritical)
-                damageAmount *= this.criticalDamage.result + 1;
-            let damageObject = new Damage(this.damageType, damageAmount, this, piece, isCritical);
+                damageAmount *= piece.criticalDamage.result + 1;
+            let damageObject = new Damage(piece.damageType, damageAmount, piece, target, isCritical);
             damageObject.apply();
             return true;
         });
@@ -90,14 +92,19 @@ class Piece {
         }
     }
     get destinations() {
-        return this.movingDestinationsCallback.result();
+        return this.movingDestinationsCallback.result(this);
     }
     get attackTargets() {
-        return this.attackingTargetsCallback.result();
+        return this.attackingTargetsCallback.result(this);
     }
     init() {
-        if (!this.htmlElement)
-            return;
+        if (!this.htmlElement) {
+            if (!this.htmlElementId)
+                return;
+            this.htmlElement = document.getElementById(this.htmlElementId);
+            if (!this.htmlElement)
+                return;
+        }
         let listener = (event) => {
             if (onPieceClick(this))
                 event.stopPropagation();
@@ -149,7 +156,7 @@ class Piece {
         return true;
     }
     attack(piece) {
-        return this.attackActionCallback.result(piece);
+        return this.attackActionCallback.result(this, piece);
     }
     destroyed() {
         if (this.htmlElement) {

@@ -19,6 +19,7 @@ class Piece {
     type: string;
     position: Position;
     htmlElement: HTMLElement | null;
+    htmlElementId: string | null;
     health: number = 0;
     dead: boolean = false;
 
@@ -30,9 +31,9 @@ class Piece {
     weight: AttributeProvider = new AttributeProvider(0);
     damageType: DamageType = DamageType.None;
 
-    movingDestinationsCallback: AttributeProvider<() => Position[]>;
-    attackingTargetsCallback: AttributeProvider<() => Position[]>;
-    attackActionCallback: AttributeProvider<(target: Piece) => boolean>;
+    movingDestinationsCallback: AttributeProvider<(piece: Piece) => Position[]>;
+    attackingTargetsCallback: AttributeProvider<(piece: Piece) => Position[]>;
+    attackActionCallback: AttributeProvider<(piece: Piece, target: Piece) => boolean>;
 
     clickListener: null | ((ev: MouseEvent) => void) = null;
 
@@ -47,6 +48,7 @@ class Piece {
         this.type = type;
         this.position = position;
         this.htmlElement = htmlElement;
+        this.htmlElementId = htmlElement?.id ?? null;
 
         config = config ?? defaultPieceConfigs[this.type];
         if (config) {
@@ -60,18 +62,24 @@ class Piece {
             this.weight = new AttributeProvider(config.weight);
         }
 
-        this.movingDestinationsCallback = new AttributeProvider(() =>
+        this.movingDestinationsCallback = new AttributeProvider(
             DefaultMovingBehaviors.auto(this, false)
         );
-        this.attackingTargetsCallback = new AttributeProvider(() =>
+        this.attackingTargetsCallback = new AttributeProvider(
             DefaultMovingBehaviors.auto(this, true)
         );
-        this.attackActionCallback = new AttributeProvider((piece) => {
-            if (piece.team === this.team) return false;
-            let damageAmount = this.attackDamage.result;
-            let isCritical = Math.random() < this.criticalChance.result;
-            if (isCritical) damageAmount *= this.criticalDamage.result + 1;
-            let damageObject = new Damage(this.damageType, damageAmount, this, piece, isCritical);
+        this.attackActionCallback = new AttributeProvider((piece, target) => {
+            if (target.team === piece.team) return false;
+            let damageAmount = piece.attackDamage.result;
+            let isCritical = Math.random() < piece.criticalChance.result;
+            if (isCritical) damageAmount *= piece.criticalDamage.result + 1;
+            let damageObject = new Damage(
+                piece.damageType,
+                damageAmount,
+                piece,
+                target,
+                isCritical
+            );
             damageObject.apply();
             return true;
         });
@@ -106,15 +114,19 @@ class Piece {
     }
 
     get destinations() {
-        return this.movingDestinationsCallback.result();
+        return this.movingDestinationsCallback.result(this);
     }
 
     get attackTargets() {
-        return this.attackingTargetsCallback.result();
+        return this.attackingTargetsCallback.result(this);
     }
 
     init() {
-        if (!this.htmlElement) return;
+        if (!this.htmlElement) {
+            if (!this.htmlElementId) return;
+            this.htmlElement = document.getElementById(this.htmlElementId);
+            if (!this.htmlElement) return;
+        }
         let listener = (event: MouseEvent) => {
             if (onPieceClick(this)) event.stopPropagation();
         };
@@ -139,8 +151,8 @@ class Piece {
     }
 
     draw() {
-        if (this.dead || !this.htmlElement)  return;
-        else  this.htmlElement.style.display = "flex";
+        if (this.dead || !this.htmlElement) return;
+        else this.htmlElement.style.display = "flex";
         // 计算位置
         this.htmlElement.style.left = this.position.getScreenPos()[0] + "px";
         this.htmlElement.style.top = this.position.getScreenPos()[1] + "px";
@@ -165,12 +177,12 @@ class Piece {
     }
 
     attack(piece: Piece) {
-        return this.attackActionCallback.result(piece);
+        return this.attackActionCallback.result(this, piece);
     }
 
     destroyed() {
         if (this.htmlElement) {
-            this.htmlElement.style.display = "none";  // 隐藏棋子
+            this.htmlElement.style.display = "none"; // 隐藏棋子
         }
         this.position = new Position(-10, -10, true);
         this.dead = true;

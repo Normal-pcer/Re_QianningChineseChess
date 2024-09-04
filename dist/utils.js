@@ -67,4 +67,7 @@ export function deepCopy(target) {
     }
     return cloneData(target);
 }
+export function notNull(value) {
+    return value !== null && value !== undefined;
+}
 //# sourceMappingURL=utils.js.map
