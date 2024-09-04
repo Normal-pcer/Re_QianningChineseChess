@@ -16,6 +16,52 @@ export class Save {
         this.players = deepCopy(players);
         this.round = round;
     }
+
+    stringify() {
+        return JSON.stringify(this, (key, value) => {
+            if (typeof value === "function") {
+                return "<STRINGIFIED FUNCTION>" + value.toString();
+            }
+            return value;
+        });
+    }
+    static parse(str: string) {
+        let saveObj = JSON.parse(str, (key, value) => {
+            if (typeof value === "string" && value.startsWith("<STRINGIFIED FUNCTION>")) {
+                return Function("return" + value.slice(22))();
+            }
+            return value;
+        }) as Object;
+        let saveTemplate = deepCopy(saves[saves.length - 1]);
+
+        function deepAssign(target: any, source: any) {
+            if (source instanceof Array) {
+                for (let index = 0; index < source.length; index++) {
+                    if (!target[index]) {
+                        target.push({});
+                    }
+                    deepAssign(target[index], source[index]);
+                }
+            }
+            for (let key in source) {
+                if (source[key] && typeof source[key] === "object") {
+                    if (!target[key]) {
+                        target[key] = {};
+                    }
+                    deepAssign(target[key], source[key]);
+                } else {
+                    target[key] = deepCopy(source[key]);
+                }
+            }
+        }
+
+        deepAssign(saveTemplate, saveObj);
+
+        saveTemplate.pieces.forEach((piece) => {
+            piece.init();
+        });
+        return saveTemplate;
+    }
 }
 
 export function saveCurrent() {
@@ -32,7 +78,7 @@ export function saveCurrent() {
 }
 
 export function recall() {
-    console.log(saves)
+    console.log(saves);
     if (saves.length > 1) {
         saves.pop();
         const lastSave = saves.pop();
@@ -49,11 +95,23 @@ export function recall() {
                 pieces[index].init();
             }
             setRound(lastSave.round);
-            
-            nextRound();
 
-            
+            nextRound();
         }
+    }
+}
+
+export function storeSave() {
+    window.localStorage.setItem("save", saves[saves.length - 1].stringify());
+}
+
+export function loadSave() {
+    let saveStr = window.localStorage.getItem("save");
+    if (saveStr) {
+        let save = Save.parse(saveStr);
+        saves.push(save);
+        saves.push(save); // 不是多打的，别给删了
+        recall();
     }
 }
 
@@ -69,6 +127,13 @@ export function deepCopy<T>(target: T): T {
         if (!isObject(data)) return data;
         if (data instanceof Date) return new Date(data);
         if (data instanceof RegExp) return new RegExp(data.source, data.flags);
+        if (data instanceof Array) {
+            const result: unknown[] = [];
+            for (let i = 0; i < data.length; i++) {
+                result.push(cloneData(data[i]));
+            }
+            return result;
+        }
         if (typeof data === "function") return generateSafeFunction(data);
 
         if (stack.has(data)) {

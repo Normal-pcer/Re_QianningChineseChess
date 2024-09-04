@@ -8,7 +8,7 @@ import { AttributeModifier } from "./attributeProvider.js";
 import { highGunActionCard, limitlessHorseActionCard } from "./actionCard.js";
 import { runAllSchedules } from "./schedule.js";
 import { lootCard } from "./cardLooting.js";
-import { recall, saveCurrent } from "./save.js";
+import { loadSave, recall, saveCurrent, storeSave } from "./save.js";
 init();
 export function stop(victor) {
     Selection.setCurrentSelection(null);
@@ -17,6 +17,7 @@ export function stop(victor) {
         victor_tip_bar.innerHTML = victor + "赢了";
 }
 window.onload = () => {
+    // deepCopy([1, 2, 3]);
     let container = document.getElementById("game-container");
     if (container !== null)
         container.style.display = "block";
@@ -87,6 +88,12 @@ window.onload = () => {
             }
             if (text === "/recall") {
                 recall();
+            }
+            if (text === "/store") {
+                storeSave();
+            }
+            if (text === "/load") {
+                loadSave();
             }
         };
     // 开局三回合攻击无效，避免开局打马

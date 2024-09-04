@@ -12,6 +12,49 @@ export class Save {
         this.players = deepCopy(players);
         this.round = round;
     }
+    stringify() {
+        return JSON.stringify(this, (key, value) => {
+            if (typeof value === "function") {
+                return "<STRINGIFIED FUNCTION>" + value.toString();
+            }
+            return value;
+        });
+    }
+    static parse(str) {
+        let saveObj = JSON.parse(str, (key, value) => {
+            if (typeof value === "string" && value.startsWith("<STRINGIFIED FUNCTION>")) {
+                return Function("return" + value.slice(22))();
+            }
+            return value;
+        });
+        let saveTemplate = deepCopy(saves[saves.length - 1]);
+        function deepAssign(target, source) {
+            if (source instanceof Array) {
+                for (let index = 0; index < source.length; index++) {
+                    if (!target[index]) {
+                        target.push({});
+                    }
+                    deepAssign(target[index], source[index]);
+                }
+            }
+            for (let key in source) {
+                if (source[key] && typeof source[key] === "object") {
+                    if (!target[key]) {
+                        target[key] = {};
+                    }
+                    deepAssign(target[key], source[key]);
+                }
+                else {
+                    target[key] = deepCopy(source[key]);
+                }
+            }
+        }
+        deepAssign(saveTemplate, saveObj);
+        saveTemplate.pieces.forEach((piece) => {
+            piece.init();
+        });
+        return saveTemplate;
+    }
 }
 export function saveCurrent() {
     saves.push(new Save(pieces, {
@@ -40,6 +83,18 @@ export function recall() {
         }
     }
 }
+export function storeSave() {
+    window.localStorage.setItem("save", saves[saves.length - 1].stringify());
+}
+export function loadSave() {
+    let saveStr = window.localStorage.getItem("save");
+    if (saveStr) {
+        let save = Save.parse(saveStr);
+        saves.push(save);
+        saves.push(save); // 不是多打的，别给删了
+        recall();
+    }
+}
 export function deepCopy(target) {
     const map = new WeakMap();
     const stack = new Set();
@@ -53,6 +108,13 @@ export function deepCopy(target) {
             return new Date(data);
         if (data instanceof RegExp)
             return new RegExp(data.source, data.flags);
+        if (data instanceof Array) {
+            const result = [];
+            for (let i = 0; i < data.length; i++) {
+                result.push(cloneData(data[i]));
+            }
+            return result;
+        }
         if (typeof data === "function")
             return generateSafeFunction(data);
         if (stack.has(data)) {

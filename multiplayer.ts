@@ -8,7 +8,7 @@ import { AttributeModifier } from "./attributeProvider.js";
 import { highGunActionCard, limitlessHorseActionCard, testActionCard } from "./actionCard.js";
 import { runAllSchedules } from "./schedule.js";
 import { lootCard } from "./cardLooting.js";
-import { recall, Save, saveCurrent } from "./save.js";
+import { deepCopy, loadSave, recall, Save, saveCurrent, storeSave } from "./save.js";
 
 init();
 
@@ -19,6 +19,7 @@ export function stop(victor: string) {
 }
 
 window.onload = () => {
+    // deepCopy([1, 2, 3]);
     let container = document.getElementById("game-container");
     if (container !== null) container.style.display = "block";
     putPieces();
@@ -106,6 +107,12 @@ window.onload = () => {
             if (text === "/recall") {
                 recall();
             }
+            if (text === "/store") {
+                storeSave();
+            }
+            if (text === "/load") {
+                loadSave();
+            }
         };
 
     // 开局三回合攻击无效，避免开局打马
@@ -120,7 +127,7 @@ window.onload = () => {
     (document.getElementById("recall-button") as HTMLParagraphElement).onclick = () => {
         recall();
         console.log("recall");
-    }
+    };
 
     saveCurrent();
 };
