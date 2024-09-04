@@ -17,6 +17,7 @@ class Piece {
     position;
     htmlElement;
     health = 0;
+    dead = false;
     maxHealth = new AttributeProvider(0);
     attackDamage = new AttributeProvider(0);
     defense = new AttributeProvider(0);
@@ -120,14 +121,16 @@ class Piece {
         this.draw();
     }
     draw() {
-        if (!this.htmlElement)
+        if (this.dead || !this.htmlElement)
             return;
+        else
+            this.htmlElement.style.display = "flex";
         // 计算位置
         this.htmlElement.style.left = this.position.getScreenPos()[0] + "px";
         this.htmlElement.style.top = this.position.getScreenPos()[1] + "px";
         // 计算、刷新血条
         let healthProportion = this.health / this.maxHealth.result;
-        if (healthProportion == 1)
+        if (healthProportion >= 1)
             healthProportion = 0.99999; // 防止血条消失😋
         let arc = healthProportion * 2 * Math.PI;
         let sin = Math.sin(arc);
@@ -149,10 +152,11 @@ class Piece {
         return this.attackActionCallback.result(piece);
     }
     destroyed() {
-        if (this.htmlElement)
-            this.htmlElement.remove();
+        if (this.htmlElement) {
+            this.htmlElement.style.display = "none"; // 隐藏棋子
+        }
         this.position = new Position(-10, -10, true);
-        pieces = pieces.filter((p) => p !== this);
+        this.dead = true;
         if (this.type === PieceType.Master)
             stop(Team.enemy(this.team));
     }
