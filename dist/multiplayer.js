@@ -108,6 +108,20 @@ window.onload = () => {
         recall();
         console.log("recall");
     };
+    document.getElementById("store-button").onclick = () => {
+        storeSave();
+        document.getElementById("store-button").style.color = "gray";
+        setTimeout(() => {
+            document.getElementById("store-button").style.color = "black";
+        }, 1000);
+    };
+    document.getElementById("load-button").onclick = () => {
+        loadSave();
+        document.getElementById("load-button").style.color = "gray";
+        setTimeout(() => {
+            document.getElementById("load-button").style.color = "black";
+        }, 1000);
+    };
     saveCurrent();
 };
 // 当页面大小改变

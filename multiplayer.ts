@@ -128,6 +128,20 @@ window.onload = () => {
         recall();
         console.log("recall");
     };
+    (document.getElementById("store-button") as HTMLElement).onclick = () => {
+        storeSave();
+        (document.getElementById("store-button") as HTMLElement).style.color = "gray";
+        setTimeout(() => {
+            (document.getElementById("store-button") as HTMLElement).style.color = "black";
+        }, 1000);
+    };
+    (document.getElementById("load-button") as HTMLElement).onclick = () => {
+        loadSave();
+        (document.getElementById("load-button") as HTMLElement).style.color = "gray";
+        setTimeout(() => {
+            (document.getElementById("load-button") as HTMLElement).style.color = "black";
+        }, 1000);
+    };
 
     saveCurrent();
 };
