@@ -22,6 +22,19 @@ export function registerCallback(callback: Function, key: string | null = null) 
     return key;
 }
 
+/**
+ * 用于匿名函数的快速注册
+ * @param callback 要注册的函数
+ * @param key 键名; 如果为null,则自动指派键名:
+ * - 如果callback的函数名未被注册过,则使用函数名
+ * - 如果函数名已被注册过,则使用函数名+使得新名没被注册的最小的正整数
+ * @return 函数本身
+ */
+export function registerAnonymous<T extends Function>(callback: T, key: string | null = null): T {
+    registerCallback(callback, key);
+    return callback;
+}
+
 export function getCallback(key: string) {
     return registry[key];
 }

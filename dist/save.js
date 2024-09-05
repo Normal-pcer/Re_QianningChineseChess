@@ -26,7 +26,7 @@ export class Save {
         });
     }
     stringify() {
-        return JSON.stringify(this, (key, value) => {
+        let json = JSON.stringify(this, (key, value) => {
             if (typeof value === "function") {
                 let registryKey = getCallbackRegistryKey(value);
                 if (registryKey) {
@@ -36,6 +36,8 @@ export class Save {
             }
             return value;
         });
+        console.log(json);
+        return json;
     }
     static parse(str) {
         let saveObj = JSON.parse(str, (key, value) => {
@@ -78,6 +80,7 @@ export class Save {
         saveTemplate.pieces.forEach((piece) => {
             piece.init();
         });
+        console.log(saveTemplate);
         return saveTemplate;
     }
 }
@@ -119,6 +122,7 @@ export function loadSave() {
     if (save) {
         saves.push(save);
         saves.push(save); // 不是多打的，别给删了
+        recall();
     }
 }
 //# sourceMappingURL=save.js.map

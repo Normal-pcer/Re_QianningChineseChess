@@ -1,0 +1,2720 @@
+{
+    "pieces": [
+        {
+            "team": "red",
+            "type": "master",
+            "position": { "x": 4, "y": 0, "_screenX": 533, "_screenY": 671.2089552238806 },
+            "htmlElement": {},
+            "htmlElementId": "red-master1",
+            "health": 7500,
+            "dead": false,
+            "maxHealth": {
+                "multiplicationAreas": [
+                    { "base": 7500, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "attackDamage": {
+                "multiplicationAreas": [
+                    { "base": 1700, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "defense": {
+                "multiplicationAreas": [
+                    {
+                        "base": 500,
+                        "modifiers": [
+                            {
+                                "amount": 11000,
+                                "expire": 5,
+                                "operation": "<STRINGIFIED FUNCTION>(arg1, arg2) => arg1 + arg2",
+                                "enabled": true
+                            }
+                        ],
+                        "description": "Base"
+                    },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "criticalChance": {
+                "multiplicationAreas": [
+                    { "base": 0.1, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "criticalDamage": {
+                "multiplicationAreas": [
+                    { "base": 0.75, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "weight": {
+                "multiplicationAreas": [
+                    { "base": 12, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "damageType": 1,
+            "movingDestinationsCallback": {
+                "multiplicationAreas": [
+                    {
+                        "base": "<REGISTERED FUNCTION>master",
+                        "modifiers": [],
+                        "description": "Base"
+                    }
+                ]
+            },
+            "attackingTargetsCallback": {
+                "multiplicationAreas": [
+                    {
+                        "base": "<REGISTERED FUNCTION>masterAttack",
+                        "modifiers": [],
+                        "description": "Base"
+                    }
+                ]
+            },
+            "attackActionCallback": {
+                "multiplicationAreas": [
+                    {
+                        "base": "<STRINGIFIED FUNCTION>(piece, target) => {\n    if (target.team === piece.team)\n        return false;\n    let damageAmount = piece.attackDamage.result;\n    let isCritical = Math.random() < piece.criticalChance.result;\n    if (isCritical)\n        damageAmount *= piece.criticalDamage.result + 1;\n    let damageObject = new Damage(piece.damageType, damageAmount, piece, target, isCritical);\n    damageObject.apply();\n    return true;\n}",
+                        "modifiers": [],
+                        "description": "Base"
+                    }
+                ]
+            },
+            "clickListener": "<STRINGIFIED FUNCTION>(event) => {\n            if (onPieceClick(this))\n                event.stopPropagation();\n        }"
+        },
+        {
+            "team": "red",
+            "type": "guard",
+            "position": {
+                "x": 3,
+                "y": 0,
+                "_screenX": 464.44954128440367,
+                "_screenY": 671.2089552238806
+            },
+            "htmlElement": {},
+            "htmlElementId": "red-guard1",
+            "health": 2500,
+            "dead": false,
+            "maxHealth": {
+                "multiplicationAreas": [
+                    { "base": 2500, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "attackDamage": {
+                "multiplicationAreas": [
+                    { "base": 1500, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "defense": {
+                "multiplicationAreas": [
+                    {
+                        "base": 100,
+                        "modifiers": [
+                            {
+                                "amount": 11000,
+                                "expire": 5,
+                                "operation": "<STRINGIFIED FUNCTION>(arg1, arg2) => arg1 + arg2",
+                                "enabled": true
+                            }
+                        ],
+                        "description": "Base"
+                    },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "criticalChance": {
+                "multiplicationAreas": [
+                    { "base": 0.1, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "criticalDamage": {
+                "multiplicationAreas": [
+                    { "base": 0.75, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "weight": {
+                "multiplicationAreas": [
+                    { "base": 8, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "damageType": 1,
+            "movingDestinationsCallback": {
+                "multiplicationAreas": [
+                    { "base": "<REGISTERED FUNCTION>guard", "modifiers": [], "description": "Base" }
+                ]
+            },
+            "attackingTargetsCallback": {
+                "multiplicationAreas": [
+                    { "base": "<REGISTERED FUNCTION>guard", "modifiers": [], "description": "Base" }
+                ]
+            },
+            "attackActionCallback": {
+                "multiplicationAreas": [
+                    {
+                        "base": "<STRINGIFIED FUNCTION>(piece, target) => {\n    if (target.team === piece.team)\n        return false;\n    let damageAmount = piece.attackDamage.result;\n    let isCritical = Math.random() < piece.criticalChance.result;\n    if (isCritical)\n        damageAmount *= piece.criticalDamage.result + 1;\n    let damageObject = new Damage(piece.damageType, damageAmount, piece, target, isCritical);\n    damageObject.apply();\n    return true;\n}",
+                        "modifiers": [],
+                        "description": "Base"
+                    }
+                ]
+            },
+            "clickListener": "<STRINGIFIED FUNCTION>(event) => {\n            if (onPieceClick(this))\n                event.stopPropagation();\n        }"
+        },
+        {
+            "team": "red",
+            "type": "guard",
+            "position": {
+                "x": 5,
+                "y": 0,
+                "_screenX": 601.5504587155963,
+                "_screenY": 671.2089552238806
+            },
+            "htmlElement": {},
+            "htmlElementId": "red-guard2",
+            "health": 2500,
+            "dead": false,
+            "maxHealth": {
+                "multiplicationAreas": [
+                    { "base": 2500, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "attackDamage": {
+                "multiplicationAreas": [
+                    { "base": 1500, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "defense": {
+                "multiplicationAreas": [
+                    {
+                        "base": 100,
+                        "modifiers": [
+                            {
+                                "amount": 11000,
+                                "expire": 5,
+                                "operation": "<STRINGIFIED FUNCTION>(arg1, arg2) => arg1 + arg2",
+                                "enabled": true
+                            }
+                        ],
+                        "description": "Base"
+                    },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "criticalChance": {
+                "multiplicationAreas": [
+                    { "base": 0.1, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "criticalDamage": {
+                "multiplicationAreas": [
+                    { "base": 0.75, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "weight": {
+                "multiplicationAreas": [
+                    { "base": 8, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "damageType": 1,
+            "movingDestinationsCallback": {
+                "multiplicationAreas": [
+                    { "base": "<REGISTERED FUNCTION>guard", "modifiers": [], "description": "Base" }
+                ]
+            },
+            "attackingTargetsCallback": {
+                "multiplicationAreas": [
+                    { "base": "<REGISTERED FUNCTION>guard", "modifiers": [], "description": "Base" }
+                ]
+            },
+            "attackActionCallback": {
+                "multiplicationAreas": [
+                    {
+                        "base": "<STRINGIFIED FUNCTION>(piece, target) => {\n    if (target.team === piece.team)\n        return false;\n    let damageAmount = piece.attackDamage.result;\n    let isCritical = Math.random() < piece.criticalChance.result;\n    if (isCritical)\n        damageAmount *= piece.criticalDamage.result + 1;\n    let damageObject = new Damage(piece.damageType, damageAmount, piece, target, isCritical);\n    damageObject.apply();\n    return true;\n}",
+                        "modifiers": [],
+                        "description": "Base"
+                    }
+                ]
+            },
+            "clickListener": "<STRINGIFIED FUNCTION>(event) => {\n            if (onPieceClick(this))\n                event.stopPropagation();\n        }"
+        },
+        {
+            "team": "red",
+            "type": "elephant",
+            "position": {
+                "x": 2,
+                "y": 0,
+                "_screenX": 395.89908256880733,
+                "_screenY": 671.2089552238806
+            },
+            "htmlElement": {},
+            "htmlElementId": "red-elephant1",
+            "health": 3500,
+            "dead": false,
+            "maxHealth": {
+                "multiplicationAreas": [
+                    { "base": 3500, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "attackDamage": {
+                "multiplicationAreas": [
+                    { "base": 2000, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "defense": {
+                "multiplicationAreas": [
+                    {
+                        "base": 100,
+                        "modifiers": [
+                            {
+                                "amount": 11000,
+                                "expire": 5,
+                                "operation": "<STRINGIFIED FUNCTION>(arg1, arg2) => arg1 + arg2",
+                                "enabled": true
+                            }
+                        ],
+                        "description": "Base"
+                    },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "criticalChance": {
+                "multiplicationAreas": [
+                    { "base": 0.1, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "criticalDamage": {
+                "multiplicationAreas": [
+                    { "base": 0.75, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "weight": {
+                "multiplicationAreas": [
+                    { "base": 18, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "damageType": 2,
+            "movingDestinationsCallback": {
+                "multiplicationAreas": [
+                    {
+                        "base": "<REGISTERED FUNCTION>elephant",
+                        "modifiers": [],
+                        "description": "Base"
+                    }
+                ]
+            },
+            "attackingTargetsCallback": {
+                "multiplicationAreas": [
+                    {
+                        "base": "<REGISTERED FUNCTION>elephant",
+                        "modifiers": [],
+                        "description": "Base"
+                    }
+                ]
+            },
+            "attackActionCallback": {
+                "multiplicationAreas": [
+                    {
+                        "base": "<STRINGIFIED FUNCTION>(piece, target) => {\n    if (target.team === piece.team)\n        return false;\n    let damageAmount = piece.attackDamage.result;\n    let isCritical = Math.random() < piece.criticalChance.result;\n    if (isCritical)\n        damageAmount *= piece.criticalDamage.result + 1;\n    let damageObject = new Damage(piece.damageType, damageAmount, piece, target, isCritical);\n    damageObject.apply();\n    return true;\n}",
+                        "modifiers": [],
+                        "description": "Base"
+                    }
+                ]
+            },
+            "clickListener": "<STRINGIFIED FUNCTION>(event) => {\n            if (onPieceClick(this))\n                event.stopPropagation();\n        }"
+        },
+        {
+            "team": "red",
+            "type": "elephant",
+            "position": {
+                "x": 6,
+                "y": 0,
+                "_screenX": 670.1009174311927,
+                "_screenY": 671.2089552238806
+            },
+            "htmlElement": {},
+            "htmlElementId": "red-elephant2",
+            "health": 3500,
+            "dead": false,
+            "maxHealth": {
+                "multiplicationAreas": [
+                    { "base": 3500, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "attackDamage": {
+                "multiplicationAreas": [
+                    { "base": 2000, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "defense": {
+                "multiplicationAreas": [
+                    {
+                        "base": 100,
+                        "modifiers": [
+                            {
+                                "amount": 11000,
+                                "expire": 5,
+                                "operation": "<STRINGIFIED FUNCTION>(arg1, arg2) => arg1 + arg2",
+                                "enabled": true
+                            }
+                        ],
+                        "description": "Base"
+                    },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "criticalChance": {
+                "multiplicationAreas": [
+                    { "base": 0.1, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "criticalDamage": {
+                "multiplicationAreas": [
+                    { "base": 0.75, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "weight": {
+                "multiplicationAreas": [
+                    { "base": 18, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "damageType": 2,
+            "movingDestinationsCallback": {
+                "multiplicationAreas": [
+                    {
+                        "base": "<REGISTERED FUNCTION>elephant",
+                        "modifiers": [],
+                        "description": "Base"
+                    }
+                ]
+            },
+            "attackingTargetsCallback": {
+                "multiplicationAreas": [
+                    {
+                        "base": "<REGISTERED FUNCTION>elephant",
+                        "modifiers": [],
+                        "description": "Base"
+                    }
+                ]
+            },
+            "attackActionCallback": {
+                "multiplicationAreas": [
+                    {
+                        "base": "<STRINGIFIED FUNCTION>(piece, target) => {\n    if (target.team === piece.team)\n        return false;\n    let damageAmount = piece.attackDamage.result;\n    let isCritical = Math.random() < piece.criticalChance.result;\n    if (isCritical)\n        damageAmount *= piece.criticalDamage.result + 1;\n    let damageObject = new Damage(piece.damageType, damageAmount, piece, target, isCritical);\n    damageObject.apply();\n    return true;\n}",
+                        "modifiers": [],
+                        "description": "Base"
+                    }
+                ]
+            },
+            "clickListener": "<STRINGIFIED FUNCTION>(event) => {\n            if (onPieceClick(this))\n                event.stopPropagation();\n        }"
+        },
+        {
+            "team": "red",
+            "type": "horse",
+            "position": {
+                "x": 2,
+                "y": 2,
+                "_screenX": 395.89908256880733,
+                "_screenY": 534.2271973466003
+            },
+            "htmlElement": {},
+            "htmlElementId": "red-horse1",
+            "health": 3000,
+            "dead": false,
+            "maxHealth": {
+                "multiplicationAreas": [
+                    { "base": 3000, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "attackDamage": {
+                "multiplicationAreas": [
+                    { "base": 2750, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "defense": {
+                "multiplicationAreas": [
+                    {
+                        "base": 200,
+                        "modifiers": [
+                            {
+                                "amount": 11000,
+                                "expire": 5,
+                                "operation": "<STRINGIFIED FUNCTION>(arg1, arg2) => arg1 + arg2",
+                                "enabled": true
+                            }
+                        ],
+                        "description": "Base"
+                    },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "criticalChance": {
+                "multiplicationAreas": [
+                    { "base": 0.1, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "criticalDamage": {
+                "multiplicationAreas": [
+                    { "base": 0.75, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "weight": {
+                "multiplicationAreas": [
+                    { "base": 15, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "damageType": 2,
+            "movingDestinationsCallback": {
+                "multiplicationAreas": [
+                    { "base": "<REGISTERED FUNCTION>horse", "modifiers": [], "description": "Base" }
+                ]
+            },
+            "attackingTargetsCallback": {
+                "multiplicationAreas": [
+                    { "base": "<REGISTERED FUNCTION>horse", "modifiers": [], "description": "Base" }
+                ]
+            },
+            "attackActionCallback": {
+                "multiplicationAreas": [
+                    {
+                        "base": "<STRINGIFIED FUNCTION>(piece, target) => {\n    if (target.team === piece.team)\n        return false;\n    let damageAmount = piece.attackDamage.result;\n    let isCritical = Math.random() < piece.criticalChance.result;\n    if (isCritical)\n        damageAmount *= piece.criticalDamage.result + 1;\n    let damageObject = new Damage(piece.damageType, damageAmount, piece, target, isCritical);\n    damageObject.apply();\n    return true;\n}",
+                        "modifiers": [],
+                        "description": "Base"
+                    }
+                ]
+            },
+            "clickListener": "<STRINGIFIED FUNCTION>(event) => {\n            if (onPieceClick(this))\n                event.stopPropagation();\n        }"
+        },
+        {
+            "team": "red",
+            "type": "horse",
+            "position": {
+                "x": 7,
+                "y": 0,
+                "_screenX": 738.6513761467891,
+                "_screenY": 671.2089552238806
+            },
+            "htmlElement": {},
+            "htmlElementId": "red-horse2",
+            "health": 3000,
+            "dead": false,
+            "maxHealth": {
+                "multiplicationAreas": [
+                    { "base": 3000, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "attackDamage": {
+                "multiplicationAreas": [
+                    { "base": 2750, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "defense": {
+                "multiplicationAreas": [
+                    {
+                        "base": 200,
+                        "modifiers": [
+                            {
+                                "amount": 11000,
+                                "expire": 5,
+                                "operation": "<STRINGIFIED FUNCTION>(arg1, arg2) => arg1 + arg2",
+                                "enabled": true
+                            }
+                        ],
+                        "description": "Base"
+                    },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "criticalChance": {
+                "multiplicationAreas": [
+                    { "base": 0.1, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "criticalDamage": {
+                "multiplicationAreas": [
+                    { "base": 0.75, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "weight": {
+                "multiplicationAreas": [
+                    { "base": 15, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "damageType": 2,
+            "movingDestinationsCallback": {
+                "multiplicationAreas": [
+                    { "base": "<REGISTERED FUNCTION>horse", "modifiers": [], "description": "Base" }
+                ]
+            },
+            "attackingTargetsCallback": {
+                "multiplicationAreas": [
+                    { "base": "<REGISTERED FUNCTION>horse", "modifiers": [], "description": "Base" }
+                ]
+            },
+            "attackActionCallback": {
+                "multiplicationAreas": [
+                    {
+                        "base": "<STRINGIFIED FUNCTION>(piece, target) => {\n    if (target.team === piece.team)\n        return false;\n    let damageAmount = piece.attackDamage.result;\n    let isCritical = Math.random() < piece.criticalChance.result;\n    if (isCritical)\n        damageAmount *= piece.criticalDamage.result + 1;\n    let damageObject = new Damage(piece.damageType, damageAmount, piece, target, isCritical);\n    damageObject.apply();\n    return true;\n}",
+                        "modifiers": [],
+                        "description": "Base"
+                    }
+                ]
+            },
+            "clickListener": "<STRINGIFIED FUNCTION>(event) => {\n            if (onPieceClick(this))\n                event.stopPropagation();\n        }"
+        },
+        {
+            "team": "red",
+            "type": "chariot",
+            "position": {
+                "x": 0,
+                "y": 0,
+                "_screenX": 258.79816513761466,
+                "_screenY": 671.2089552238806
+            },
+            "htmlElement": {},
+            "htmlElementId": "red-chariot1",
+            "health": 4500,
+            "dead": false,
+            "maxHealth": {
+                "multiplicationAreas": [
+                    { "base": 4500, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "attackDamage": {
+                "multiplicationAreas": [
+                    { "base": 2200, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "defense": {
+                "multiplicationAreas": [
+                    {
+                        "base": 200,
+                        "modifiers": [
+                            {
+                                "amount": 11000,
+                                "expire": 5,
+                                "operation": "<STRINGIFIED FUNCTION>(arg1, arg2) => arg1 + arg2",
+                                "enabled": true
+                            }
+                        ],
+                        "description": "Base"
+                    },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "criticalChance": {
+                "multiplicationAreas": [
+                    { "base": 0.1, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "criticalDamage": {
+                "multiplicationAreas": [
+                    { "base": 0.75, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "weight": {
+                "multiplicationAreas": [
+                    { "base": 20, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "damageType": 3,
+            "movingDestinationsCallback": {
+                "multiplicationAreas": [
+                    {
+                        "base": "<REGISTERED FUNCTION>chariot",
+                        "modifiers": [],
+                        "description": "Base"
+                    }
+                ]
+            },
+            "attackingTargetsCallback": {
+                "multiplicationAreas": [
+                    {
+                        "base": "<REGISTERED FUNCTION>chariot",
+                        "modifiers": [],
+                        "description": "Base"
+                    }
+                ]
+            },
+            "attackActionCallback": {
+                "multiplicationAreas": [
+                    {
+                        "base": "<STRINGIFIED FUNCTION>(piece, target) => {\n    if (target.team === piece.team)\n        return false;\n    let damageAmount = piece.attackDamage.result;\n    let isCritical = Math.random() < piece.criticalChance.result;\n    if (isCritical)\n        damageAmount *= piece.criticalDamage.result + 1;\n    let damageObject = new Damage(piece.damageType, damageAmount, piece, target, isCritical);\n    damageObject.apply();\n    return true;\n}",
+                        "modifiers": [],
+                        "description": "Base"
+                    }
+                ]
+            },
+            "clickListener": "<STRINGIFIED FUNCTION>(event) => {\n            if (onPieceClick(this))\n                event.stopPropagation();\n        }"
+        },
+        {
+            "team": "red",
+            "type": "chariot",
+            "position": {
+                "x": 8,
+                "y": 0,
+                "_screenX": 807.2018348623853,
+                "_screenY": 671.2089552238806
+            },
+            "htmlElement": {},
+            "htmlElementId": "red-chariot2",
+            "health": 4500,
+            "dead": false,
+            "maxHealth": {
+                "multiplicationAreas": [
+                    { "base": 4500, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "attackDamage": {
+                "multiplicationAreas": [
+                    { "base": 2200, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "defense": {
+                "multiplicationAreas": [
+                    {
+                        "base": 200,
+                        "modifiers": [
+                            {
+                                "amount": 11000,
+                                "expire": 5,
+                                "operation": "<STRINGIFIED FUNCTION>(arg1, arg2) => arg1 + arg2",
+                                "enabled": true
+                            }
+                        ],
+                        "description": "Base"
+                    },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "criticalChance": {
+                "multiplicationAreas": [
+                    { "base": 0.1, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "criticalDamage": {
+                "multiplicationAreas": [
+                    { "base": 0.75, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "weight": {
+                "multiplicationAreas": [
+                    { "base": 20, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "damageType": 3,
+            "movingDestinationsCallback": {
+                "multiplicationAreas": [
+                    {
+                        "base": "<REGISTERED FUNCTION>chariot",
+                        "modifiers": [],
+                        "description": "Base"
+                    }
+                ]
+            },
+            "attackingTargetsCallback": {
+                "multiplicationAreas": [
+                    {
+                        "base": "<REGISTERED FUNCTION>chariot",
+                        "modifiers": [],
+                        "description": "Base"
+                    }
+                ]
+            },
+            "attackActionCallback": {
+                "multiplicationAreas": [
+                    {
+                        "base": "<STRINGIFIED FUNCTION>(piece, target) => {\n    if (target.team === piece.team)\n        return false;\n    let damageAmount = piece.attackDamage.result;\n    let isCritical = Math.random() < piece.criticalChance.result;\n    if (isCritical)\n        damageAmount *= piece.criticalDamage.result + 1;\n    let damageObject = new Damage(piece.damageType, damageAmount, piece, target, isCritical);\n    damageObject.apply();\n    return true;\n}",
+                        "modifiers": [],
+                        "description": "Base"
+                    }
+                ]
+            },
+            "clickListener": "<STRINGIFIED FUNCTION>(event) => {\n            if (onPieceClick(this))\n                event.stopPropagation();\n        }"
+        },
+        {
+            "team": "red",
+            "type": "gun",
+            "position": {
+                "x": 1,
+                "y": 2,
+                "_screenX": 327.348623853211,
+                "_screenY": 534.2271973466003
+            },
+            "htmlElement": {},
+            "htmlElementId": "red-gun1",
+            "health": 4750,
+            "dead": false,
+            "maxHealth": {
+                "multiplicationAreas": [
+                    { "base": 4750, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "attackDamage": {
+                "multiplicationAreas": [
+                    { "base": 2250, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "defense": {
+                "multiplicationAreas": [
+                    {
+                        "base": 150,
+                        "modifiers": [
+                            {
+                                "amount": 11000,
+                                "expire": 5,
+                                "operation": "<STRINGIFIED FUNCTION>(arg1, arg2) => arg1 + arg2",
+                                "enabled": true
+                            }
+                        ],
+                        "description": "Base"
+                    },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "criticalChance": {
+                "multiplicationAreas": [
+                    { "base": 0.1, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "criticalDamage": {
+                "multiplicationAreas": [
+                    { "base": 0.75, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "weight": {
+                "multiplicationAreas": [
+                    { "base": 20, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "damageType": 4,
+            "movingDestinationsCallback": {
+                "multiplicationAreas": [
+                    {
+                        "base": "<REGISTERED FUNCTION>gunMove",
+                        "modifiers": [],
+                        "description": "Base"
+                    }
+                ]
+            },
+            "attackingTargetsCallback": {
+                "multiplicationAreas": [
+                    {
+                        "base": "<REGISTERED FUNCTION>gunAttack",
+                        "modifiers": [],
+                        "description": "Base"
+                    }
+                ]
+            },
+            "attackActionCallback": {
+                "multiplicationAreas": [
+                    {
+                        "base": "<STRINGIFIED FUNCTION>(piece, target) => {\n    if (target.team === piece.team)\n        return false;\n    let damageAmount = piece.attackDamage.result;\n    let isCritical = Math.random() < piece.criticalChance.result;\n    if (isCritical)\n        damageAmount *= piece.criticalDamage.result + 1;\n    let damageObject = new Damage(piece.damageType, damageAmount, piece, target, isCritical);\n    damageObject.apply();\n    return true;\n}",
+                        "modifiers": [],
+                        "description": "Base"
+                    }
+                ]
+            },
+            "clickListener": "<STRINGIFIED FUNCTION>(event) => {\n            if (onPieceClick(this))\n                event.stopPropagation();\n        }"
+        },
+        {
+            "team": "red",
+            "type": "gun",
+            "position": { "x": 4, "y": 2, "_screenX": 533, "_screenY": 534.2271973466003 },
+            "htmlElement": {},
+            "htmlElementId": "red-gun2",
+            "health": 4750,
+            "dead": false,
+            "maxHealth": {
+                "multiplicationAreas": [
+                    { "base": 4750, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "attackDamage": {
+                "multiplicationAreas": [
+                    { "base": 2250, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "defense": {
+                "multiplicationAreas": [
+                    {
+                        "base": 150,
+                        "modifiers": [
+                            {
+                                "amount": 11000,
+                                "expire": 5,
+                                "operation": "<STRINGIFIED FUNCTION>(arg1, arg2) => arg1 + arg2",
+                                "enabled": true
+                            }
+                        ],
+                        "description": "Base"
+                    },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "criticalChance": {
+                "multiplicationAreas": [
+                    { "base": 0.1, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "criticalDamage": {
+                "multiplicationAreas": [
+                    { "base": 0.75, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "weight": {
+                "multiplicationAreas": [
+                    { "base": 20, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "damageType": 4,
+            "movingDestinationsCallback": {
+                "multiplicationAreas": [
+                    {
+                        "base": "<REGISTERED FUNCTION>gunMove",
+                        "modifiers": [],
+                        "description": "Base"
+                    }
+                ]
+            },
+            "attackingTargetsCallback": {
+                "multiplicationAreas": [
+                    {
+                        "base": "<REGISTERED FUNCTION>gunAttack",
+                        "modifiers": [],
+                        "description": "Base"
+                    }
+                ]
+            },
+            "attackActionCallback": {
+                "multiplicationAreas": [
+                    {
+                        "base": "<STRINGIFIED FUNCTION>(piece, target) => {\n    if (target.team === piece.team)\n        return false;\n    let damageAmount = piece.attackDamage.result;\n    let isCritical = Math.random() < piece.criticalChance.result;\n    if (isCritical)\n        damageAmount *= piece.criticalDamage.result + 1;\n    let damageObject = new Damage(piece.damageType, damageAmount, piece, target, isCritical);\n    damageObject.apply();\n    return true;\n}",
+                        "modifiers": [],
+                        "description": "Base"
+                    }
+                ]
+            },
+            "clickListener": "<STRINGIFIED FUNCTION>(event) => {\n            if (onPieceClick(this))\n                event.stopPropagation();\n        }"
+        },
+        {
+            "team": "red",
+            "type": "pawn",
+            "position": {
+                "x": 0,
+                "y": 3,
+                "_screenX": 258.79816513761466,
+                "_screenY": 465.7363184079602
+            },
+            "htmlElement": {},
+            "htmlElementId": "red-pawn1",
+            "health": 2250,
+            "dead": false,
+            "maxHealth": {
+                "multiplicationAreas": [
+                    { "base": 2250, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "attackDamage": {
+                "multiplicationAreas": [
+                    { "base": 1250, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "defense": {
+                "multiplicationAreas": [
+                    {
+                        "base": 100,
+                        "modifiers": [
+                            {
+                                "amount": 11000,
+                                "expire": 5,
+                                "operation": "<STRINGIFIED FUNCTION>(arg1, arg2) => arg1 + arg2",
+                                "enabled": true
+                            }
+                        ],
+                        "description": "Base"
+                    },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "criticalChance": {
+                "multiplicationAreas": [
+                    { "base": 0.1, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "criticalDamage": {
+                "multiplicationAreas": [
+                    { "base": 0.75, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "weight": {
+                "multiplicationAreas": [
+                    { "base": 8, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "damageType": 1,
+            "movingDestinationsCallback": {
+                "multiplicationAreas": [
+                    { "base": "<REGISTERED FUNCTION>pawn", "modifiers": [], "description": "Base" }
+                ]
+            },
+            "attackingTargetsCallback": {
+                "multiplicationAreas": [
+                    { "base": "<REGISTERED FUNCTION>pawn", "modifiers": [], "description": "Base" }
+                ]
+            },
+            "attackActionCallback": {
+                "multiplicationAreas": [
+                    {
+                        "base": "<STRINGIFIED FUNCTION>(piece, target) => {\n    if (target.team === piece.team)\n        return false;\n    let damageAmount = piece.attackDamage.result;\n    let isCritical = Math.random() < piece.criticalChance.result;\n    if (isCritical)\n        damageAmount *= piece.criticalDamage.result + 1;\n    let damageObject = new Damage(piece.damageType, damageAmount, piece, target, isCritical);\n    damageObject.apply();\n    return true;\n}",
+                        "modifiers": [],
+                        "description": "Base"
+                    }
+                ]
+            },
+            "clickListener": "<STRINGIFIED FUNCTION>(event) => {\n            if (onPieceClick(this))\n                event.stopPropagation();\n        }"
+        },
+        {
+            "team": "red",
+            "type": "pawn",
+            "position": {
+                "x": 2,
+                "y": 3,
+                "_screenX": 395.89908256880733,
+                "_screenY": 465.7363184079602
+            },
+            "htmlElement": {},
+            "htmlElementId": "red-pawn2",
+            "health": 2250,
+            "dead": false,
+            "maxHealth": {
+                "multiplicationAreas": [
+                    { "base": 2250, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "attackDamage": {
+                "multiplicationAreas": [
+                    { "base": 1250, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "defense": {
+                "multiplicationAreas": [
+                    {
+                        "base": 100,
+                        "modifiers": [
+                            {
+                                "amount": 11000,
+                                "expire": 5,
+                                "operation": "<STRINGIFIED FUNCTION>(arg1, arg2) => arg1 + arg2",
+                                "enabled": true
+                            }
+                        ],
+                        "description": "Base"
+                    },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "criticalChance": {
+                "multiplicationAreas": [
+                    { "base": 0.1, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "criticalDamage": {
+                "multiplicationAreas": [
+                    { "base": 0.75, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "weight": {
+                "multiplicationAreas": [
+                    { "base": 8, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "damageType": 1,
+            "movingDestinationsCallback": {
+                "multiplicationAreas": [
+                    { "base": "<REGISTERED FUNCTION>pawn", "modifiers": [], "description": "Base" }
+                ]
+            },
+            "attackingTargetsCallback": {
+                "multiplicationAreas": [
+                    { "base": "<REGISTERED FUNCTION>pawn", "modifiers": [], "description": "Base" }
+                ]
+            },
+            "attackActionCallback": {
+                "multiplicationAreas": [
+                    {
+                        "base": "<STRINGIFIED FUNCTION>(piece, target) => {\n    if (target.team === piece.team)\n        return false;\n    let damageAmount = piece.attackDamage.result;\n    let isCritical = Math.random() < piece.criticalChance.result;\n    if (isCritical)\n        damageAmount *= piece.criticalDamage.result + 1;\n    let damageObject = new Damage(piece.damageType, damageAmount, piece, target, isCritical);\n    damageObject.apply();\n    return true;\n}",
+                        "modifiers": [],
+                        "description": "Base"
+                    }
+                ]
+            },
+            "clickListener": "<STRINGIFIED FUNCTION>(event) => {\n            if (onPieceClick(this))\n                event.stopPropagation();\n        }"
+        },
+        {
+            "team": "red",
+            "type": "pawn",
+            "position": { "x": 4, "y": 3, "_screenX": 533, "_screenY": 465.7363184079602 },
+            "htmlElement": {},
+            "htmlElementId": "red-pawn3",
+            "health": 2250,
+            "dead": false,
+            "maxHealth": {
+                "multiplicationAreas": [
+                    { "base": 2250, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "attackDamage": {
+                "multiplicationAreas": [
+                    { "base": 1250, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "defense": {
+                "multiplicationAreas": [
+                    {
+                        "base": 100,
+                        "modifiers": [
+                            {
+                                "amount": 11000,
+                                "expire": 5,
+                                "operation": "<STRINGIFIED FUNCTION>(arg1, arg2) => arg1 + arg2",
+                                "enabled": true
+                            }
+                        ],
+                        "description": "Base"
+                    },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "criticalChance": {
+                "multiplicationAreas": [
+                    { "base": 0.1, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "criticalDamage": {
+                "multiplicationAreas": [
+                    { "base": 0.75, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "weight": {
+                "multiplicationAreas": [
+                    { "base": 8, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "damageType": 1,
+            "movingDestinationsCallback": {
+                "multiplicationAreas": [
+                    { "base": "<REGISTERED FUNCTION>pawn", "modifiers": [], "description": "Base" }
+                ]
+            },
+            "attackingTargetsCallback": {
+                "multiplicationAreas": [
+                    { "base": "<REGISTERED FUNCTION>pawn", "modifiers": [], "description": "Base" }
+                ]
+            },
+            "attackActionCallback": {
+                "multiplicationAreas": [
+                    {
+                        "base": "<STRINGIFIED FUNCTION>(piece, target) => {\n    if (target.team === piece.team)\n        return false;\n    let damageAmount = piece.attackDamage.result;\n    let isCritical = Math.random() < piece.criticalChance.result;\n    if (isCritical)\n        damageAmount *= piece.criticalDamage.result + 1;\n    let damageObject = new Damage(piece.damageType, damageAmount, piece, target, isCritical);\n    damageObject.apply();\n    return true;\n}",
+                        "modifiers": [],
+                        "description": "Base"
+                    }
+                ]
+            },
+            "clickListener": "<STRINGIFIED FUNCTION>(event) => {\n            if (onPieceClick(this))\n                event.stopPropagation();\n        }"
+        },
+        {
+            "team": "red",
+            "type": "pawn",
+            "position": {
+                "x": 6,
+                "y": 3,
+                "_screenX": 670.1009174311927,
+                "_screenY": 465.7363184079602
+            },
+            "htmlElement": {},
+            "htmlElementId": "red-pawn4",
+            "health": 2250,
+            "dead": false,
+            "maxHealth": {
+                "multiplicationAreas": [
+                    { "base": 2250, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "attackDamage": {
+                "multiplicationAreas": [
+                    { "base": 1250, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "defense": {
+                "multiplicationAreas": [
+                    {
+                        "base": 100,
+                        "modifiers": [
+                            {
+                                "amount": 11000,
+                                "expire": 5,
+                                "operation": "<STRINGIFIED FUNCTION>(arg1, arg2) => arg1 + arg2",
+                                "enabled": true
+                            }
+                        ],
+                        "description": "Base"
+                    },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "criticalChance": {
+                "multiplicationAreas": [
+                    { "base": 0.1, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "criticalDamage": {
+                "multiplicationAreas": [
+                    { "base": 0.75, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "weight": {
+                "multiplicationAreas": [
+                    { "base": 8, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "damageType": 1,
+            "movingDestinationsCallback": {
+                "multiplicationAreas": [
+                    { "base": "<REGISTERED FUNCTION>pawn", "modifiers": [], "description": "Base" }
+                ]
+            },
+            "attackingTargetsCallback": {
+                "multiplicationAreas": [
+                    { "base": "<REGISTERED FUNCTION>pawn", "modifiers": [], "description": "Base" }
+                ]
+            },
+            "attackActionCallback": {
+                "multiplicationAreas": [
+                    {
+                        "base": "<STRINGIFIED FUNCTION>(piece, target) => {\n    if (target.team === piece.team)\n        return false;\n    let damageAmount = piece.attackDamage.result;\n    let isCritical = Math.random() < piece.criticalChance.result;\n    if (isCritical)\n        damageAmount *= piece.criticalDamage.result + 1;\n    let damageObject = new Damage(piece.damageType, damageAmount, piece, target, isCritical);\n    damageObject.apply();\n    return true;\n}",
+                        "modifiers": [],
+                        "description": "Base"
+                    }
+                ]
+            },
+            "clickListener": "<STRINGIFIED FUNCTION>(event) => {\n            if (onPieceClick(this))\n                event.stopPropagation();\n        }"
+        },
+        {
+            "team": "red",
+            "type": "pawn",
+            "position": {
+                "x": 8,
+                "y": 3,
+                "_screenX": 807.2018348623853,
+                "_screenY": 465.7363184079602
+            },
+            "htmlElement": {},
+            "htmlElementId": "red-pawn5",
+            "health": 2250,
+            "dead": false,
+            "maxHealth": {
+                "multiplicationAreas": [
+                    { "base": 2250, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "attackDamage": {
+                "multiplicationAreas": [
+                    { "base": 1250, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "defense": {
+                "multiplicationAreas": [
+                    {
+                        "base": 100,
+                        "modifiers": [
+                            {
+                                "amount": 11000,
+                                "expire": 5,
+                                "operation": "<STRINGIFIED FUNCTION>(arg1, arg2) => arg1 + arg2",
+                                "enabled": true
+                            }
+                        ],
+                        "description": "Base"
+                    },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "criticalChance": {
+                "multiplicationAreas": [
+                    { "base": 0.1, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "criticalDamage": {
+                "multiplicationAreas": [
+                    { "base": 0.75, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "weight": {
+                "multiplicationAreas": [
+                    { "base": 8, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "damageType": 1,
+            "movingDestinationsCallback": {
+                "multiplicationAreas": [
+                    { "base": "<REGISTERED FUNCTION>pawn", "modifiers": [], "description": "Base" }
+                ]
+            },
+            "attackingTargetsCallback": {
+                "multiplicationAreas": [
+                    { "base": "<REGISTERED FUNCTION>pawn", "modifiers": [], "description": "Base" }
+                ]
+            },
+            "attackActionCallback": {
+                "multiplicationAreas": [
+                    {
+                        "base": "<STRINGIFIED FUNCTION>(piece, target) => {\n    if (target.team === piece.team)\n        return false;\n    let damageAmount = piece.attackDamage.result;\n    let isCritical = Math.random() < piece.criticalChance.result;\n    if (isCritical)\n        damageAmount *= piece.criticalDamage.result + 1;\n    let damageObject = new Damage(piece.damageType, damageAmount, piece, target, isCritical);\n    damageObject.apply();\n    return true;\n}",
+                        "modifiers": [],
+                        "description": "Base"
+                    }
+                ]
+            },
+            "clickListener": "<STRINGIFIED FUNCTION>(event) => {\n            if (onPieceClick(this))\n                event.stopPropagation();\n        }"
+        },
+        {
+            "team": "black",
+            "type": "master",
+            "position": { "x": 4, "y": 9, "_screenX": 533, "_screenY": 54.7910447761194 },
+            "htmlElement": {},
+            "htmlElementId": "black-master1",
+            "health": 7500,
+            "dead": false,
+            "maxHealth": {
+                "multiplicationAreas": [
+                    { "base": 7500, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "attackDamage": {
+                "multiplicationAreas": [
+                    { "base": 1700, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "defense": {
+                "multiplicationAreas": [
+                    {
+                        "base": 500,
+                        "modifiers": [
+                            {
+                                "amount": 11000,
+                                "expire": 5,
+                                "operation": "<STRINGIFIED FUNCTION>(arg1, arg2) => arg1 + arg2",
+                                "enabled": true
+                            }
+                        ],
+                        "description": "Base"
+                    },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "criticalChance": {
+                "multiplicationAreas": [
+                    { "base": 0.1, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "criticalDamage": {
+                "multiplicationAreas": [
+                    { "base": 0.75, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "weight": {
+                "multiplicationAreas": [
+                    { "base": 12, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "damageType": 1,
+            "movingDestinationsCallback": {
+                "multiplicationAreas": [
+                    {
+                        "base": "<REGISTERED FUNCTION>master",
+                        "modifiers": [],
+                        "description": "Base"
+                    }
+                ]
+            },
+            "attackingTargetsCallback": {
+                "multiplicationAreas": [
+                    {
+                        "base": "<REGISTERED FUNCTION>masterAttack",
+                        "modifiers": [],
+                        "description": "Base"
+                    }
+                ]
+            },
+            "attackActionCallback": {
+                "multiplicationAreas": [
+                    {
+                        "base": "<STRINGIFIED FUNCTION>(piece, target) => {\n    if (target.team === piece.team)\n        return false;\n    let damageAmount = piece.attackDamage.result;\n    let isCritical = Math.random() < piece.criticalChance.result;\n    if (isCritical)\n        damageAmount *= piece.criticalDamage.result + 1;\n    let damageObject = new Damage(piece.damageType, damageAmount, piece, target, isCritical);\n    damageObject.apply();\n    return true;\n}",
+                        "modifiers": [],
+                        "description": "Base"
+                    }
+                ]
+            },
+            "clickListener": "<STRINGIFIED FUNCTION>(event) => {\n            if (onPieceClick(this))\n                event.stopPropagation();\n        }"
+        },
+        {
+            "team": "black",
+            "type": "guard",
+            "position": {
+                "x": 3,
+                "y": 9,
+                "_screenX": 464.44954128440367,
+                "_screenY": 54.7910447761194
+            },
+            "htmlElement": {},
+            "htmlElementId": "black-guard1",
+            "health": 2500,
+            "dead": false,
+            "maxHealth": {
+                "multiplicationAreas": [
+                    { "base": 2500, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "attackDamage": {
+                "multiplicationAreas": [
+                    { "base": 1500, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "defense": {
+                "multiplicationAreas": [
+                    {
+                        "base": 100,
+                        "modifiers": [
+                            {
+                                "amount": 11000,
+                                "expire": 5,
+                                "operation": "<STRINGIFIED FUNCTION>(arg1, arg2) => arg1 + arg2",
+                                "enabled": true
+                            }
+                        ],
+                        "description": "Base"
+                    },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "criticalChance": {
+                "multiplicationAreas": [
+                    { "base": 0.1, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "criticalDamage": {
+                "multiplicationAreas": [
+                    { "base": 0.75, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "weight": {
+                "multiplicationAreas": [
+                    { "base": 8, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "damageType": 1,
+            "movingDestinationsCallback": {
+                "multiplicationAreas": [
+                    { "base": "<REGISTERED FUNCTION>guard", "modifiers": [], "description": "Base" }
+                ]
+            },
+            "attackingTargetsCallback": {
+                "multiplicationAreas": [
+                    { "base": "<REGISTERED FUNCTION>guard", "modifiers": [], "description": "Base" }
+                ]
+            },
+            "attackActionCallback": {
+                "multiplicationAreas": [
+                    {
+                        "base": "<STRINGIFIED FUNCTION>(piece, target) => {\n    if (target.team === piece.team)\n        return false;\n    let damageAmount = piece.attackDamage.result;\n    let isCritical = Math.random() < piece.criticalChance.result;\n    if (isCritical)\n        damageAmount *= piece.criticalDamage.result + 1;\n    let damageObject = new Damage(piece.damageType, damageAmount, piece, target, isCritical);\n    damageObject.apply();\n    return true;\n}",
+                        "modifiers": [],
+                        "description": "Base"
+                    }
+                ]
+            },
+            "clickListener": "<STRINGIFIED FUNCTION>(event) => {\n            if (onPieceClick(this))\n                event.stopPropagation();\n        }"
+        },
+        {
+            "team": "black",
+            "type": "guard",
+            "position": {
+                "x": 5,
+                "y": 9,
+                "_screenX": 601.5504587155963,
+                "_screenY": 54.7910447761194
+            },
+            "htmlElement": {},
+            "htmlElementId": "black-guard2",
+            "health": 2500,
+            "dead": false,
+            "maxHealth": {
+                "multiplicationAreas": [
+                    { "base": 2500, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "attackDamage": {
+                "multiplicationAreas": [
+                    { "base": 1500, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "defense": {
+                "multiplicationAreas": [
+                    {
+                        "base": 100,
+                        "modifiers": [
+                            {
+                                "amount": 11000,
+                                "expire": 5,
+                                "operation": "<STRINGIFIED FUNCTION>(arg1, arg2) => arg1 + arg2",
+                                "enabled": true
+                            }
+                        ],
+                        "description": "Base"
+                    },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "criticalChance": {
+                "multiplicationAreas": [
+                    { "base": 0.1, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "criticalDamage": {
+                "multiplicationAreas": [
+                    { "base": 0.75, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "weight": {
+                "multiplicationAreas": [
+                    { "base": 8, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "damageType": 1,
+            "movingDestinationsCallback": {
+                "multiplicationAreas": [
+                    { "base": "<REGISTERED FUNCTION>guard", "modifiers": [], "description": "Base" }
+                ]
+            },
+            "attackingTargetsCallback": {
+                "multiplicationAreas": [
+                    { "base": "<REGISTERED FUNCTION>guard", "modifiers": [], "description": "Base" }
+                ]
+            },
+            "attackActionCallback": {
+                "multiplicationAreas": [
+                    {
+                        "base": "<STRINGIFIED FUNCTION>(piece, target) => {\n    if (target.team === piece.team)\n        return false;\n    let damageAmount = piece.attackDamage.result;\n    let isCritical = Math.random() < piece.criticalChance.result;\n    if (isCritical)\n        damageAmount *= piece.criticalDamage.result + 1;\n    let damageObject = new Damage(piece.damageType, damageAmount, piece, target, isCritical);\n    damageObject.apply();\n    return true;\n}",
+                        "modifiers": [],
+                        "description": "Base"
+                    }
+                ]
+            },
+            "clickListener": "<STRINGIFIED FUNCTION>(event) => {\n            if (onPieceClick(this))\n                event.stopPropagation();\n        }"
+        },
+        {
+            "team": "black",
+            "type": "elephant",
+            "position": {
+                "x": 2,
+                "y": 9,
+                "_screenX": 395.89908256880733,
+                "_screenY": 54.7910447761194
+            },
+            "htmlElement": {},
+            "htmlElementId": "black-elephant1",
+            "health": 3500,
+            "dead": false,
+            "maxHealth": {
+                "multiplicationAreas": [
+                    { "base": 3500, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "attackDamage": {
+                "multiplicationAreas": [
+                    { "base": 2000, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "defense": {
+                "multiplicationAreas": [
+                    {
+                        "base": 100,
+                        "modifiers": [
+                            {
+                                "amount": 11000,
+                                "expire": 5,
+                                "operation": "<STRINGIFIED FUNCTION>(arg1, arg2) => arg1 + arg2",
+                                "enabled": true
+                            }
+                        ],
+                        "description": "Base"
+                    },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "criticalChance": {
+                "multiplicationAreas": [
+                    { "base": 0.1, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "criticalDamage": {
+                "multiplicationAreas": [
+                    { "base": 0.75, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "weight": {
+                "multiplicationAreas": [
+                    { "base": 18, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "damageType": 2,
+            "movingDestinationsCallback": {
+                "multiplicationAreas": [
+                    {
+                        "base": "<REGISTERED FUNCTION>elephant",
+                        "modifiers": [],
+                        "description": "Base"
+                    }
+                ]
+            },
+            "attackingTargetsCallback": {
+                "multiplicationAreas": [
+                    {
+                        "base": "<REGISTERED FUNCTION>elephant",
+                        "modifiers": [],
+                        "description": "Base"
+                    }
+                ]
+            },
+            "attackActionCallback": {
+                "multiplicationAreas": [
+                    {
+                        "base": "<STRINGIFIED FUNCTION>(piece, target) => {\n    if (target.team === piece.team)\n        return false;\n    let damageAmount = piece.attackDamage.result;\n    let isCritical = Math.random() < piece.criticalChance.result;\n    if (isCritical)\n        damageAmount *= piece.criticalDamage.result + 1;\n    let damageObject = new Damage(piece.damageType, damageAmount, piece, target, isCritical);\n    damageObject.apply();\n    return true;\n}",
+                        "modifiers": [],
+                        "description": "Base"
+                    }
+                ]
+            },
+            "clickListener": "<STRINGIFIED FUNCTION>(event) => {\n            if (onPieceClick(this))\n                event.stopPropagation();\n        }"
+        },
+        {
+            "team": "black",
+            "type": "elephant",
+            "position": {
+                "x": 6,
+                "y": 9,
+                "_screenX": 670.1009174311927,
+                "_screenY": 54.7910447761194
+            },
+            "htmlElement": {},
+            "htmlElementId": "black-elephant2",
+            "health": 3500,
+            "dead": false,
+            "maxHealth": {
+                "multiplicationAreas": [
+                    { "base": 3500, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "attackDamage": {
+                "multiplicationAreas": [
+                    { "base": 2000, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "defense": {
+                "multiplicationAreas": [
+                    {
+                        "base": 100,
+                        "modifiers": [
+                            {
+                                "amount": 11000,
+                                "expire": 5,
+                                "operation": "<STRINGIFIED FUNCTION>(arg1, arg2) => arg1 + arg2",
+                                "enabled": true
+                            }
+                        ],
+                        "description": "Base"
+                    },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "criticalChance": {
+                "multiplicationAreas": [
+                    { "base": 0.1, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "criticalDamage": {
+                "multiplicationAreas": [
+                    { "base": 0.75, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "weight": {
+                "multiplicationAreas": [
+                    { "base": 18, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "damageType": 2,
+            "movingDestinationsCallback": {
+                "multiplicationAreas": [
+                    {
+                        "base": "<REGISTERED FUNCTION>elephant",
+                        "modifiers": [],
+                        "description": "Base"
+                    }
+                ]
+            },
+            "attackingTargetsCallback": {
+                "multiplicationAreas": [
+                    {
+                        "base": "<REGISTERED FUNCTION>elephant",
+                        "modifiers": [],
+                        "description": "Base"
+                    }
+                ]
+            },
+            "attackActionCallback": {
+                "multiplicationAreas": [
+                    {
+                        "base": "<STRINGIFIED FUNCTION>(piece, target) => {\n    if (target.team === piece.team)\n        return false;\n    let damageAmount = piece.attackDamage.result;\n    let isCritical = Math.random() < piece.criticalChance.result;\n    if (isCritical)\n        damageAmount *= piece.criticalDamage.result + 1;\n    let damageObject = new Damage(piece.damageType, damageAmount, piece, target, isCritical);\n    damageObject.apply();\n    return true;\n}",
+                        "modifiers": [],
+                        "description": "Base"
+                    }
+                ]
+            },
+            "clickListener": "<STRINGIFIED FUNCTION>(event) => {\n            if (onPieceClick(this))\n                event.stopPropagation();\n        }"
+        },
+        {
+            "team": "black",
+            "type": "horse",
+            "position": {
+                "x": 2,
+                "y": 7,
+                "_screenX": 395.89908256880733,
+                "_screenY": 191.77280265339965
+            },
+            "htmlElement": {},
+            "htmlElementId": "black-horse1",
+            "health": 3000,
+            "dead": false,
+            "maxHealth": {
+                "multiplicationAreas": [
+                    { "base": 3000, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "attackDamage": {
+                "multiplicationAreas": [
+                    { "base": 2750, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "defense": {
+                "multiplicationAreas": [
+                    {
+                        "base": 200,
+                        "modifiers": [
+                            {
+                                "amount": 11000,
+                                "expire": 5,
+                                "operation": "<STRINGIFIED FUNCTION>(arg1, arg2) => arg1 + arg2",
+                                "enabled": true
+                            }
+                        ],
+                        "description": "Base"
+                    },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "criticalChance": {
+                "multiplicationAreas": [
+                    { "base": 0.1, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "criticalDamage": {
+                "multiplicationAreas": [
+                    { "base": 0.75, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "weight": {
+                "multiplicationAreas": [
+                    { "base": 15, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "damageType": 2,
+            "movingDestinationsCallback": {
+                "multiplicationAreas": [
+                    { "base": "<REGISTERED FUNCTION>horse", "modifiers": [], "description": "Base" }
+                ]
+            },
+            "attackingTargetsCallback": {
+                "multiplicationAreas": [
+                    { "base": "<REGISTERED FUNCTION>horse", "modifiers": [], "description": "Base" }
+                ]
+            },
+            "attackActionCallback": {
+                "multiplicationAreas": [
+                    {
+                        "base": "<STRINGIFIED FUNCTION>(piece, target) => {\n    if (target.team === piece.team)\n        return false;\n    let damageAmount = piece.attackDamage.result;\n    let isCritical = Math.random() < piece.criticalChance.result;\n    if (isCritical)\n        damageAmount *= piece.criticalDamage.result + 1;\n    let damageObject = new Damage(piece.damageType, damageAmount, piece, target, isCritical);\n    damageObject.apply();\n    return true;\n}",
+                        "modifiers": [],
+                        "description": "Base"
+                    }
+                ]
+            },
+            "clickListener": "<STRINGIFIED FUNCTION>(event) => {\n            if (onPieceClick(this))\n                event.stopPropagation();\n        }"
+        },
+        {
+            "team": "black",
+            "type": "horse",
+            "position": {
+                "x": 7,
+                "y": 9,
+                "_screenX": 738.6513761467891,
+                "_screenY": 54.7910447761194
+            },
+            "htmlElement": {},
+            "htmlElementId": "black-horse2",
+            "health": 3000,
+            "dead": false,
+            "maxHealth": {
+                "multiplicationAreas": [
+                    { "base": 3000, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "attackDamage": {
+                "multiplicationAreas": [
+                    { "base": 2750, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "defense": {
+                "multiplicationAreas": [
+                    {
+                        "base": 200,
+                        "modifiers": [
+                            {
+                                "amount": 11000,
+                                "expire": 5,
+                                "operation": "<STRINGIFIED FUNCTION>(arg1, arg2) => arg1 + arg2",
+                                "enabled": true
+                            }
+                        ],
+                        "description": "Base"
+                    },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "criticalChance": {
+                "multiplicationAreas": [
+                    { "base": 0.1, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "criticalDamage": {
+                "multiplicationAreas": [
+                    { "base": 0.75, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "weight": {
+                "multiplicationAreas": [
+                    { "base": 15, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "damageType": 2,
+            "movingDestinationsCallback": {
+                "multiplicationAreas": [
+                    { "base": "<REGISTERED FUNCTION>horse", "modifiers": [], "description": "Base" }
+                ]
+            },
+            "attackingTargetsCallback": {
+                "multiplicationAreas": [
+                    { "base": "<REGISTERED FUNCTION>horse", "modifiers": [], "description": "Base" }
+                ]
+            },
+            "attackActionCallback": {
+                "multiplicationAreas": [
+                    {
+                        "base": "<STRINGIFIED FUNCTION>(piece, target) => {\n    if (target.team === piece.team)\n        return false;\n    let damageAmount = piece.attackDamage.result;\n    let isCritical = Math.random() < piece.criticalChance.result;\n    if (isCritical)\n        damageAmount *= piece.criticalDamage.result + 1;\n    let damageObject = new Damage(piece.damageType, damageAmount, piece, target, isCritical);\n    damageObject.apply();\n    return true;\n}",
+                        "modifiers": [],
+                        "description": "Base"
+                    }
+                ]
+            },
+            "clickListener": "<STRINGIFIED FUNCTION>(event) => {\n            if (onPieceClick(this))\n                event.stopPropagation();\n        }"
+        },
+        {
+            "team": "black",
+            "type": "chariot",
+            "position": {
+                "x": 0,
+                "y": 9,
+                "_screenX": 258.79816513761466,
+                "_screenY": 54.7910447761194
+            },
+            "htmlElement": {},
+            "htmlElementId": "black-chariot1",
+            "health": 4500,
+            "dead": false,
+            "maxHealth": {
+                "multiplicationAreas": [
+                    { "base": 4500, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "attackDamage": {
+                "multiplicationAreas": [
+                    { "base": 2200, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "defense": {
+                "multiplicationAreas": [
+                    {
+                        "base": 200,
+                        "modifiers": [
+                            {
+                                "amount": 11000,
+                                "expire": 5,
+                                "operation": "<STRINGIFIED FUNCTION>(arg1, arg2) => arg1 + arg2",
+                                "enabled": true
+                            }
+                        ],
+                        "description": "Base"
+                    },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "criticalChance": {
+                "multiplicationAreas": [
+                    { "base": 0.1, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "criticalDamage": {
+                "multiplicationAreas": [
+                    { "base": 0.75, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "weight": {
+                "multiplicationAreas": [
+                    { "base": 20, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "damageType": 3,
+            "movingDestinationsCallback": {
+                "multiplicationAreas": [
+                    {
+                        "base": "<REGISTERED FUNCTION>chariot",
+                        "modifiers": [],
+                        "description": "Base"
+                    }
+                ]
+            },
+            "attackingTargetsCallback": {
+                "multiplicationAreas": [
+                    {
+                        "base": "<REGISTERED FUNCTION>chariot",
+                        "modifiers": [],
+                        "description": "Base"
+                    }
+                ]
+            },
+            "attackActionCallback": {
+                "multiplicationAreas": [
+                    {
+                        "base": "<STRINGIFIED FUNCTION>(piece, target) => {\n    if (target.team === piece.team)\n        return false;\n    let damageAmount = piece.attackDamage.result;\n    let isCritical = Math.random() < piece.criticalChance.result;\n    if (isCritical)\n        damageAmount *= piece.criticalDamage.result + 1;\n    let damageObject = new Damage(piece.damageType, damageAmount, piece, target, isCritical);\n    damageObject.apply();\n    return true;\n}",
+                        "modifiers": [],
+                        "description": "Base"
+                    }
+                ]
+            },
+            "clickListener": "<STRINGIFIED FUNCTION>(event) => {\n            if (onPieceClick(this))\n                event.stopPropagation();\n        }"
+        },
+        {
+            "team": "black",
+            "type": "chariot",
+            "position": {
+                "x": 8,
+                "y": 9,
+                "_screenX": 807.2018348623853,
+                "_screenY": 54.7910447761194
+            },
+            "htmlElement": {},
+            "htmlElementId": "black-chariot2",
+            "health": 4500,
+            "dead": false,
+            "maxHealth": {
+                "multiplicationAreas": [
+                    { "base": 4500, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "attackDamage": {
+                "multiplicationAreas": [
+                    { "base": 2200, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "defense": {
+                "multiplicationAreas": [
+                    {
+                        "base": 200,
+                        "modifiers": [
+                            {
+                                "amount": 11000,
+                                "expire": 5,
+                                "operation": "<STRINGIFIED FUNCTION>(arg1, arg2) => arg1 + arg2",
+                                "enabled": true
+                            }
+                        ],
+                        "description": "Base"
+                    },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "criticalChance": {
+                "multiplicationAreas": [
+                    { "base": 0.1, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "criticalDamage": {
+                "multiplicationAreas": [
+                    { "base": 0.75, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "weight": {
+                "multiplicationAreas": [
+                    { "base": 20, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "damageType": 3,
+            "movingDestinationsCallback": {
+                "multiplicationAreas": [
+                    {
+                        "base": "<REGISTERED FUNCTION>chariot",
+                        "modifiers": [],
+                        "description": "Base"
+                    }
+                ]
+            },
+            "attackingTargetsCallback": {
+                "multiplicationAreas": [
+                    {
+                        "base": "<REGISTERED FUNCTION>chariot",
+                        "modifiers": [],
+                        "description": "Base"
+                    }
+                ]
+            },
+            "attackActionCallback": {
+                "multiplicationAreas": [
+                    {
+                        "base": "<STRINGIFIED FUNCTION>(piece, target) => {\n    if (target.team === piece.team)\n        return false;\n    let damageAmount = piece.attackDamage.result;\n    let isCritical = Math.random() < piece.criticalChance.result;\n    if (isCritical)\n        damageAmount *= piece.criticalDamage.result + 1;\n    let damageObject = new Damage(piece.damageType, damageAmount, piece, target, isCritical);\n    damageObject.apply();\n    return true;\n}",
+                        "modifiers": [],
+                        "description": "Base"
+                    }
+                ]
+            },
+            "clickListener": "<STRINGIFIED FUNCTION>(event) => {\n            if (onPieceClick(this))\n                event.stopPropagation();\n        }"
+        },
+        {
+            "team": "black",
+            "type": "gun",
+            "position": {
+                "x": 1,
+                "y": 7,
+                "_screenX": 327.348623853211,
+                "_screenY": 191.77280265339965
+            },
+            "htmlElement": {},
+            "htmlElementId": "black-gun1",
+            "health": 4750,
+            "dead": false,
+            "maxHealth": {
+                "multiplicationAreas": [
+                    { "base": 4750, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "attackDamage": {
+                "multiplicationAreas": [
+                    { "base": 2250, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "defense": {
+                "multiplicationAreas": [
+                    {
+                        "base": 150,
+                        "modifiers": [
+                            {
+                                "amount": 11000,
+                                "expire": 5,
+                                "operation": "<STRINGIFIED FUNCTION>(arg1, arg2) => arg1 + arg2",
+                                "enabled": true
+                            }
+                        ],
+                        "description": "Base"
+                    },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "criticalChance": {
+                "multiplicationAreas": [
+                    { "base": 0.1, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "criticalDamage": {
+                "multiplicationAreas": [
+                    { "base": 0.75, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "weight": {
+                "multiplicationAreas": [
+                    { "base": 20, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "damageType": 4,
+            "movingDestinationsCallback": {
+                "multiplicationAreas": [
+                    {
+                        "base": "<REGISTERED FUNCTION>gunMove",
+                        "modifiers": [],
+                        "description": "Base"
+                    }
+                ]
+            },
+            "attackingTargetsCallback": {
+                "multiplicationAreas": [
+                    {
+                        "base": "<REGISTERED FUNCTION>gunAttack",
+                        "modifiers": [],
+                        "description": "Base"
+                    }
+                ]
+            },
+            "attackActionCallback": {
+                "multiplicationAreas": [
+                    {
+                        "base": "<STRINGIFIED FUNCTION>(piece, target) => {\n    if (target.team === piece.team)\n        return false;\n    let damageAmount = piece.attackDamage.result;\n    let isCritical = Math.random() < piece.criticalChance.result;\n    if (isCritical)\n        damageAmount *= piece.criticalDamage.result + 1;\n    let damageObject = new Damage(piece.damageType, damageAmount, piece, target, isCritical);\n    damageObject.apply();\n    return true;\n}",
+                        "modifiers": [],
+                        "description": "Base"
+                    }
+                ]
+            },
+            "clickListener": "<STRINGIFIED FUNCTION>(event) => {\n            if (onPieceClick(this))\n                event.stopPropagation();\n        }"
+        },
+        {
+            "team": "black",
+            "type": "gun",
+            "position": {
+                "x": 7,
+                "y": 7,
+                "_screenX": 738.6513761467891,
+                "_screenY": 191.77280265339965
+            },
+            "htmlElement": {},
+            "htmlElementId": "black-gun2",
+            "health": 4750,
+            "dead": false,
+            "maxHealth": {
+                "multiplicationAreas": [
+                    { "base": 4750, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "attackDamage": {
+                "multiplicationAreas": [
+                    { "base": 2250, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "defense": {
+                "multiplicationAreas": [
+                    {
+                        "base": 150,
+                        "modifiers": [
+                            {
+                                "amount": 11000,
+                                "expire": 5,
+                                "operation": "<STRINGIFIED FUNCTION>(arg1, arg2) => arg1 + arg2",
+                                "enabled": true
+                            }
+                        ],
+                        "description": "Base"
+                    },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "criticalChance": {
+                "multiplicationAreas": [
+                    { "base": 0.1, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "criticalDamage": {
+                "multiplicationAreas": [
+                    { "base": 0.75, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "weight": {
+                "multiplicationAreas": [
+                    { "base": 20, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "damageType": 4,
+            "movingDestinationsCallback": {
+                "multiplicationAreas": [
+                    {
+                        "base": "<REGISTERED FUNCTION>gunMove",
+                        "modifiers": [],
+                        "description": "Base"
+                    }
+                ]
+            },
+            "attackingTargetsCallback": {
+                "multiplicationAreas": [
+                    {
+                        "base": "<REGISTERED FUNCTION>gunAttack",
+                        "modifiers": [],
+                        "description": "Base"
+                    }
+                ]
+            },
+            "attackActionCallback": {
+                "multiplicationAreas": [
+                    {
+                        "base": "<STRINGIFIED FUNCTION>(piece, target) => {\n    if (target.team === piece.team)\n        return false;\n    let damageAmount = piece.attackDamage.result;\n    let isCritical = Math.random() < piece.criticalChance.result;\n    if (isCritical)\n        damageAmount *= piece.criticalDamage.result + 1;\n    let damageObject = new Damage(piece.damageType, damageAmount, piece, target, isCritical);\n    damageObject.apply();\n    return true;\n}",
+                        "modifiers": [],
+                        "description": "Base"
+                    }
+                ]
+            },
+            "clickListener": "<STRINGIFIED FUNCTION>(event) => {\n            if (onPieceClick(this))\n                event.stopPropagation();\n        }"
+        },
+        {
+            "team": "black",
+            "type": "pawn",
+            "position": {
+                "x": 0,
+                "y": 6,
+                "_screenX": 258.79816513761466,
+                "_screenY": 260.2636815920398
+            },
+            "htmlElement": {},
+            "htmlElementId": "black-pawn1",
+            "health": 2250,
+            "dead": false,
+            "maxHealth": {
+                "multiplicationAreas": [
+                    { "base": 2250, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "attackDamage": {
+                "multiplicationAreas": [
+                    { "base": 1250, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "defense": {
+                "multiplicationAreas": [
+                    {
+                        "base": 100,
+                        "modifiers": [
+                            {
+                                "amount": 11000,
+                                "expire": 5,
+                                "operation": "<STRINGIFIED FUNCTION>(arg1, arg2) => arg1 + arg2",
+                                "enabled": true
+                            }
+                        ],
+                        "description": "Base"
+                    },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "criticalChance": {
+                "multiplicationAreas": [
+                    { "base": 0.1, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "criticalDamage": {
+                "multiplicationAreas": [
+                    { "base": 0.75, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "weight": {
+                "multiplicationAreas": [
+                    { "base": 8, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "damageType": 1,
+            "movingDestinationsCallback": {
+                "multiplicationAreas": [
+                    { "base": "<REGISTERED FUNCTION>pawn", "modifiers": [], "description": "Base" }
+                ]
+            },
+            "attackingTargetsCallback": {
+                "multiplicationAreas": [
+                    { "base": "<REGISTERED FUNCTION>pawn", "modifiers": [], "description": "Base" }
+                ]
+            },
+            "attackActionCallback": {
+                "multiplicationAreas": [
+                    {
+                        "base": "<STRINGIFIED FUNCTION>(piece, target) => {\n    if (target.team === piece.team)\n        return false;\n    let damageAmount = piece.attackDamage.result;\n    let isCritical = Math.random() < piece.criticalChance.result;\n    if (isCritical)\n        damageAmount *= piece.criticalDamage.result + 1;\n    let damageObject = new Damage(piece.damageType, damageAmount, piece, target, isCritical);\n    damageObject.apply();\n    return true;\n}",
+                        "modifiers": [],
+                        "description": "Base"
+                    }
+                ]
+            },
+            "clickListener": "<STRINGIFIED FUNCTION>(event) => {\n            if (onPieceClick(this))\n                event.stopPropagation();\n        }"
+        },
+        {
+            "team": "black",
+            "type": "pawn",
+            "position": {
+                "x": 2,
+                "y": 6,
+                "_screenX": 395.89908256880733,
+                "_screenY": 260.2636815920398
+            },
+            "htmlElement": {},
+            "htmlElementId": "black-pawn2",
+            "health": 2250,
+            "dead": false,
+            "maxHealth": {
+                "multiplicationAreas": [
+                    { "base": 2250, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "attackDamage": {
+                "multiplicationAreas": [
+                    { "base": 1250, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "defense": {
+                "multiplicationAreas": [
+                    {
+                        "base": 100,
+                        "modifiers": [
+                            {
+                                "amount": 11000,
+                                "expire": 5,
+                                "operation": "<STRINGIFIED FUNCTION>(arg1, arg2) => arg1 + arg2",
+                                "enabled": true
+                            }
+                        ],
+                        "description": "Base"
+                    },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "criticalChance": {
+                "multiplicationAreas": [
+                    { "base": 0.1, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "criticalDamage": {
+                "multiplicationAreas": [
+                    { "base": 0.75, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "weight": {
+                "multiplicationAreas": [
+                    { "base": 8, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "damageType": 1,
+            "movingDestinationsCallback": {
+                "multiplicationAreas": [
+                    { "base": "<REGISTERED FUNCTION>pawn", "modifiers": [], "description": "Base" }
+                ]
+            },
+            "attackingTargetsCallback": {
+                "multiplicationAreas": [
+                    { "base": "<REGISTERED FUNCTION>pawn", "modifiers": [], "description": "Base" }
+                ]
+            },
+            "attackActionCallback": {
+                "multiplicationAreas": [
+                    {
+                        "base": "<STRINGIFIED FUNCTION>(piece, target) => {\n    if (target.team === piece.team)\n        return false;\n    let damageAmount = piece.attackDamage.result;\n    let isCritical = Math.random() < piece.criticalChance.result;\n    if (isCritical)\n        damageAmount *= piece.criticalDamage.result + 1;\n    let damageObject = new Damage(piece.damageType, damageAmount, piece, target, isCritical);\n    damageObject.apply();\n    return true;\n}",
+                        "modifiers": [],
+                        "description": "Base"
+                    }
+                ]
+            },
+            "clickListener": "<STRINGIFIED FUNCTION>(event) => {\n            if (onPieceClick(this))\n                event.stopPropagation();\n        }"
+        },
+        {
+            "team": "black",
+            "type": "pawn",
+            "position": { "x": 4, "y": 6, "_screenX": 533, "_screenY": 260.2636815920398 },
+            "htmlElement": {},
+            "htmlElementId": "black-pawn3",
+            "health": 2250,
+            "dead": false,
+            "maxHealth": {
+                "multiplicationAreas": [
+                    { "base": 2250, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "attackDamage": {
+                "multiplicationAreas": [
+                    { "base": 1250, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "defense": {
+                "multiplicationAreas": [
+                    {
+                        "base": 100,
+                        "modifiers": [
+                            {
+                                "amount": 11000,
+                                "expire": 5,
+                                "operation": "<STRINGIFIED FUNCTION>(arg1, arg2) => arg1 + arg2",
+                                "enabled": true
+                            }
+                        ],
+                        "description": "Base"
+                    },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "criticalChance": {
+                "multiplicationAreas": [
+                    { "base": 0.1, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "criticalDamage": {
+                "multiplicationAreas": [
+                    { "base": 0.75, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "weight": {
+                "multiplicationAreas": [
+                    { "base": 8, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "damageType": 1,
+            "movingDestinationsCallback": {
+                "multiplicationAreas": [
+                    { "base": "<REGISTERED FUNCTION>pawn", "modifiers": [], "description": "Base" }
+                ]
+            },
+            "attackingTargetsCallback": {
+                "multiplicationAreas": [
+                    { "base": "<REGISTERED FUNCTION>pawn", "modifiers": [], "description": "Base" }
+                ]
+            },
+            "attackActionCallback": {
+                "multiplicationAreas": [
+                    {
+                        "base": "<STRINGIFIED FUNCTION>(piece, target) => {\n    if (target.team === piece.team)\n        return false;\n    let damageAmount = piece.attackDamage.result;\n    let isCritical = Math.random() < piece.criticalChance.result;\n    if (isCritical)\n        damageAmount *= piece.criticalDamage.result + 1;\n    let damageObject = new Damage(piece.damageType, damageAmount, piece, target, isCritical);\n    damageObject.apply();\n    return true;\n}",
+                        "modifiers": [],
+                        "description": "Base"
+                    }
+                ]
+            },
+            "clickListener": "<STRINGIFIED FUNCTION>(event) => {\n            if (onPieceClick(this))\n                event.stopPropagation();\n        }"
+        },
+        {
+            "team": "black",
+            "type": "pawn",
+            "position": {
+                "x": 6,
+                "y": 6,
+                "_screenX": 670.1009174311927,
+                "_screenY": 260.2636815920398
+            },
+            "htmlElement": {},
+            "htmlElementId": "black-pawn4",
+            "health": 2250,
+            "dead": false,
+            "maxHealth": {
+                "multiplicationAreas": [
+                    { "base": 2250, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "attackDamage": {
+                "multiplicationAreas": [
+                    { "base": 1250, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "defense": {
+                "multiplicationAreas": [
+                    {
+                        "base": 100,
+                        "modifiers": [
+                            {
+                                "amount": 11000,
+                                "expire": 5,
+                                "operation": "<STRINGIFIED FUNCTION>(arg1, arg2) => arg1 + arg2",
+                                "enabled": true
+                            }
+                        ],
+                        "description": "Base"
+                    },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "criticalChance": {
+                "multiplicationAreas": [
+                    { "base": 0.1, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "criticalDamage": {
+                "multiplicationAreas": [
+                    { "base": 0.75, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "weight": {
+                "multiplicationAreas": [
+                    { "base": 8, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "damageType": 1,
+            "movingDestinationsCallback": {
+                "multiplicationAreas": [
+                    { "base": "<REGISTERED FUNCTION>pawn", "modifiers": [], "description": "Base" }
+                ]
+            },
+            "attackingTargetsCallback": {
+                "multiplicationAreas": [
+                    { "base": "<REGISTERED FUNCTION>pawn", "modifiers": [], "description": "Base" }
+                ]
+            },
+            "attackActionCallback": {
+                "multiplicationAreas": [
+                    {
+                        "base": "<STRINGIFIED FUNCTION>(piece, target) => {\n    if (target.team === piece.team)\n        return false;\n    let damageAmount = piece.attackDamage.result;\n    let isCritical = Math.random() < piece.criticalChance.result;\n    if (isCritical)\n        damageAmount *= piece.criticalDamage.result + 1;\n    let damageObject = new Damage(piece.damageType, damageAmount, piece, target, isCritical);\n    damageObject.apply();\n    return true;\n}",
+                        "modifiers": [],
+                        "description": "Base"
+                    }
+                ]
+            },
+            "clickListener": "<STRINGIFIED FUNCTION>(event) => {\n            if (onPieceClick(this))\n                event.stopPropagation();\n        }"
+        },
+        {
+            "team": "black",
+            "type": "pawn",
+            "position": {
+                "x": 8,
+                "y": 6,
+                "_screenX": 807.2018348623853,
+                "_screenY": 260.2636815920398
+            },
+            "htmlElement": {},
+            "htmlElementId": "black-pawn5",
+            "health": 2250,
+            "dead": false,
+            "maxHealth": {
+                "multiplicationAreas": [
+                    { "base": 2250, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "attackDamage": {
+                "multiplicationAreas": [
+                    { "base": 1250, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "defense": {
+                "multiplicationAreas": [
+                    {
+                        "base": 100,
+                        "modifiers": [
+                            {
+                                "amount": 11000,
+                                "expire": 5,
+                                "operation": "<STRINGIFIED FUNCTION>(arg1, arg2) => arg1 + arg2",
+                                "enabled": true
+                            }
+                        ],
+                        "description": "Base"
+                    },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "criticalChance": {
+                "multiplicationAreas": [
+                    { "base": 0.1, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "criticalDamage": {
+                "multiplicationAreas": [
+                    { "base": 0.75, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "weight": {
+                "multiplicationAreas": [
+                    { "base": 8, "modifiers": [], "description": "Base" },
+                    { "base": 1, "modifiers": [], "description": "Improve" }
+                ]
+            },
+            "damageType": 1,
+            "movingDestinationsCallback": {
+                "multiplicationAreas": [
+                    { "base": "<REGISTERED FUNCTION>pawn", "modifiers": [], "description": "Base" }
+                ]
+            },
+            "attackingTargetsCallback": {
+                "multiplicationAreas": [
+                    { "base": "<REGISTERED FUNCTION>pawn", "modifiers": [], "description": "Base" }
+                ]
+            },
+            "attackActionCallback": {
+                "multiplicationAreas": [
+                    {
+                        "base": "<STRINGIFIED FUNCTION>(piece, target) => {\n    if (target.team === piece.team)\n        return false;\n    let damageAmount = piece.attackDamage.result;\n    let isCritical = Math.random() < piece.criticalChance.result;\n    if (isCritical)\n        damageAmount *= piece.criticalDamage.result + 1;\n    let damageObject = new Damage(piece.damageType, damageAmount, piece, target, isCritical);\n    damageObject.apply();\n    return true;\n}",
+                        "modifiers": [],
+                        "description": "Base"
+                    }
+                ]
+            },
+            "clickListener": "<STRINGIFIED FUNCTION>(event) => {\n            if (onPieceClick(this))\n                event.stopPropagation();\n        }"
+        }
+    ],
+    "players": {
+        "red": { "actionCards": [], "team": "red" },
+        "black": { "actionCards": [], "team": "black" }
+    },
+    "round": 2
+}

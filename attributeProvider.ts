@@ -1,7 +1,14 @@
+import { registerAnonymous } from "./callbackRegister.js";
 import { round } from "./round.js";
 
-export const operaPlus = (arg1: number, arg2: number) => arg1 + arg2;
-export const operaOverride = (arg1: any, arg2: any) => arg2;
+export const operaPlus = registerAnonymous(
+    (arg1: number, arg2: number) => arg1 + arg2,
+    "ModifierOperaPlus"
+);
+export const operaOverride = registerAnonymous(
+    (arg1: any, arg2: any) => arg2,
+    "ModifierOperaOverride"
+);
 
 /**
  * 属性提供器

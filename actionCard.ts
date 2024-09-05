@@ -1,4 +1,5 @@
 import { AttributeModifier } from "./attributeProvider.js";
+import { registerAnonymous, registerCallback } from "./callbackRegister.js";
 import { filterGrids, ray } from "./defaultMovingBehaviors.js";
 import { Piece, pieces, PieceType } from "./piece.js";
 import {
@@ -22,7 +23,10 @@ export class ActionCard {
         this.name = name;
         this.id = id;
         this.description = description;
-        this.applyCallback = applyCallback;
+        this.applyCallback = registerAnonymous(
+            applyCallback,
+            "actionCard'" + id + "'applyCallback"
+        );
     }
 
     apply() {
@@ -46,8 +50,12 @@ export const testActionCard = new ActionCard(
  * 进行一次单选棋子，然后基于选择的棋子进行接下来的操作
  * @pieceType 指定棋子类型，None表示不限制
  */
-const singleTargetSelectorTemplate =
-    (name: string, pieceType: string, final: (results: SelectedItem[]) => void) => () => {
+const singleTargetSelectorTemplate = (
+    name: string,
+    pieceType: string,
+    final: (results: SelectedItem[]) => void
+) => {
+    let callback = () => {
         let currentSelection = getCurrentSelection();
         let targetSelection = new SelectionManager(
             new SingleSelection([], ItemType.Piece, `请选择要应用「${name}」的棋子`, (item) => {
@@ -60,6 +68,8 @@ const singleTargetSelectorTemplate =
 
         setCurrentSelection(targetSelection);
     };
+    return callback;
+};
 
 export const highGunActionCard = new ActionCard(
     "高射炮",

@@ -7,6 +7,18 @@ import { Damage } from "./damage.js";
 import { DamageType } from "./damageType.js";
 import { Team } from "./team.js";
 import { AttributeProvider } from "./attributeProvider.js";
+import { registerAnonymous } from "./callbackRegister.js";
+const defaultAttackActionCallback = registerAnonymous((piece, target) => {
+    if (target.team === piece.team)
+        return false;
+    let damageAmount = piece.attackDamage.result;
+    let isCritical = Math.random() < piece.criticalChance.result;
+    if (isCritical)
+        damageAmount *= piece.criticalDamage.result + 1;
+    let damageObject = new Damage(piece.damageType, damageAmount, piece, target, isCritical);
+    damageObject.apply();
+    return true;
+});
 export var pieces = [];
 export function modifyPieces(newList) {
     pieces = newList;
@@ -49,17 +61,7 @@ class Piece {
         }
         this.movingDestinationsCallback = new AttributeProvider(DefaultMovingBehaviors.auto(this, false));
         this.attackingTargetsCallback = new AttributeProvider(DefaultMovingBehaviors.auto(this, true));
-        this.attackActionCallback = new AttributeProvider((piece, target) => {
-            if (target.team === piece.team)
-                return false;
-            let damageAmount = piece.attackDamage.result;
-            let isCritical = Math.random() < piece.criticalChance.result;
-            if (isCritical)
-                damageAmount *= piece.criticalDamage.result + 1;
-            let damageObject = new Damage(piece.damageType, damageAmount, piece, target, isCritical);
-            damageObject.apply();
-            return true;
-        });
+        this.attackActionCallback = new AttributeProvider(defaultAttackActionCallback);
     }
     toggleSelected() {
         if (!this.htmlElement)

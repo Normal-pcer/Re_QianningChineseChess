@@ -9,6 +9,7 @@ import { highGunActionCard, limitlessHorseActionCard, testActionCard } from "./a
 import { runAllSchedules } from "./schedule.js";
 import { lootCard } from "./cardLooting.js";
 import { loadSave, recall, Save, saveCurrent, storeSave } from "./save.js";
+import { registerCallback } from "./callbackRegister.js";
 
 init();
 
@@ -87,6 +88,9 @@ window.onload = () => {
     pieces.forEach((piece) => {
         piece.init();
     });
+
+    registerCallback(pieces[0].attackActionCallback.result, "defaultAttackActionCallback")
+    
 
     let submit_cheating = document.getElementById("submit-cheating");
     if (submit_cheating instanceof HTMLElement)

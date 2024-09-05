@@ -1,6 +1,7 @@
+import { registerAnonymous } from "./callbackRegister.js";
 import { round } from "./round.js";
-export const operaPlus = (arg1, arg2) => arg1 + arg2;
-export const operaOverride = (arg1, arg2) => arg2;
+export const operaPlus = registerAnonymous((arg1, arg2) => arg1 + arg2, "ModifierOperaPlus");
+export const operaOverride = registerAnonymous((arg1, arg2) => arg2, "ModifierOperaOverride");
 /**
  * 属性提供器
  * 如果T不是数字，则只有首个乘区会生效
