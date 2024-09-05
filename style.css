@@ -2,11 +2,23 @@ body {
     background-color: #faead4;
 }
 
-#game-container {
-    width: 800px;
+#center-column {
+    width: 50vw;
     margin: 0 auto;
     border: 2px black solid;
     height: 95vh;
+}
+
+#left-column {
+    width: 20vw;
+    margin: 0 auto;
+    border: 2px black solid;
+    height: 95vh;
+    position: fixed;
+    left: 2vw;
+}
+
+#game-container {
     display: none;
 }
 
@@ -81,11 +93,11 @@ body {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
 
-#black-pieces span {
+.black-piece span {
     color: black;
 }
 
-#red-pieces span {
+.red-piece span {
     color: red;
 }
 
@@ -125,7 +137,7 @@ body {
     position: absolute;
     font-size: 1.6em;
     animation: damage-number 750ms ease-out;
-    text-shadow: #000000ff
+    text-shadow: #000000ff;
 }
 
 .critical-damage-effect {
@@ -168,4 +180,11 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+#piece-frame {
+    left: 50px;
+    top: 50px;
+    position: relative;
+    margin-bottom: 30px;
 }

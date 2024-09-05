@@ -220,3 +220,7 @@ class PieceType {
 }
 
 export { Piece, PieceType };
+
+export function getTeamMaster(team: Team) {
+    return pieces.find((piece) => piece.team === team && piece.type === PieceType.Master);
+}

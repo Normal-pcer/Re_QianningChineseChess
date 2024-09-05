@@ -10,6 +10,7 @@ import { runAllSchedules } from "./schedule.js";
 import { lootCard } from "./cardLooting.js";
 import { loadSave, recall, saveCurrent, storeSave } from "./save.js";
 import { registerCallback } from "./callbackRegister.js";
+import { showDefaultPiece, showPiece } from "./pieceFrame.js";
 init();
 export function stop(victor) {
     Selection.setCurrentSelection(null);
@@ -33,6 +34,7 @@ window.onload = () => {
         let selectedPiece = past[0].data;
         let validMove = selectedPiece.destinations;
         let validTarget = selectedPiece.attackTargets;
+        showPiece(selectedPiece);
         return new Selection.SingleSelection(validMove.concat(validTarget), Selection.ItemType.Grid, "请选择要移动到的位置", (selectedGrid) => {
             let pos = selectedGrid.data;
             if (pos.integerGrid().piece !== null) {
@@ -59,6 +61,7 @@ window.onload = () => {
             nextRound();
             runAllSchedules();
         }
+        showDefaultPiece();
     });
     Selection.setCurrentSelection(MainSelection);
     Position._calculateGameboardSize();
@@ -125,6 +128,7 @@ window.onload = () => {
         }, 1000);
     };
     saveCurrent();
+    showDefaultPiece();
 };
 // 当页面大小改变
 window.onresize = () => {

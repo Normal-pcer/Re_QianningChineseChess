@@ -201,4 +201,7 @@ class PieceType {
     static None = "none";
 }
 export { Piece, PieceType };
+export function getTeamMaster(team) {
+    return pieces.find((piece) => piece.team === team && piece.type === PieceType.Master);
+}
 //# sourceMappingURL=piece.js.map

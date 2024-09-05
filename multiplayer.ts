@@ -10,6 +10,7 @@ import { runAllSchedules } from "./schedule.js";
 import { lootCard } from "./cardLooting.js";
 import { loadSave, recall, Save, saveCurrent, storeSave } from "./save.js";
 import { registerCallback } from "./callbackRegister.js";
+import { showDefaultPiece, showPiece } from "./pieceFrame.js";
 
 init();
 
@@ -39,6 +40,7 @@ window.onload = () => {
                 let selectedPiece = past[0].data as Piece;
                 let validMove = selectedPiece.destinations;
                 let validTarget = selectedPiece.attackTargets;
+                showPiece(selectedPiece);
                 return new Selection.SingleSelection(
                     validMove.concat(validTarget),
                     Selection.ItemType.Grid,
@@ -72,6 +74,8 @@ window.onload = () => {
                     nextRound();
                     runAllSchedules();
                 }
+
+                showDefaultPiece();
             } 
         );
     Selection.setCurrentSelection(MainSelection);
@@ -89,8 +93,7 @@ window.onload = () => {
         piece.init();
     });
 
-    registerCallback(pieces[0].attackActionCallback.result, "defaultAttackActionCallback")
-    
+    registerCallback(pieces[0].attackActionCallback.result, "defaultAttackActionCallback");
 
     let submit_cheating = document.getElementById("submit-cheating");
     if (submit_cheating instanceof HTMLElement)
@@ -148,6 +151,7 @@ window.onload = () => {
     };
 
     saveCurrent();
+    showDefaultPiece();
 };
 
 // 当页面大小改变

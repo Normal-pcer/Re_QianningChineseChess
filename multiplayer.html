@@ -15,148 +15,168 @@
 
     <body>
         <div id="game-container">
-            <div id="gameboard">
-                <div class="background">
-                    <img src="gameboard.png" alt="棋盘" />
-                </div>
-                <!-- 棋子 -->
-                <div id="pieces">
-                    <div id="black-pieces">
-                        <div id="black-master1" class="black-master piece">
-                            <span class="piece-name">将</span>
-                        </div>
-                        <div id="black-guard1" class="black-guard piece">
-                            <span class="piece-name">士</span>
-                        </div>
-                        <div id="black-guard2" class="black-guard piece">
-                            <span class="piece-name">士</span>
-                        </div>
-                        <div id="black-elephant1" class="black-elephant piece">
-                            <span class="piece-name">象</span>
-                        </div>
-                        <div id="black-elephant2" class="black-elephant piece">
-                            <span class="piece-name">象</span>
-                        </div>
-                        <div id="black-horse1" class="black-horse piece">
-                            <span class="piece-name">馬</span>
-                        </div>
-                        <div id="black-horse2" class="black-horse piece">
-                            <span class="piece-name">馬</span>
-                        </div>
-                        <div id="black-chariot1" class="black-chariot piece">
-                            <span class="piece-name">車</span>
-                        </div>
-                        <div id="black-chariot2" class="black-chariot piece">
-                            <span class="piece-name">車</span>
-                        </div>
-                        <div id="black-gun1" class="black-gun piece">
-                            <span class="piece-name">炮</span>
-                        </div>
-                        <div id="black-gun2" class="black-gun piece">
-                            <span class="piece-name">炮</span>
-                        </div>
-                        <div id="black-pawn1" class="black-pawn piece">
-                            <span class="piece-name">卒</span>
-                        </div>
-                        <div id="black-pawn2" class="black-pawn piece">
-                            <span class="piece-name">卒</span>
-                        </div>
-                        <div id="black-pawn3" class="black-pawn piece">
-                            <span class="piece-name">卒</span>
-                        </div>
-                        <div id="black-pawn4" class="black-pawn piece">
-                            <span class="piece-name">卒</span>
-                        </div>
-                        <div id="black-pawn5" class="black-pawn piece">
-                            <span class="piece-name">卒</span>
-                        </div>
+            <div id="left-column">
+                <div id="piece-info">
+                    <div id="piece-frame" class="piece">
+                        <span class="piece-name"></span>
                     </div>
-                    <div id="red-pieces">
-                        <div id="red-master1" class="red-master piece">
-                            <span class="piece-name">帥</span>
-                        </div>
-                        <div id="red-guard1" class="red-guard piece">
-                            <span class="piece-name">仕</span>
-                        </div>
-                        <div id="red-guard2" class="red-guard piece">
-                            <span class="piece-name">仕</span>
-                        </div>
-                        <div id="red-elephant1" class="red-elephant piece">
-                            <span class="piece-name">相</span>
-                        </div>
-                        <div id="red-elephant2" class="red-elephant piece">
-                            <span class="piece-name">相</span>
-                        </div>
-                        <div id="red-horse1" class="red-horse piece">
-                            <span class="piece-name">馬</span>
-                        </div>
-                        <div id="red-horse2" class="red-horse piece">
-                            <span class="piece-name">馬</span>
-                        </div>
-                        <div id="red-chariot1" class="red-chariot piece">
-                            <span class="piece-name">車</span>
-                        </div>
-                        <div id="red-chariot2" class="red-chariot piece">
-                            <span class="piece-name">車</span>
-                        </div>
-                        <div id="red-gun1" class="red-gun piece">
-                            <span class="piece-name">砲</span>
-                        </div>
-                        <div id="red-gun2" class="red-gun piece">
-                            <span class="piece-name">砲</span>
-                        </div>
-                        <div id="red-pawn1" class="red-pawn piece">
-                            <span class="piece-name">兵</span>
-                        </div>
-                        <div id="red-pawn2" class="red-pawn piece">
-                            <span class="piece-name">兵</span>
-                        </div>
-                        <div id="red-pawn3" class="red-pawn piece">
-                            <span class="piece-name">兵</span>
-                        </div>
-                        <div id="red-pawn4" class="red-pawn piece">
-                            <span class="piece-name">兵</span>
-                        </div>
-                        <div id="red-pawn5" class="red-pawn piece">
-                            <span class="piece-name">兵</span>
-                        </div>
+                    <div id="data-list-container">
+                        <ul id="data-list">
+                            <li>
+                                生命值: <span id="frame-health"></span> / <span id="frame-health-max"></span>
+                            </li>
+                            <li>攻击力: <span id="frame-attack"></span></li>
+                            <li>防御力: <span id="frame-defense"></span></li>
+                            <li>暴击率: <span id="frame-critical"></span>%</li>
+                            <li>暴击伤害: <span id="frame-critical-damage"></span>%</li>
+                        </ul>
                     </div>
                 </div>
+            </div>
+            <div id="center-column">
+                <div id="gameboard">
+                    <div class="background">
+                        <img src="gameboard.png" alt="棋盘" />
+                    </div>
+                    <!-- 棋子 -->
+                    <div id="pieces">
+                        <div id="black-pieces">
+                            <div id="black-master1" class="black-piece black-master piece">
+                                <span class="piece-name">将</span>
+                            </div>
+                            <div id="black-guard1" class="black-piece black-guard piece">
+                                <span class="piece-name">士</span>
+                            </div>
+                            <div id="black-guard2" class="black-piece black-guard piece">
+                                <span class="piece-name">士</span>
+                            </div>
+                            <div id="black-elephant1" class="black-piece black-elephant piece">
+                                <span class="piece-name">象</span>
+                            </div>
+                            <div id="black-elephant2" class="black-piece black-elephant piece">
+                                <span class="piece-name">象</span>
+                            </div>
+                            <div id="black-horse1" class="black-piece black-horse piece">
+                                <span class="piece-name">馬</span>
+                            </div>
+                            <div id="black-horse2" class="black-piece black-horse piece">
+                                <span class="piece-name">馬</span>
+                            </div>
+                            <div id="black-chariot1" class="black-piece black-chariot piece">
+                                <span class="piece-name">車</span>
+                            </div>
+                            <div id="black-chariot2" class="black-piece black-chariot piece">
+                                <span class="piece-name">車</span>
+                            </div>
+                            <div id="black-gun1" class="black-piece black-gun piece">
+                                <span class="piece-name">炮</span>
+                            </div>
+                            <div id="black-gun2" class="black-piece black-gun piece">
+                                <span class="piece-name">炮</span>
+                            </div>
+                            <div id="black-pawn1" class="black-piece black-pawn piece">
+                                <span class="piece-name">卒</span>
+                            </div>
+                            <div id="black-pawn2" class="black-piece black-pawn piece">
+                                <span class="piece-name">卒</span>
+                            </div>
+                            <div id="black-pawn3" class="black-piece black-pawn piece">
+                                <span class="piece-name">卒</span>
+                            </div>
+                            <div id="black-pawn4" class="black-piece black-pawn piece">
+                                <span class="piece-name">卒</span>
+                            </div>
+                            <div id="black-pawn5" class="black-piece black-pawn piece">
+                                <span class="piece-name">卒</span>
+                            </div>
+                        </div>
+                        <div id="red-pieces">
+                            <div id="red-master1" class="red-piece red-master piece">
+                                <span class="piece-name">帥</span>
+                            </div>
+                            <div id="red-guard1" class="red-piece red-guard piece">
+                                <span class="piece-name">仕</span>
+                            </div>
+                            <div id="red-guard2" class="red-piece red-guard piece">
+                                <span class="piece-name">仕</span>
+                            </div>
+                            <div id="red-elephant1" class="red-piece red-elephant piece">
+                                <span class="piece-name">相</span>
+                            </div>
+                            <div id="red-elephant2" class="red-piece red-elephant piece">
+                                <span class="piece-name">相</span>
+                            </div>
+                            <div id="red-horse1" class="red-piece red-horse piece">
+                                <span class="piece-name">馬</span>
+                            </div>
+                            <div id="red-horse2" class="red-piece red-horse piece">
+                                <span class="piece-name">馬</span>
+                            </div>
+                            <div id="red-chariot1" class="red-piece red-chariot piece">
+                                <span class="piece-name">車</span>
+                            </div>
+                            <div id="red-chariot2" class="red-piece red-chariot piece">
+                                <span class="piece-name">車</span>
+                            </div>
+                            <div id="red-gun1" class="red-piece red-gun piece">
+                                <span class="piece-name">砲</span>
+                            </div>
+                            <div id="red-gun2" class="red-piece red-gun piece">
+                                <span class="piece-name">砲</span>
+                            </div>
+                            <div id="red-pawn1" class="red-piece red-pawn piece">
+                                <span class="piece-name">兵</span>
+                            </div>
+                            <div id="red-pawn2" class="red-piece red-pawn piece">
+                                <span class="piece-name">兵</span>
+                            </div>
+                            <div id="red-pawn3" class="red-piece red-pawn piece">
+                                <span class="piece-name">兵</span>
+                            </div>
+                            <div id="red-pawn4" class="red-piece red-pawn piece">
+                                <span class="piece-name">兵</span>
+                            </div>
+                            <div id="red-pawn5" class="red-piece red-pawn piece">
+                                <span class="piece-name">兵</span>
+                            </div>
+                        </div>
+                    </div>
 
-                <div id="cheating">
-                    <form action="">
-                        <input type="text" placeholder="command" />
-                        <input type="button" id="submit-cheating" value="LOL" />
-                    </form>
+                    <div id="cheating">
+                        <form action="">
+                            <input type="text" placeholder="command" />
+                            <input type="button" id="submit-cheating" value="LOL" />
+                        </form>
+                    </div>
                 </div>
-            </div>
-            <div id="tip-bars">
-                <div id="round-tip">
-                    <span>red</span>
+                <div id="tip-bars">
+                    <div id="round-tip">
+                        <span>red</span>
+                    </div>
+                    <div id="victor-tip" style="font-size: 3em">
+                        <span></span>
+                    </div>
+                    <div id="action-bar" style="display: none">
+                        <span>请选择一个棋子</span>
+                    </div>
                 </div>
-                <div id="victor-tip" style="font-size: 3em">
-                    <span></span>
-                </div>
-                <div id="action-bar" style="display: none">
-                    <span>请选择一个棋子</span>
-                </div>
-            </div>
-            <div id="effects">
-                <!--各种特效-->
+                <div id="effects">
+                    <!--各种特效-->
 
-                <div id="damage-numbers">
-                    <!--伤害数字特效-->
+                    <div id="damage-numbers">
+                        <!--伤害数字特效-->
+                    </div>
                 </div>
-            </div>
-            <div id="buttons">
-                <span id="loot-card-button">抽卡</span>
-                <span id="recall-button">悔棋<span style="color: gray">(测试功能)</span></span>
-                <span id="store-button">存档<span style="color: gray">(测试功能)</span></span>
-                <span id="load-button">读档<span style="color: gray">(测试功能)</span></span>
-            </div>
-            <div id="player-assets">
-                <div id="action-cards">
-                    <ul id="action-cards-list"></ul>
+                <div id="buttons">
+                    <span id="loot-card-button">抽卡</span>
+                    <span id="recall-button">悔棋<span style="color: gray">(测试功能)</span></span>
+                    <span id="store-button">存档<span style="color: gray">(测试功能)</span></span>
+                    <span id="load-button">读档<span style="color: gray">(测试功能)</span></span>
+                </div>
+                <div id="player-assets">
+                    <div id="action-cards">
+                        <ul id="action-cards-list"></ul>
+                    </div>
                 </div>
             </div>
         </div>
