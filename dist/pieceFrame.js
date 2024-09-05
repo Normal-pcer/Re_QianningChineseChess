@@ -1,5 +1,5 @@
 import { getTeamMaster } from "./piece.js";
-import { getCurrentTeam } from "./round.js";
+import { getCurrentTeam, round } from "./round.js";
 import { Team } from "./team.js";
 export function showPiece(piece) {
     if (!piece.htmlElement)
@@ -30,6 +30,18 @@ export function showPiece(piece) {
     criticalDamageElement.innerText = Math.round(piece.criticalDamage.result * 100).toString();
     pieceFrameElement.classList.add(piece.team + "-piece");
     pieceFrameElement.classList.remove(Team.enemy(piece.team) + "-piece");
+    const effectsListElement = document.getElementById("effect-list");
+    effectsListElement.innerHTML = "";
+    if (piece.effects.length === 0)
+        effectsListElement.innerHTML = "暂无";
+    else
+        for (const effect of piece.effects) {
+            const effectElement = document.createElement("li");
+            effectElement.innerHTML = `${effect.name}(${effect.expire === -1
+                ? "持久"
+                : "剩余" + (effect.expire - round + 1).toString() + "轮"}: <span class="description-text">${effect.description}</span>)`;
+            effectsListElement.appendChild(effectElement);
+        }
 }
 export function showDefaultPiece() {
     const currentTeam = getCurrentTeam();

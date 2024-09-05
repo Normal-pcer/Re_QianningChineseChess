@@ -86,8 +86,13 @@ class MultiplicationArea<T> {
     get result() {
         let result = this.base;
         for (let modifier of this.modifiers) {
-            if (modifier.enabled && (modifier.expire == -1 || modifier.expire >= round)) {
-                console.log(modifier, "expire: ", modifier.expire);
+            if (!modifier.enabled) {
+                if (modifier.clearOnDisable)
+                    this.modifiers.splice(this.modifiers.indexOf(modifier), 1);
+            } else if (modifier.expire !== -1 && modifier.expire < round) {
+                if (modifier.clearOnExpire)
+                    this.modifiers.splice(this.modifiers.indexOf(modifier), 1);
+            } else {
                 result = modifier.operation(result, modifier.amount);
             }
         }
@@ -100,6 +105,8 @@ export class AttributeModifier<T> {
     expire: number = -1; // -1 表示永不过期
     operation: (arg1: T, arg2: T) => T;
     enabled: boolean = true;
+    clearOnExpire: boolean = true;
+    clearOnDisable: boolean = true;
 
     /**
      * 如果operation为null，则会应用如下默认操作：
@@ -115,7 +122,9 @@ export class AttributeModifier<T> {
         expire: number = -1,
         expireOffset: number | null = -1,
         operation: null | ((arg1: T, arg2: T) => T) = null,
-        numberModifier: boolean = true
+        numberModifier: boolean = true,
+        clearOnExpire: boolean = true,
+        clearOnDisable: boolean = true
     ) {
         this.amount = amount;
         if (operation === null) {
@@ -129,5 +138,7 @@ export class AttributeModifier<T> {
         }
         if (expireOffset === null) this.expire = expire;
         else this.expire = expire === -1 ? -1 : round + expire + expireOffset;
+        this.clearOnExpire = clearOnExpire;
+        this.clearOnDisable = clearOnDisable;
     }
 }

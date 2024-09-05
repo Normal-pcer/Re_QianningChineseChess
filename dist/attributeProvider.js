@@ -68,8 +68,15 @@ class MultiplicationArea {
     get result() {
         let result = this.base;
         for (let modifier of this.modifiers) {
-            if (modifier.enabled && (modifier.expire == -1 || modifier.expire >= round)) {
-                console.log(modifier, "expire: ", modifier.expire);
+            if (!modifier.enabled) {
+                if (modifier.clearOnDisable)
+                    this.modifiers.splice(this.modifiers.indexOf(modifier), 1);
+            }
+            else if (modifier.expire !== -1 && modifier.expire < round) {
+                if (modifier.clearOnExpire)
+                    this.modifiers.splice(this.modifiers.indexOf(modifier), 1);
+            }
+            else {
                 result = modifier.operation(result, modifier.amount);
             }
         }
@@ -81,6 +88,8 @@ export class AttributeModifier {
     expire = -1; // -1 表示永不过期
     operation;
     enabled = true;
+    clearOnExpire = true;
+    clearOnDisable = true;
     /**
      * 如果operation为null，则会应用如下默认操作：
      * 1. 如果T是数字，则使用加法
@@ -90,7 +99,7 @@ export class AttributeModifier {
      * ($expire-$expireOffset)回合；当为null时，表示参数expire直接作为过期回合号
      * @param numberModifier - 如果为true，则amount会被优先视为数字，否则视为普通值；如果amount不是数字，则该参数无效
      */
-    constructor(amount, expire = -1, expireOffset = -1, operation = null, numberModifier = true) {
+    constructor(amount, expire = -1, expireOffset = -1, operation = null, numberModifier = true, clearOnExpire = true, clearOnDisable = true) {
         this.amount = amount;
         if (operation === null) {
             if (typeof amount == "number" && numberModifier) {
@@ -107,6 +116,8 @@ export class AttributeModifier {
             this.expire = expire;
         else
             this.expire = expire === -1 ? -1 : round + expire + expireOffset;
+        this.clearOnExpire = clearOnExpire;
+        this.clearOnDisable = clearOnDisable;
     }
 }
 //# sourceMappingURL=attributeProvider.js.map

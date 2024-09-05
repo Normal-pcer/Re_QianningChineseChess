@@ -8,6 +8,7 @@ import { DamageType } from "./damageType.js";
 import { Team } from "./team.js";
 import { AttributeModifier, AttributeProvider, NumberAttributeProvider } from "./attributeProvider.js";
 import { registerAnonymous } from "./callbackRegister.js";
+import { Effect } from "./effect.js";
 
 const defaultAttackActionCallback = registerAnonymous((piece: Piece, target: Piece) => {
     if (target.team === piece.team) return false;
@@ -47,6 +48,7 @@ class Piece {
     attackActionCallback: AttributeProvider<(piece: Piece, target: Piece) => boolean>;
 
     clickListener: null | ((ev: MouseEvent) => void) = null;
+    effects: Effect[] = [];
 
     constructor(
         team: string,

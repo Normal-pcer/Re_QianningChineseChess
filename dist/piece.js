@@ -42,6 +42,7 @@ class Piece {
     attackingTargetsCallback;
     attackActionCallback;
     clickListener = null;
+    effects = [];
     constructor(team, type, position, htmlElement, config = null) {
         this.team = team;
         this.type = type;

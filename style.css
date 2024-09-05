@@ -188,3 +188,7 @@ body {
     position: relative;
     margin-bottom: 30px;
 }
+
+.description-text {
+    color: gray;
+}
