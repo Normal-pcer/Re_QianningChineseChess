@@ -1,18 +1,19 @@
 import { Position } from "./position.js";
 import { Piece, PieceType, pieces } from "./piece.js";
 import * as Selection from "./selection.js";
-import { DefaultMovingBehaviors, init } from "./defaultMovingBehaviors.js";
+import { DefaultMovingBehaviors, initDefaultMovingBehaviors } from "./defaultMovingBehaviors.js";
 import { getPlayerFromTeam, Team } from "./team.js";
 import { nextRound, getCurrentTeam } from "./round.js";
 import { AttributeModifier } from "./attributeProvider.js";
 import { highGunActionCard, limitlessHorseActionCard, testActionCard } from "./actionCard.js";
 import { runAllSchedules } from "./schedule.js";
-import { lootCard } from "./cardLooting.js";
+import { initCardLooting, lootCard } from "./cardLooting.js";
 import { loadSave, recall, Save, saveCurrent, storeSave } from "./save.js";
 import { registerCallback } from "./callbackRegister.js";
 import { showDefaultPiece, showPiece } from "./pieceFrame.js";
 
-init();
+initDefaultMovingBehaviors();
+initCardLooting();
 
 export function stop(victor: string) {
     Selection.setCurrentSelection(null);
@@ -26,59 +27,7 @@ window.onload = () => {
     if (container !== null) container.style.display = "block";
     putPieces();
 
-    /**
-     * @description 主要选择器，在几乎整个游戏周期内使用，用于移动棋子和控制攻击
-     */
-    /*prettier-ignore */
-    const MainSelection = new Selection
-        .SelectionManager(
-            new Selection.SingleSelection(
-                [], Selection.ItemType.Piece, "请选择要移动的棋子", 
-                (piece) => getCurrentTeam() === (piece.data as Piece).team))
-        .then(
-            (past) => {
-                let selectedPiece = past[0].data as Piece;
-                let validMove = selectedPiece.destinations;
-                let validTarget = selectedPiece.attackTargets;
-                showPiece(selectedPiece);
-                return new Selection.SingleSelection(
-                    validMove.concat(validTarget),
-                    Selection.ItemType.Grid,
-                    "请选择要移动到的位置",
-                    (selectedGrid) => {
-                        let pos = selectedGrid.data as Position
-                        if (pos.integerGrid().piece !== null) {
-                            return validTarget.some((item)=>item.nearby(pos));
-                        } else {
-                            return validMove.some((item)=>item.nearby(pos));
-                        }
-                    }
-                )
-            }
-        )
-        .final(
-            (results) => {
-                let selectedPiece = results[0].data as Piece;
-                let selectedTarget = (results[1].data as Position).integerGrid();
-                let success = false;
-
-                if (selectedTarget.piece !== null) {
-                    success = selectedPiece.attack(selectedTarget.piece);
-                    console.log(selectedPiece, "attack", selectedTarget.piece, success);
-                } else {
-                    success = selectedPiece.move(selectedTarget);
-                    console.log(selectedPiece, "move", selectedTarget, success);
-                }
-
-                if (success) {
-                    nextRound();
-                    runAllSchedules();
-                }
-
-                showDefaultPiece();
-            } 
-        );
-    Selection.setCurrentSelection(MainSelection);
+    Selection.setCurrentSelection(Selection.MainSelection);
 
     Position._calculateGameboardSize();
 
@@ -149,6 +98,9 @@ window.onload = () => {
             (document.getElementById("load-button") as HTMLElement).style.color = "black";
         }, 1000);
     };
+    (document.getElementById("action-bar") as HTMLElement).onclick = (event) => {
+        Selection.cancelCurrentSelection();
+    }
 
     saveCurrent();
     showDefaultPiece();

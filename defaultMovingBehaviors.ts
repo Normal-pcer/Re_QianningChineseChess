@@ -13,7 +13,7 @@ const BLACK_TERRITORY = [0, 8, 5, 9];
 var mapping: { [key: string]: (piece: Piece) => Position[] } = {};
 var mappingAttack: { [key: string]: (piece: Piece) => Position[] } = {};
 
-export function init() {
+export function initDefaultMovingBehaviors() {
     mapping = {
         [PieceType.Guard]: DefaultMovingBehaviors.guard,
         [PieceType.Elephant]: DefaultMovingBehaviors.elephant,

@@ -10,7 +10,7 @@ const RED_TERRITORY = [0, 8, 0, 4];
 const BLACK_TERRITORY = [0, 8, 5, 9];
 var mapping = {};
 var mappingAttack = {};
-export function init() {
+export function initDefaultMovingBehaviors() {
     mapping = {
         [PieceType.Guard]: DefaultMovingBehaviors.guard,
         [PieceType.Elephant]: DefaultMovingBehaviors.elephant,

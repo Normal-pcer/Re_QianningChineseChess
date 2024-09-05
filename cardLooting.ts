@@ -23,19 +23,24 @@ class poolItem {
     }
 }
 
-const pool = [
-    new poolItem(highGunActionCard),
-    new poolItem(limitlessHorseActionCard),
-    new poolItem(strengthPotionActionCard),
-    new poolItem(weaknessPotionActionCard),
-    new poolItem(healthInstantPotionActionCard),
-    new poolItem(strengthPotionEnhancedActionCard, 0.5),
-    new poolItem(strengthPotionExtendedActionCard, 0.5),
-    new poolItem(superLaughingActionCard),
-];
+let pool: poolItem[] = [];
+
+export function initCardLooting() {
+    pool.push(
+        new poolItem(highGunActionCard),
+        new poolItem(limitlessHorseActionCard),
+        new poolItem(strengthPotionActionCard),
+        new poolItem(weaknessPotionActionCard),
+        new poolItem(healthInstantPotionActionCard),
+        new poolItem(strengthPotionEnhancedActionCard, 0.5),
+        new poolItem(strengthPotionExtendedActionCard, 0.5),
+        new poolItem(superLaughingActionCard)
+    );
+}
 
 function giveCard(card: ActionCard, to: Player) {
     to.actionCards.push(deepCopy(card));
+    to.showActionCards()
 }
 
 export function lootCard() {
@@ -51,4 +56,13 @@ export function lootCard() {
         }
     }
     nextRound();
+}
+
+export function returnCardById(cardId: string) {
+    let player = getPlayerFromTeam(getCurrentTeam());
+    pool.forEach((item) => {
+        if (item.card.id === cardId) {
+            giveCard(item.card, player);
+        }
+    });
 }

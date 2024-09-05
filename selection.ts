@@ -1,5 +1,8 @@
 import { Position } from "./position.js";
 import { Piece, pieces } from "./piece.js";
+import { getCurrentTeam, nextRound } from "./round.js";
+import { showPiece, showDefaultPiece } from "./pieceFrame.js";
+import { runAllSchedules } from "./schedule.js";
 
 const returnSelf = (obj: any) => obj;
 
@@ -51,20 +54,27 @@ var GameboardClickListener = (position: Position) => {
 
 export class SelectionManager {
     afterSelection: ((results: SelectedItem[]) => void | any) | null = null;
+    oncancelCallback: ((results: SelectedItem[]) => void | any) | null = null;
     recursions: (((past: SelectedItem[]) => SingleSelection) | SingleSelection)[];
     index: number = 0;
     doOnce: boolean;
     current: SingleSelection | null = null;
     results: SelectedItem[] = [];
+    replaceWithFinally_: SelectionManager | null = null;
 
     constructor(...singleSelections: SingleSelection[]) {
         this.recursions = singleSelections;
-        this.doOnce = false;
+        this.doOnce = true;
         this.reset();
     }
 
     final(afterSelection: (results: SelectedItem[]) => void | any) {
         this.afterSelection = afterSelection;
+        return this;
+    }
+
+    oncancel(oncancel: (results: SelectedItem[]) => void | any) {
+        this.oncancelCallback = oncancel;
         return this;
     }
 
@@ -75,6 +85,15 @@ export class SelectionManager {
 
     once(once = true) {
         this.doOnce = once;
+        return this;
+    }
+
+    cycle() {
+        return this.once(false);
+    }
+
+    replaceWithFinally(manager: SelectionManager | null) {
+        this.replaceWithFinally_ = manager;
         return this;
     }
 
@@ -110,10 +129,15 @@ export class SelectionManager {
         if (this.doOnce) currentSelection = null;
         else this.current?.tip();
         if (this.afterSelection != null && done) this.afterSelection(results);
-
+        if (this.oncancelCallback != null && !done) this.oncancelCallback(results);
         console.log("stop: ", this);
 
         pieces.forEach((p) => (p.selected = false));
+
+        if (this.replaceWithFinally_ != null) {
+            this.replaceWithFinally_.reset();
+            setCurrentSelection(this.replaceWithFinally_);
+        }
     }
 }
 
@@ -242,3 +266,65 @@ export function setCurrentSelection(selection: SelectionManager | null) {
 export function getCurrentSelection() {
     return currentSelection;
 }
+
+export function cancelCurrentSelection(continueMainSelection = true) {
+    currentSelection?.stop(false);
+    if (continueMainSelection) {
+        setCurrentSelection(MainSelection);
+    }
+}
+
+/**
+ * @description 主要选择器，在几乎整个游戏周期内使用，用于移动棋子和控制攻击
+ */
+export const MainSelection = new SelectionManager(
+    new SingleSelection(
+        [],
+        ItemType.Piece,
+        "请选择要移动的棋子",
+        (piece) => getCurrentTeam() === (piece.data as Piece).team
+    )
+)
+    .then((past) => {
+        let selectedPiece = past[0].data as Piece;
+        let validMove = selectedPiece.destinations;
+        let validTarget = selectedPiece.attackTargets;
+        showPiece(selectedPiece);
+        return new SingleSelection(
+            validMove.concat(validTarget),
+            ItemType.Grid,
+            "请选择要移动到的位置",
+            (selectedGrid) => {
+                let pos = selectedGrid.data as Position;
+                if (pos.integerGrid().piece !== null) {
+                    return validTarget.some((item) => item.nearby(pos));
+                } else {
+                    return validMove.some((item) => item.nearby(pos));
+                }
+            }
+        );
+    })
+    .final((results) => {
+        let selectedPiece = results[0].data as Piece;
+        let selectedTarget = (results[1].data as Position).integerGrid();
+        let success = false;
+
+        if (selectedTarget.piece !== null) {
+            success = selectedPiece.attack(selectedTarget.piece);
+            console.log(selectedPiece, "attack", selectedTarget.piece, success);
+        } else {
+            success = selectedPiece.move(selectedTarget);
+            console.log(selectedPiece, "move", selectedTarget, success);
+        }
+
+        if (success) {
+            nextRound();
+            runAllSchedules();
+        }
+
+        showDefaultPiece();
+    })
+    .oncancel(() => {
+        showDefaultPiece();
+    })
+    .cycle();
