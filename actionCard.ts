@@ -185,6 +185,7 @@ export const strengthPotionEnhancedActionCard = singleTargetSelectorTemplate(
         let piece = results[0].data as Piece;
         let modifier = new AttributeModifier(0.25, 2 * 2);
         let effect = new Effect("力量 II", "strengthPotionII", "攻击力提升25%", [modifier]);
+        piece.putEffects(effect);
         piece.attackDamage.area(1).modify(modifier);
         console.log(modifier);
     }
