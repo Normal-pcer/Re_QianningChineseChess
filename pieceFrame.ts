@@ -25,6 +25,7 @@ export function showPiece(piece: Piece) {
     const criticalDamageElement = document.getElementById(
         "frame-critical-damage"
     ) as HTMLSpanElement;
+    const weight = document.getElementById("frame-weight") as HTMLSpanElement;
 
     healthElement.innerText = Math.round(piece.health).toString();
     healthMaxElement.innerText = piece.maxHealth.toExpression();
@@ -32,6 +33,7 @@ export function showPiece(piece: Piece) {
     defenseElement.innerText = piece.defense.toExpression();
     criticalElement.innerText = Math.round(piece.criticalChance.result * 100).toString();
     criticalDamageElement.innerText = Math.round(piece.criticalDamage.result * 100).toString();
+    weight.innerText = piece.weight.toExpression();
 
     pieceFrameElement.classList.add(piece.team + "-piece");
     pieceFrameElement.classList.remove(Team.enemy(piece.team) + "-piece");
@@ -49,7 +51,9 @@ export function showPiece(piece: Piece) {
                 index--;
                 continue;
             }
-            effectElement.innerHTML = `${effect.name}(${
+            effectElement.innerHTML = `<span style="color: ${
+                effect.negative ? "darkred" : "black"
+            }">${effect.name}</span>(${
                 effect.expire === -1
                     ? "持久"
                     : "剩余" + (effect.expire - round + 1).toString() + "轮"

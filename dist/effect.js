@@ -8,6 +8,7 @@ export class Effect {
     expire = -1;
     enabled = true;
     continuedAction = null;
+    negative = false;
     /**
      * @param expire -当为null时，取决于所有relatedModifiers的expire中最早的
      * @param expireOffset -当为数字时，表示参数expire的偏移量，此时实际过期时间为当前时间之后再经过
@@ -37,6 +38,10 @@ export class Effect {
                 modifier.expire = this.expire;
             });
         }
+    }
+    setAsNegative() {
+        this.negative = true;
+        return this;
     }
     get relatedModifiers() {
         return this.relatedModifierIds.map((id) => getAttributeModifierById(id));

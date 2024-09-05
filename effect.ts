@@ -9,6 +9,7 @@ export class Effect {
     expire: number = -1;
     enabled: boolean = true;
     continuedAction: (() => void) | null = null;
+    negative: boolean = false;
 
     /**
      * @param expire -当为null时，取决于所有relatedModifiers的expire中最早的
@@ -44,6 +45,11 @@ export class Effect {
                 modifier.expire = this.expire;
             });
         }
+    }
+
+    setAsNegative() {
+        this.negative = true;
+        return this;
     }
 
     get relatedModifiers() {

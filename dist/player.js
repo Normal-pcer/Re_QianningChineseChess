@@ -4,7 +4,7 @@ export class Player {
     constructor(team) {
         this.team = team;
     }
-    showActionCards() {
+    showActionCards(usable = true) {
         let targetUlElement = document.getElementById(this.team + "-action-cards-list");
         if (!targetUlElement)
             return;
@@ -15,11 +15,13 @@ export class Player {
                 this.actionCards[i].name +
                     ` <span style="color: gray;">(${this.actionCards[i].description})</span>`;
             targetUlElement.appendChild(targetLiElement);
-            targetLiElement.addEventListener("click", () => {
-                this.actionCards[i].apply();
-                this.actionCards.splice(i, 1);
-                this.showActionCards();
-            });
+            if (usable) {
+                targetLiElement.addEventListener("click", () => {
+                    this.actionCards[i].apply();
+                    this.actionCards.splice(i, 1);
+                    this.showActionCards();
+                });
+            }
         }
     }
 }

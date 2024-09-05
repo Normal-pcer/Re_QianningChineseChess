@@ -22,12 +22,14 @@ export function showPiece(piece) {
     const defenseElement = document.getElementById("frame-defense");
     const criticalElement = document.getElementById("frame-critical");
     const criticalDamageElement = document.getElementById("frame-critical-damage");
+    const weight = document.getElementById("frame-weight");
     healthElement.innerText = Math.round(piece.health).toString();
     healthMaxElement.innerText = piece.maxHealth.toExpression();
     attackElement.innerText = piece.attackDamage.toExpression();
     defenseElement.innerText = piece.defense.toExpression();
     criticalElement.innerText = Math.round(piece.criticalChance.result * 100).toString();
     criticalDamageElement.innerText = Math.round(piece.criticalDamage.result * 100).toString();
+    weight.innerText = piece.weight.toExpression();
     pieceFrameElement.classList.add(piece.team + "-piece");
     pieceFrameElement.classList.remove(Team.enemy(piece.team) + "-piece");
     const effectsListElement = document.getElementById("effect-list");
@@ -44,7 +46,7 @@ export function showPiece(piece) {
                 index--;
                 continue;
             }
-            effectElement.innerHTML = `${effect.name}(${effect.expire === -1
+            effectElement.innerHTML = `<span style="color: ${effect.negative ? "darkred" : "black"}">${effect.name}</span>(${effect.expire === -1
                 ? "持久"
                 : "剩余" + (effect.expire - round + 1).toString() + "轮"}): <span class="description-text">${effect.description}</span>`;
             effectsListElement.appendChild(effectElement);

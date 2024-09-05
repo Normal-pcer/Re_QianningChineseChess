@@ -1,3 +1,4 @@
+import { pieces } from "./piece.js";
 import { showDefaultPiece } from "./pieceFrame.js";
 import { saveCurrent } from "./save.js";
 import { getPlayerFromTeam, Team } from "./team.js";
@@ -10,9 +11,13 @@ export function nextRound() {
     round++;
     console.log(`Round ${round}`);
     getPlayerFromTeam(getCurrentTeam()).showActionCards();
+    getPlayerFromTeam(Team.enemy(getCurrentTeam())).showActionCards(false);
     let round_tip = document.querySelector("#round-tip>span") as HTMLElement;
     round_tip.innerText = getCurrentTeam();
     showDefaultPiece()
+    pieces.forEach((p) => {
+        p.draw();
+    })
 }
 
 export function getCurrentTeam() {

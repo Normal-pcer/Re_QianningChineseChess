@@ -45,10 +45,17 @@ function repelForward(origin, direction, distance_limit = 1) {
     }
     return positionAvailable(position) ? position : origin;
 }
+/**
+ * @param weight 不低于1000的weight会被视为无穷大
+ */
 function correctDistanceByWeight(distance, weight) {
+    const infinityWeight = 1000; // 高于这个值的weight会被视为无穷大
     const constanceK = 90; // 可以适当调整；constanceK越小越不容易被击退
     let reduceProbability = 1 - Math.pow(constanceK / (constanceK + weight), 2);
-    console.log('reduceProbability: ' + reduceProbability);
+    if (weight >= infinityWeight) {
+        reduceProbability = 1;
+    }
+    console.log("reduceProbability: " + reduceProbability);
     let result = 0;
     for (let i = 1; i <= distance; i++) {
         if (Math.random() > reduceProbability) {

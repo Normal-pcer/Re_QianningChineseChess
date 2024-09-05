@@ -11,6 +11,7 @@ import { initCardLooting, lootCard } from "./cardLooting.js";
 import { loadSave, recall, Save, saveCurrent, storeSave } from "./save.js";
 import { registerCallback } from "./callbackRegister.js";
 import { showDefaultPiece, showPiece } from "./pieceFrame.js";
+import { Effect } from "./effect.js";
 
 initDefaultMovingBehaviors();
 initCardLooting();
@@ -72,8 +73,13 @@ window.onload = () => {
         };
 
     // 开局三回合攻击无效，避免开局打马
+    let newDefenseModifiers: AttributeModifier<number>[] = [];
     pieces.forEach((piece) => {
-        piece.defense.area(0).modify(new AttributeModifier(11000, 3 * 2));
+        newDefenseModifiers.push(new AttributeModifier(11000, 3 * 2));
+        piece.defense.area(0).modify(newDefenseModifiers[newDefenseModifiers.length - 1]);
+    });
+    pieces.forEach((piece) => {
+        piece.pushEffects(new Effect("初始之护", "initialProtection", "提升11000点防御力", newDefenseModifiers));
     });
 
     (document.getElementById("loot-card-button") as HTMLElement).onclick = () => {
@@ -100,7 +106,7 @@ window.onload = () => {
     };
     (document.getElementById("action-bar") as HTMLElement).onclick = (event) => {
         Selection.cancelCurrentSelection();
-    }
+    };
 
     saveCurrent();
     showDefaultPiece();

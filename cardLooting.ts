@@ -8,6 +8,7 @@ import {
     strengthPotionExtendedActionCard,
     superLaughingActionCard,
     weaknessPotionActionCard,
+    withBellAndTripodActionCard,
 } from "./actionCard.js";
 import { Player } from "./player.js";
 import { getCurrentTeam, nextRound } from "./round.js";
@@ -34,13 +35,14 @@ export function initCardLooting() {
         new poolItem(healthInstantPotionActionCard),
         new poolItem(strengthPotionEnhancedActionCard, 0.5),
         new poolItem(strengthPotionExtendedActionCard, 0.5),
-        new poolItem(superLaughingActionCard)
+        new poolItem(superLaughingActionCard),
+        new poolItem(withBellAndTripodActionCard)
     );
 }
 
 function giveCard(card: ActionCard, to: Player) {
     to.actionCards.push(deepCopy(card));
-    to.showActionCards()
+    to.showActionCards();
 }
 
 export function lootCard() {

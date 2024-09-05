@@ -1,4 +1,4 @@
-import { healthInstantPotionActionCard, highGunActionCard, limitlessHorseActionCard, strengthPotionActionCard, strengthPotionEnhancedActionCard, strengthPotionExtendedActionCard, superLaughingActionCard, weaknessPotionActionCard, } from "./actionCard.js";
+import { healthInstantPotionActionCard, highGunActionCard, limitlessHorseActionCard, strengthPotionActionCard, strengthPotionEnhancedActionCard, strengthPotionExtendedActionCard, superLaughingActionCard, weaknessPotionActionCard, withBellAndTripodActionCard, } from "./actionCard.js";
 import { getCurrentTeam, nextRound } from "./round.js";
 import { getPlayerFromTeam } from "./team.js";
 import { deepCopy } from "./utils.js";
@@ -12,7 +12,7 @@ class poolItem {
 }
 let pool = [];
 export function initCardLooting() {
-    pool.push(new poolItem(highGunActionCard), new poolItem(limitlessHorseActionCard), new poolItem(strengthPotionActionCard), new poolItem(weaknessPotionActionCard), new poolItem(healthInstantPotionActionCard), new poolItem(strengthPotionEnhancedActionCard, 0.5), new poolItem(strengthPotionExtendedActionCard, 0.5), new poolItem(superLaughingActionCard));
+    pool.push(new poolItem(highGunActionCard), new poolItem(limitlessHorseActionCard), new poolItem(strengthPotionActionCard), new poolItem(weaknessPotionActionCard), new poolItem(healthInstantPotionActionCard), new poolItem(strengthPotionEnhancedActionCard, 0.5), new poolItem(strengthPotionExtendedActionCard, 0.5), new poolItem(superLaughingActionCard), new poolItem(withBellAndTripodActionCard));
 }
 function giveCard(card, to) {
     to.actionCards.push(deepCopy(card));

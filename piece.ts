@@ -54,7 +54,6 @@ class Piece {
     clickListener: null | ((ev: MouseEvent) => void) = null;
     effects: Effect[] = [];
 
-
     constructor(
         team: string,
         type: string,
@@ -108,7 +107,7 @@ class Piece {
         return this.htmlElement.classList.contains("selected-piece");
     }
 
-    putEffects(...effects: Effect[]) {
+    pushEffects(...effects: Effect[]) {
         this.effects.push(...effects);
         this.draw();
     }
@@ -177,11 +176,18 @@ class Piece {
         let d = `M 100,10 A 90,90 0 ${largeArcFlag},1 ${x},${y}`;
         this.htmlElement.querySelector(".health-bar")?.setAttribute("d", d);
         // 检查是否有有效的状态效果
+        this.effects = this.effects.filter((effect) => effect.available);
         let hasEffect = this.effects.some((effect) => effect.available);
-        if (hasEffect) {
+        let allNegative = hasEffect && this.effects.every((effect) => effect.negative);
+        if (allNegative) {
+            this.htmlElement.classList.remove("has-effect");
+            this.htmlElement.classList.add("has-negative-effect");
+        } else if (hasEffect) {
             this.htmlElement.classList.add("has-effect");
+            this.htmlElement.classList.remove("has-negative-effect");
         } else {
             this.htmlElement.classList.remove("has-effect");
+            this.htmlElement.classList.remove("has-negative-effect");
         }
     }
 

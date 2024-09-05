@@ -95,6 +95,9 @@ body {
 .piece.has-effect {
     box-shadow: 0 0 15px rgba(255, 215, 0, 0.5) !important;
 }
+.piece.has-negative-effect {
+    box-shadow: 0 0 15px rgba(255, 10, 0, 0.5) !important;
+}
 
 .black-piece span {
     color: black;
