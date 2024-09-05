@@ -26,12 +26,12 @@ export function showPiece(piece: Piece) {
         "frame-critical-damage"
     ) as HTMLSpanElement;
 
-    healthElement.innerText = piece.health.toString();
-    healthMaxElement.innerText = piece.maxHealth.result.toString();
-    attackElement.innerText = piece.attackDamage.result.toString();
-    defenseElement.innerText = piece.defense.result.toString();
-    criticalElement.innerText = (piece.criticalChance.result * 100).toString();
-    criticalDamageElement.innerText = (piece.criticalDamage.result * 100).toString();
+    healthElement.innerText = Math.round(piece.health).toString();
+    healthMaxElement.innerText = Math.round(piece.maxHealth.result).toString();
+    attackElement.innerText = Math.round(piece.attackDamage.result).toString();
+    defenseElement.innerText = Math.round(piece.defense.result).toString();
+    criticalElement.innerText = Math.round(piece.criticalChance.result * 100).toString();
+    criticalDamageElement.innerText = Math.round(piece.criticalDamage.result * 100).toString();
 
     pieceFrameElement.classList.add(piece.team + "-piece");
     pieceFrameElement.classList.remove(Team.enemy(piece.team) + "-piece");
