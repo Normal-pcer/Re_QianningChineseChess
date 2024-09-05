@@ -2,44 +2,55 @@ import { registerAnonymous } from "./callbackRegister.js";
 import { round } from "./round.js";
 export const operaPlus = registerAnonymous((arg1, arg2) => arg1 + arg2, "ModifierOperaPlus");
 export const operaOverride = registerAnonymous((arg1, arg2) => arg2, "ModifierOperaOverride");
+export class AttributeProvider {
+    multiplicationAreas;
+    constructor(base) {
+        this.multiplicationAreas = [];
+        this.multiplicationAreas.push(new MultiplicationArea(base, "Base"));
+    }
+    get result() {
+        return this.multiplicationAreas[0].result;
+    }
+    area(index) {
+        return this.multiplicationAreas[0];
+    }
+}
 /**
  * 属性提供器
  * 如果T不是数字，则只有首个乘区会生效
  */
-export class AttributeProvider {
-    multiplicationAreas = [];
+export class NumberAttributeProvider extends AttributeProvider {
     constructor(base) {
-        this.multiplicationAreas.push(new MultiplicationArea(base, "Base"));
-        if (typeof base === "number") {
-            this.multiplicationAreas.push(new MultiplicationArea(1, "Improve"));
-        }
+        super(base);
+        this.multiplicationAreas.push(new MultiplicationArea(1, "Improve"));
     }
     get result() {
         let result = 1;
-        let numberProvider = true;
         for (let area of this.multiplicationAreas) {
-            if (typeof area.result == "number") {
-                result *= area.result;
-            }
-            else {
-                numberProvider = false;
-                break;
-            }
-        }
-        if (!numberProvider) {
-            return this.multiplicationAreas[0].result;
+            result *= area.result;
         }
         return result;
     }
     area(index) {
-        if (typeof this.multiplicationAreas[0].base !== "number") {
-            return this.multiplicationAreas[0];
-        }
         while (index >= this.multiplicationAreas.length) {
             let area = new MultiplicationArea(1);
             this.multiplicationAreas.push(area);
         }
         return this.multiplicationAreas[index];
+    }
+    toExpression(round = true) {
+        let base = this.area(0).result;
+        let total = this.result;
+        let improve = total - base;
+        if (round) {
+            base = Math.round(base);
+            improve = Math.round(improve);
+            total = Math.round(total);
+        }
+        if (improve == 0)
+            return `${base}`;
+        else
+            return `${base} + ${improve} = ${total}`;
     }
 }
 class MultiplicationArea {
@@ -77,11 +88,12 @@ export class AttributeModifier {
      *
      * @param expireOffset -当为数字时，表示参数expire的偏移量，此时实际过期时间为当前时间之后再经过
      * ($expire-$expireOffset)回合；当为null时，表示参数expire直接作为过期回合号
+     * @param numberModifier - 如果为true，则amount会被优先视为数字，否则视为普通值；如果amount不是数字，则该参数无效
      */
-    constructor(amount, expire = -1, expireOffset = -1, operation = null) {
+    constructor(amount, expire = -1, expireOffset = -1, operation = null, numberModifier = true) {
         this.amount = amount;
         if (operation === null) {
-            if (typeof amount == "number") {
+            if (typeof amount == "number" && numberModifier) {
                 this.operation = operaPlus;
             }
             else {

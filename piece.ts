@@ -6,7 +6,7 @@ import { defaultPieceConfigs, PieceConfig } from "./defaultPieceConfig.js";
 import { Damage } from "./damage.js";
 import { DamageType } from "./damageType.js";
 import { Team } from "./team.js";
-import { AttributeProvider } from "./attributeProvider.js";
+import { AttributeModifier, AttributeProvider, NumberAttributeProvider } from "./attributeProvider.js";
 import { registerAnonymous } from "./callbackRegister.js";
 
 const defaultAttackActionCallback = registerAnonymous((piece: Piece, target: Piece) => {
@@ -34,12 +34,12 @@ class Piece {
     health: number = 0;
     dead: boolean = false;
 
-    maxHealth: AttributeProvider = new AttributeProvider(0);
-    attackDamage: AttributeProvider = new AttributeProvider(0);
-    defense: AttributeProvider = new AttributeProvider(0);
-    criticalChance: AttributeProvider = new AttributeProvider(0);
-    criticalDamage: AttributeProvider = new AttributeProvider(0);
-    weight: AttributeProvider = new AttributeProvider(0);
+    maxHealth: NumberAttributeProvider = new NumberAttributeProvider(0);
+    attackDamage: NumberAttributeProvider = new NumberAttributeProvider(0);
+    defense: NumberAttributeProvider = new NumberAttributeProvider(0);
+    criticalChance: NumberAttributeProvider = new NumberAttributeProvider(0);
+    criticalDamage: NumberAttributeProvider = new NumberAttributeProvider(0);
+    weight: NumberAttributeProvider = new NumberAttributeProvider(0);
     damageType: DamageType = DamageType.None;
 
     movingDestinationsCallback: AttributeProvider<(piece: Piece) => Position[]>;
@@ -63,14 +63,14 @@ class Piece {
 
         config = config ?? defaultPieceConfigs[this.type];
         if (config) {
-            this.attackDamage = new AttributeProvider(config.attackDamage);
-            this.defense = new AttributeProvider(config.defense);
-            this.criticalChance = new AttributeProvider(config.criticalChance);
-            this.criticalDamage = new AttributeProvider(config.criticalDamage);
+            this.attackDamage = new NumberAttributeProvider(config.attackDamage);
+            this.defense = new NumberAttributeProvider(config.defense);
+            this.criticalChance = new NumberAttributeProvider(config.criticalChance);
+            this.criticalDamage = new NumberAttributeProvider(config.criticalDamage);
             this.damageType = config.damageType;
-            this.maxHealth = new AttributeProvider(config.maxHealth);
+            this.maxHealth = new NumberAttributeProvider(config.maxHealth);
             this.health = this.maxHealth.result;
-            this.weight = new AttributeProvider(config.weight);
+            this.weight = new NumberAttributeProvider(config.weight);
         }
 
         this.movingDestinationsCallback = new AttributeProvider(

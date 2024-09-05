@@ -23,9 +23,9 @@ export function showPiece(piece) {
     const criticalElement = document.getElementById("frame-critical");
     const criticalDamageElement = document.getElementById("frame-critical-damage");
     healthElement.innerText = Math.round(piece.health).toString();
-    healthMaxElement.innerText = Math.round(piece.maxHealth.result).toString();
-    attackElement.innerText = Math.round(piece.attackDamage.result).toString();
-    defenseElement.innerText = Math.round(piece.defense.result).toString();
+    healthMaxElement.innerText = piece.maxHealth.toExpression();
+    attackElement.innerText = piece.attackDamage.toExpression();
+    defenseElement.innerText = piece.defense.toExpression();
     criticalElement.innerText = Math.round(piece.criticalChance.result * 100).toString();
     criticalDamageElement.innerText = Math.round(piece.criticalDamage.result * 100).toString();
     pieceFrameElement.classList.add(piece.team + "-piece");
