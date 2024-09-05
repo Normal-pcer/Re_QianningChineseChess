@@ -1,3 +1,4 @@
+import { showDefaultPiece } from "./pieceFrame.js";
 import { saveCurrent } from "./save.js";
 import { getPlayerFromTeam, Team } from "./team.js";
 
@@ -11,6 +12,7 @@ export function nextRound() {
     getPlayerFromTeam(getCurrentTeam()).showActionCards();
     let round_tip = document.querySelector("#round-tip>span") as HTMLElement;
     round_tip.innerText = getCurrentTeam();
+    showDefaultPiece()
 }
 
 export function getCurrentTeam() {

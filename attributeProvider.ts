@@ -1,6 +1,8 @@
 import { registerAnonymous } from "./callbackRegister.js";
 import { round } from "./round.js";
 
+let attributeModifierId = 0;
+
 export const operaPlus = registerAnonymous(
     (arg1: number, arg2: number) => arg1 + arg2,
     "ModifierOperaPlus"
@@ -9,6 +11,8 @@ export const operaOverride = registerAnonymous(
     (arg1: any, arg2: any) => arg2,
     "ModifierOperaOverride"
 );
+
+export const modifiers: { [key: number]: AttributeModifier<any> } = {};
 
 export class AttributeProvider<T> {
     multiplicationAreas: MultiplicationArea<T>[];
@@ -107,6 +111,7 @@ export class AttributeModifier<T> {
     enabled: boolean = true;
     clearOnExpire: boolean = true;
     clearOnDisable: boolean = true;
+    id: number;
 
     /**
      * 如果operation为null，则会应用如下默认操作：
@@ -140,5 +145,16 @@ export class AttributeModifier<T> {
         else this.expire = expire === -1 ? -1 : round + expire + expireOffset;
         this.clearOnExpire = clearOnExpire;
         this.clearOnDisable = clearOnDisable;
+
+        while (modifiers[attributeModifierId] !== undefined) {
+            attributeModifierId++;
+        }
+        this.id = attributeModifierId;
+        modifiers[attributeModifierId] = this;
+        attributeModifierId++;
     }
+}
+
+export function getAttributeModifierById(id: number) {
+    return modifiers[id];
 }

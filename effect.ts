@@ -1,11 +1,11 @@
-import { AttributeModifier } from "./attributeProvider.js";
+import { AttributeModifier, getAttributeModifierById } from "./attributeProvider.js";
 import { round } from "./round.js";
 
 export class Effect {
     name: string = "";
     id: string = "";
     description: string = "";
-    relatedModifiers: AttributeModifier<any>[] = [];
+    relatedModifierIds: number[] = [];
     expire: number = -1;
     enabled: boolean = true;
     continuedAction: (() => void) | null = null;
@@ -26,7 +26,7 @@ export class Effect {
         this.name = name;
         this.id = id;
         this.description = description;
-        this.relatedModifiers = relatedModifiers;
+        this.relatedModifierIds = relatedModifiers.map((modifier) => modifier.id);
         if (expire === null) {
             let minExpire = Infinity;
             this.relatedModifiers.forEach((modifier) => {
@@ -44,6 +44,10 @@ export class Effect {
                 modifier.expire = this.expire;
             });
         }
+    }
+
+    get relatedModifiers() {
+        return this.relatedModifierIds.map((id) => getAttributeModifierById(id));
     }
 
     runContinuedAction() {

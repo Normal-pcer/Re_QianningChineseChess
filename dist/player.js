@@ -5,8 +5,10 @@ export class Player {
         this.team = team;
     }
     showActionCards() {
-        let targetUlElement = document.getElementById("action-cards-list");
-        targetUlElement.innerHTML = this.team + ":";
+        let targetUlElement = document.getElementById(this.team + "-action-cards-list");
+        if (!targetUlElement)
+            return;
+        targetUlElement.innerHTML = "";
         for (let i = 0; i < this.actionCards.length; i++) {
             let targetLiElement = document.createElement("li");
             targetLiElement.innerHTML =

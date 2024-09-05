@@ -1,7 +1,9 @@
 import { registerAnonymous } from "./callbackRegister.js";
 import { round } from "./round.js";
+let attributeModifierId = 0;
 export const operaPlus = registerAnonymous((arg1, arg2) => arg1 + arg2, "ModifierOperaPlus");
 export const operaOverride = registerAnonymous((arg1, arg2) => arg2, "ModifierOperaOverride");
+export const modifiers = {};
 export class AttributeProvider {
     multiplicationAreas;
     constructor(base) {
@@ -90,6 +92,7 @@ export class AttributeModifier {
     enabled = true;
     clearOnExpire = true;
     clearOnDisable = true;
+    id;
     /**
      * 如果operation为null，则会应用如下默认操作：
      * 1. 如果T是数字，则使用加法
@@ -118,6 +121,15 @@ export class AttributeModifier {
             this.expire = expire === -1 ? -1 : round + expire + expireOffset;
         this.clearOnExpire = clearOnExpire;
         this.clearOnDisable = clearOnDisable;
+        while (modifiers[attributeModifierId] !== undefined) {
+            attributeModifierId++;
+        }
+        this.id = attributeModifierId;
+        modifiers[attributeModifierId] = this;
+        attributeModifierId++;
     }
+}
+export function getAttributeModifierById(id) {
+    return modifiers[id];
 }
 //# sourceMappingURL=attributeProvider.js.map

@@ -6,7 +6,11 @@ import { defaultPieceConfigs, PieceConfig } from "./defaultPieceConfig.js";
 import { Damage } from "./damage.js";
 import { DamageType } from "./damageType.js";
 import { Team } from "./team.js";
-import { AttributeModifier, AttributeProvider, NumberAttributeProvider } from "./attributeProvider.js";
+import {
+    AttributeModifier,
+    AttributeProvider,
+    NumberAttributeProvider,
+} from "./attributeProvider.js";
 import { registerAnonymous } from "./callbackRegister.js";
 import { Effect } from "./effect.js";
 
@@ -49,6 +53,7 @@ class Piece {
 
     clickListener: null | ((ev: MouseEvent) => void) = null;
     effects: Effect[] = [];
+
 
     constructor(
         team: string,
@@ -101,6 +106,11 @@ class Piece {
     get selected() {
         if (!this.htmlElement) return false;
         return this.htmlElement.classList.contains("selected-piece");
+    }
+
+    putEffects(...effects: Effect[]) {
+        this.effects.push(...effects);
+        this.draw();
     }
 
     set selected(value) {
@@ -166,6 +176,13 @@ class Piece {
         let largeArcFlag = arc > Math.PI ? 1 : 0;
         let d = `M 100,10 A 90,90 0 ${largeArcFlag},1 ${x},${y}`;
         this.htmlElement.querySelector(".health-bar")?.setAttribute("d", d);
+        // 检查是否有有效的状态效果
+        let hasEffect = this.effects.some((effect) => effect.available);
+        if (hasEffect) {
+            this.htmlElement.classList.add("has-effect");
+        } else {
+            this.htmlElement.classList.remove("has-effect");
+        }
     }
 
     move(position: Position) {

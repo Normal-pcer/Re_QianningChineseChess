@@ -40,8 +40,15 @@ export function showPiece(piece: Piece) {
     effectsListElement.innerHTML = "";
     if (piece.effects.length === 0) effectsListElement.innerHTML = "暂无";
     else
-        for (const effect of piece.effects) {
+        for (let index = 0; index < piece.effects.length; index++) {
+            let effect = piece.effects[index];
             const effectElement = document.createElement("li");
+            if (!effect.available) {
+                // 直接删除
+                piece.effects.splice(index, 1);
+                index--;
+                continue;
+            }
             effectElement.innerHTML = `${effect.name}(${
                 effect.expire === -1
                     ? "持久"

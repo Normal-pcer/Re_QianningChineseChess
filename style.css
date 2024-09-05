@@ -92,6 +92,9 @@ body {
     transform: translate(-50%, -50%) scale(1.1);
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
+.piece.has-effect {
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.5) !important;
+}
 
 .black-piece span {
     color: black;

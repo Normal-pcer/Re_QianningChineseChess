@@ -59,7 +59,7 @@ export const highGunActionCard = singleTargetSelectorTemplate("高射炮", "high
     let modifier = new AttributeModifier(highGunAttackCallback);
     piece.attackingTargetsCallback.area(0).modify(modifier);
     let effect = new Effect("高射炮", "highGun", "下一次攻击允许隔至多两个棋子", [modifier]);
-    piece.effects.push(effect);
+    piece.putEffects(effect);
     TriggerManager.addTrigger(new DamageTrigger((damage) => {
         if (damage.source === piece) {
             effect.enabled = false; // 攻击一次就失效
@@ -75,7 +75,7 @@ export const limitlessHorseActionCard = singleTargetSelectorTemplate("一马平�
     let effect = new Effect("一马平川", "limitlessHorse", "马的行动不再受「蹩马腿」限制", [
         modifier,
     ]);
-    piece.effects.push(effect);
+    piece.putEffects(effect);
     piece.attackingTargetsCallback.area(0).modify(modifier);
     piece.movingDestinationsCallback.area(0).modify(modifier);
 });
@@ -83,7 +83,7 @@ export const strengthPotionActionCard = singleTargetSelectorTemplate("力量药�
     let piece = results[0].data;
     let modifier = new AttributeModifier(0.15, 3 * 2);
     let effect = new Effect("力量 I", "strengthPotionI", "攻击力提升15%", [modifier]);
-    piece.effects.push(effect);
+    piece.putEffects(effect);
     piece.attackDamage.area(1).modify(modifier);
     console.log(modifier);
 });
@@ -92,7 +92,7 @@ export const weaknessPotionActionCard = singleTargetSelectorTemplate("虚弱药�
     let modifier = new AttributeModifier(-0.2, 3 * 2);
     let effect = new Effect("虚弱 I", "weaknessPotionI", "攻击力降低20%", [modifier]);
     piece.attackDamage.area(1).modify(modifier);
-    piece.effects.push(effect);
+    piece.putEffects(effect);
     console.log(modifier);
 });
 export const healthInstantPotionActionCard = singleTargetSelectorTemplate("治疗药水", "healthInstantPotion", "选中棋子回复600点生命值", PieceType.None, (results) => {
@@ -102,7 +102,7 @@ export const healthInstantPotionActionCard = singleTargetSelectorTemplate("治�
 });
 export const strengthPotionEnhancedActionCard = singleTargetSelectorTemplate("力量药水（加强）", "strengthPotionEnhanced", "持续2回合-选中棋子的攻击力提升25%", PieceType.None, (results) => {
     let piece = results[0].data;
-    let modifier = new AttributeModifier(0.25, 1);
+    let modifier = new AttributeModifier(0.25, 2 * 2);
     let effect = new Effect("力量 II", "strengthPotionII", "攻击力提升25%", [modifier]);
     piece.attackDamage.area(1).modify(modifier);
     console.log(modifier);
@@ -111,7 +111,7 @@ export const strengthPotionExtendedActionCard = singleTargetSelectorTemplate("�
     let piece = results[0].data;
     let modifier = new AttributeModifier(0.15, 5 * 2);
     let effect = new Effect("力量 I", "strengthPotionI", "攻击力提升15%", [modifier]);
-    piece.effects.push(effect);
+    piece.putEffects(effect);
     piece.attackDamage.area(1).modify(modifier);
     console.log(modifier);
 });
