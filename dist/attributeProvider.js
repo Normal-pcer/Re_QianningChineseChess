@@ -51,8 +51,10 @@ export class NumberAttributeProvider extends AttributeProvider {
         }
         if (improve == 0)
             return `${base}`;
-        else
+        else if (improve > 0)
             return `${base} + ${improve} = ${total}`;
+        else
+            return `${base} - ${-improve} = ${total}`;
     }
 }
 class MultiplicationArea {

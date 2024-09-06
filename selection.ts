@@ -282,11 +282,20 @@ export const MainSelection = new SelectionManager(
         [],
         ItemType.Piece,
         "请选择要移动的棋子",
-        (piece) => getCurrentTeam() === (piece.data as Piece).team
+        (piece) => true
     )
 )
     .then((past) => {
         let selectedPiece = past[0].data as Piece;
+        if (getCurrentTeam() !== selectedPiece.team) {
+            showPiece(selectedPiece);
+            return new SingleSelection(
+                [],
+                ItemType.Grid,
+                "查看棋子信息",
+                (grid) => false
+            );
+        }
         let validMove = selectedPiece.destinations;
         let validTarget = selectedPiece.attackTargets;
         showPiece(selectedPiece);

@@ -68,7 +68,8 @@ export class NumberAttributeProvider extends AttributeProvider<number> {
             total = Math.round(total);
         }
         if (improve == 0) return `${base}`;
-        else return `${base} + ${improve} = ${total}`;
+        else if (improve > 0) return `${base} + ${improve} = ${total}`;
+        else return `${base} - ${-improve} = ${total}`;
     }
 }
 

@@ -246,9 +246,13 @@ export function cancelCurrentSelection(continueMainSelection = true) {
 /**
  * @description 主要选择器，在几乎整个游戏周期内使用，用于移动棋子和控制攻击
  */
-export const MainSelection = new SelectionManager(new SingleSelection([], ItemType.Piece, "请选择要移动的棋子", (piece) => getCurrentTeam() === piece.data.team))
+export const MainSelection = new SelectionManager(new SingleSelection([], ItemType.Piece, "请选择要移动的棋子", (piece) => true))
     .then((past) => {
     let selectedPiece = past[0].data;
+    if (getCurrentTeam() !== selectedPiece.team) {
+        showPiece(selectedPiece);
+        return new SingleSelection([], ItemType.Grid, "查看棋子信息", (grid) => false);
+    }
     let validMove = selectedPiece.destinations;
     let validTarget = selectedPiece.attackTargets;
     showPiece(selectedPiece);
