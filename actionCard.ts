@@ -3,6 +3,7 @@ import { registerAnonymous, registerCallback } from "./callbackRegister.js";
 import { returnCardById } from "./cardLooting.js";
 import { filterGrids, ray } from "./defaultMovingBehaviors.js";
 import { Effect } from "./effect.js";
+import { StrengthEffectTemplate, WeaknessEffectTemplate } from "./effectTemplate.js";
 import { Piece, pieces, PieceType } from "./piece.js";
 import {
     getCurrentSelection,
@@ -58,7 +59,7 @@ const singleTargetSelectorTemplate = (
     id: string,
     description: string,
     pieceType: string,
-    final: (results: SelectedItem[]) => void
+    final: (result: Piece) => void
 ) => {
     let callback = () => {
         let currentSelection = getCurrentSelection();
@@ -68,12 +69,12 @@ const singleTargetSelectorTemplate = (
             })
         )
             .once()
-            .oncancel((results) => {
+            .oncancel((result) => {
                 returnCardById(id);
             })
             .replaceWithFinally(currentSelection)
-            .final((results) => {
-                final(results);
+            .final((result) => {
+                final(result[0].data as Piece);
             });
 
         setCurrentSelection(targetSelection);
@@ -94,8 +95,7 @@ export const highGunActionCard = singleTargetSelectorTemplate(
     "highGun",
     "一次性-允许炮至多隔两个棋子攻击",
     PieceType.Gun,
-    (results) => {
-        let piece = results[0].data as Piece;
+    (piece) => {
         let modifier = new AttributeModifier(highGunAttackCallback);
         piece.attackingTargetsCallback.area(0).modify(modifier);
         let effect = new Effect("高射炮", "highGun", "下一次攻击允许隔至多两个棋子", [modifier]);
@@ -122,8 +122,8 @@ export const limitlessHorseActionCard = singleTargetSelectorTemplate(
     "limitlessHorse",
     "持续3回合-马的行动不再受「蹩马腿」限制",
     PieceType.Horse,
-    (results) => {
-        let piece = results[0].data as Piece;
+    (result) => {
+        let piece = result
         let modifier = new AttributeModifier(limitlessHorseAttackCallback, 3 * 2);
         let effect = new Effect("一马平川", "limitlessHorse", "马的行动不再受「蹩马腿」限制", [
             modifier,
@@ -139,13 +139,8 @@ export const strengthPotionActionCard = singleTargetSelectorTemplate(
     "strengthPotion",
     "持续3回合-选中棋子的攻击力提升15%",
     PieceType.None,
-    (results) => {
-        let piece = results[0].data as Piece;
-        let modifier = new AttributeModifier(0.15, 3 * 2);
-        let effect = new Effect("力量", "strength", "攻击力提升15%", [modifier], 1);
-        piece.pushEffects(effect);
-        piece.attackDamage.area(1).modify(modifier);
-        console.log(modifier);
+    (result) => {
+        StrengthEffectTemplate.apply(result, 1, 3 * 2);
     }
 );
 
@@ -154,15 +149,8 @@ export const weaknessPotionActionCard = singleTargetSelectorTemplate(
     "weaknessPotion",
     "持续3回合-选中棋子的攻击力降低20%",
     PieceType.None,
-    (results) => {
-        let piece = results[0].data as Piece;
-        let modifier = new AttributeModifier(-0.2, 3 * 2);
-        let effect = new Effect("虚弱", "weakness", "攻击力降低20%", [
-            modifier,
-        ], 1).setAsNegative();
-        piece.attackDamage.area(1).modify(modifier);
-        piece.pushEffects(effect);
-        console.log(modifier);
+    (result) => {
+        WeaknessEffectTemplate.apply(result, 1, 3 * 2);
     }
 );
 
@@ -171,8 +159,8 @@ export const healthInstantPotionActionCard = singleTargetSelectorTemplate(
     "healthInstantPotion",
     "选中棋子回复600点生命值",
     PieceType.None,
-    (results) => {
-        let piece = results[0].data as Piece;
+    (result) => {
+        let piece = result
         piece.health = Math.min(piece.health + 600, piece.maxHealth.result);
         piece.draw();
     }
@@ -183,13 +171,8 @@ export const strengthPotionEnhancedActionCard = singleTargetSelectorTemplate(
     "strengthPotionEnhanced",
     "持续2回合-选中棋子的攻击力提升25%",
     PieceType.None,
-    (results) => {
-        let piece = results[0].data as Piece;
-        let modifier = new AttributeModifier(0.25, 2 * 2);
-        let effect = new Effect("力量", "strength", "攻击力提升25%", [modifier], 2);
-        piece.pushEffects(effect);
-        piece.attackDamage.area(1).modify(modifier);
-        console.log(modifier);
+    (result) => {
+        StrengthEffectTemplate.apply(result, 2, 2 * 2);
     }
 );
 
@@ -198,13 +181,8 @@ export const strengthPotionExtendedActionCard = singleTargetSelectorTemplate(
     "strengthPotionExtended",
     "持续5回合-选中棋子的攻击力提升15%",
     PieceType.None,
-    (results) => {
-        let piece = results[0].data as Piece;
-        let modifier = new AttributeModifier(0.15, 5 * 2);
-        let effect = new Effect("力量", "strength", "攻击力提升15%", [modifier], 1);
-        piece.pushEffects(effect);
-        piece.attackDamage.area(1).modify(modifier);
-        console.log(modifier);
+    (result) => {
+        StrengthEffectTemplate.apply(result, 1, 5 * 2);
     }
 );
 
@@ -213,8 +191,8 @@ export const superLaughingActionCard = singleTargetSelectorTemplate(
     "superLaughing",
     "持续3回合-选中棋子不能移动",
     PieceType.None,
-    (results) => {
-        let piece = results[0].data as Piece;
+    (result) => {
+        let piece = result
         let modifier = new AttributeModifier((piece_: Piece) => {
             return filterGrids((pos) => false);
         }, 3 * 2);
@@ -232,8 +210,8 @@ export const withBellAndTripodActionCard = singleTargetSelectorTemplate(
     "withBellAndTripod",
     "持续3回合-选中棋子重量提升6000%",
     PieceType.None,
-    (results) => {
-        let piece = results[0].data as Piece;
+    (result) => {
+        let piece = result
         let modifier = new AttributeModifier(60, 3 * 2);
         let effect = new Effect("戴钟之鼎", "withBellAndTripod", "重量提升6000%", [modifier]);
         piece.weight.area(1).modify(modifier);

@@ -68,6 +68,13 @@ class MultiplicationArea {
     }
     modify(attributeModifier) {
         this.modifiers.push(attributeModifier);
+        return attributeModifier;
+    }
+    modified(...attributeModifiers) {
+        for (let modifier of attributeModifiers) {
+            this.modifiers.push(modifier);
+        }
+        return this;
     }
     get result() {
         let result = this.base;

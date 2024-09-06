@@ -86,6 +86,14 @@ class MultiplicationArea<T> {
 
     modify(attributeModifier: AttributeModifier<T>) {
         this.modifiers.push(attributeModifier);
+        return attributeModifier;
+    }
+
+    modified(...attributeModifiers: AttributeModifier<T>[]) {
+        for (let modifier of attributeModifiers) {
+            this.modifiers.push(modifier);
+        }
+        return this;
     }
 
     get result() {
