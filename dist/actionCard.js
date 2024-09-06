@@ -115,4 +115,11 @@ export const withBellAndTripodActionCard = singleTargetSelectorTemplate("戴钟�
     piece.weight.area(1).modify(modifier);
     piece.pushEffects(effect);
 });
+export const determinedResistanceActionCard = singleTargetSelectorTemplate("决意流博", "determinedResistance", "持续3回合-选中棋子的暴击率提升12%", PieceType.None, (result) => {
+    let piece = result;
+    let modifier = new AttributeModifier(0.12, 3 * 2);
+    let effect = new Effect("决意流博", "determinedResistance", "暴击率提升12%", [modifier]);
+    piece.criticalRate.area(0).modify(modifier);
+    piece.pushEffects(effect);
+});
 //# sourceMappingURL=actionCard.js.map

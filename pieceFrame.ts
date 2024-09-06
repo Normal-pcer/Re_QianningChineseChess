@@ -33,7 +33,7 @@ export function showPiece(piece: Piece) {
     healthMaxElement.innerText = piece.maxHealth.toExpression();
     attackElement.innerText = piece.attackDamage.toExpression();
     defenseElement.innerText = piece.defense.toExpression();
-    criticalElement.innerText = Math.round(piece.criticalChance.result * 100).toString();
+    criticalElement.innerText = Math.round(piece.criticalRate.result * 100).toString();
     criticalDamageElement.innerText = Math.round(piece.criticalDamage.result * 100).toString();
     weight.innerText = piece.weight.toExpression();
 

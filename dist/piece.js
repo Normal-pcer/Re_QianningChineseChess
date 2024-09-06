@@ -16,7 +16,7 @@ const defaultAttackActionCallback = registerAnonymous((piece, target) => {
         return false;
     let damageAmount = piece.attackDamage.result;
     let isCritical = fixedRandom("criticalCheck", round, piece.position.toString(), target.position.toString()) <
-        piece.criticalChance.result;
+        piece.criticalRate.result;
     if (isCritical)
         damageAmount *= piece.criticalDamage.result + 1;
     let damageObject = new Damage(piece.damageType, damageAmount, piece, target, isCritical);
@@ -38,7 +38,7 @@ class Piece {
     maxHealth = new NumberAttributeProvider(0);
     attackDamage = new NumberAttributeProvider(0);
     defense = new NumberAttributeProvider(0);
-    criticalChance = new NumberAttributeProvider(0);
+    criticalRate = new NumberAttributeProvider(0);
     criticalDamage = new NumberAttributeProvider(0);
     weight = new NumberAttributeProvider(0);
     damageType = DamageType.None;
@@ -57,7 +57,7 @@ class Piece {
         if (config) {
             this.attackDamage = new NumberAttributeProvider(config.attackDamage);
             this.defense = new NumberAttributeProvider(config.defense);
-            this.criticalChance = new NumberAttributeProvider(config.criticalChance);
+            this.criticalRate = new NumberAttributeProvider(config.criticalChance);
             this.criticalDamage = new NumberAttributeProvider(config.criticalDamage);
             this.damageType = config.damageType;
             this.maxHealth = new NumberAttributeProvider(config.maxHealth);
