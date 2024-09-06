@@ -15,6 +15,8 @@ import { getCurrentTeam, nextRound } from "./round.js";
 import { getPlayerFromTeam } from "./team.js";
 import { deepCopy } from "./utils.js";
 
+const playerCardCountMax = 5;
+
 class poolItem {
     card: ActionCard;
     weight: number;
@@ -47,6 +49,7 @@ function giveCard(card: ActionCard, to: Player) {
 
 export function lootCard() {
     let player = getPlayerFromTeam(getCurrentTeam());
+    if (player.actionCards.length >= playerCardCountMax) return;
     let weightSum = pool.reduce((sum, item) => sum + item.weight, 0);
     let random = Math.random() * weightSum;
     let sum = 0;
