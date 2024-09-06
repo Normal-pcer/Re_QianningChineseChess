@@ -1,5 +1,6 @@
 import { healthInstantPotionActionCard, highGunActionCard, limitlessHorseActionCard, strengthPotionActionCard, strengthPotionEnhancedActionCard, strengthPotionExtendedActionCard, superLaughingActionCard, weaknessPotionActionCard, withBellAndTripodActionCard, } from "./actionCard.js";
-import { getCurrentTeam, nextRound } from "./round.js";
+import { fixedRandom } from "./random.js";
+import { getCurrentTeam, nextRound, round } from "./round.js";
 import { getPlayerFromTeam } from "./team.js";
 import { deepCopy } from "./utils.js";
 const playerCardCountMax = 5;
@@ -24,7 +25,7 @@ export function lootCard() {
     if (player.actionCards.length >= playerCardCountMax)
         return;
     let weightSum = pool.reduce((sum, item) => sum + item.weight, 0);
-    let random = Math.random() * weightSum;
+    let random = fixedRandom("cardLooting", round) * weightSum;
     let sum = 0;
     for (let item of pool) {
         sum += item.weight;

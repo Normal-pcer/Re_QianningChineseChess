@@ -12,6 +12,8 @@ import { registerCallback } from "./callbackRegister.js";
 import { showDefaultPiece } from "./pieceFrame.js";
 import { Effect } from "./effect.js";
 import { DamageTrigger, TriggerManager } from "./trigger.js";
+import { seed } from "./random.js";
+seed();
 initDefaultMovingBehaviors();
 initCardLooting();
 export function stop(victor) {

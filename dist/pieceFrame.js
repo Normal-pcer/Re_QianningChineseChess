@@ -16,6 +16,7 @@ export function showPiece(piece) {
     //     pieceFrameElement
     // );
     pieceFrameElement.innerHTML = piece.htmlElement.innerHTML;
+    const positionElement = document.getElementById("frame-position");
     const healthElement = document.getElementById("frame-health");
     const healthMaxElement = document.getElementById("frame-health-max");
     const attackElement = document.getElementById("frame-attack");
@@ -23,6 +24,7 @@ export function showPiece(piece) {
     const criticalElement = document.getElementById("frame-critical");
     const criticalDamageElement = document.getElementById("frame-critical-damage");
     const weight = document.getElementById("frame-weight");
+    positionElement.innerText = piece.position.toString();
     healthElement.innerText = Math.round(piece.health).toString();
     healthMaxElement.innerText = piece.maxHealth.toExpression();
     attackElement.innerText = piece.attackDamage.toExpression();

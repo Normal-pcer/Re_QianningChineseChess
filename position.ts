@@ -169,4 +169,13 @@ export class Position extends PositionedItem {
         }
         return null;
     }
+
+    toString() {
+        if (0 <= this.x && this.x <= 8 && 0 <= this.y && this.y <= 9) {
+            let letterX = String.fromCharCode('A'.charCodeAt(0) + this.x);
+            let numberY = this.y.toString();
+            return letterX + numberY;
+        }
+        return `(${this.x}, ${this.y})`
+    }
 }

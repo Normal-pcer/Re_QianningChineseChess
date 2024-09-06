@@ -1,20 +1,20 @@
 import { Position } from "./position.js";
 import { Piece, PieceType, pieces } from "./piece.js";
 import * as Selection from "./selection.js";
-import { DefaultMovingBehaviors, initDefaultMovingBehaviors } from "./defaultMovingBehaviors.js";
+import { initDefaultMovingBehaviors } from "./defaultMovingBehaviors.js";
 import { getPlayerFromTeam, Team } from "./team.js";
-import { nextRound, getCurrentTeam } from "./round.js";
+import { getCurrentTeam } from "./round.js";
 import { AttributeModifier } from "./attributeProvider.js";
-import { highGunActionCard, limitlessHorseActionCard, testActionCard } from "./actionCard.js";
-import { runAllSchedules } from "./schedule.js";
+import { highGunActionCard, limitlessHorseActionCard } from "./actionCard.js";
 import { initCardLooting, lootCard } from "./cardLooting.js";
-import { loadSave, recall, Save, saveCurrent, storeSave } from "./save.js";
+import { loadSave, recall, saveCurrent, storeSave } from "./save.js";
 import { registerCallback } from "./callbackRegister.js";
-import { showDefaultPiece, showPiece } from "./pieceFrame.js";
+import { showDefaultPiece } from "./pieceFrame.js";
 import { Effect } from "./effect.js";
 import { DamageTrigger, TriggerManager } from "./trigger.js";
-import { EffectTemplate } from "./effectTemplate.js";
+import { seed } from "./random.js";
 
+seed();
 initDefaultMovingBehaviors();
 initCardLooting();
 

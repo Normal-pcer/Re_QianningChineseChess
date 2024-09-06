@@ -14,11 +14,15 @@ import {
 import { registerAnonymous } from "./callbackRegister.js";
 import { Effect } from "./effect.js";
 import { schedule } from "./schedule.js";
+import { fixedRandom } from "./random.js";
+import { round } from "./round.js";
 
 const defaultAttackActionCallback = registerAnonymous((piece: Piece, target: Piece) => {
     if (target.team === piece.team) return false;
     let damageAmount = piece.attackDamage.result;
-    let isCritical = Math.random() < piece.criticalChance.result;
+    let isCritical =
+        fixedRandom("criticalCheck", round, piece.position.toString(), target.position.toString()) <
+        piece.criticalChance.result;
     if (isCritical) damageAmount *= piece.criticalDamage.result + 1;
     let damageObject = new Damage(piece.damageType, damageAmount, piece, target, isCritical);
     damageObject.apply();

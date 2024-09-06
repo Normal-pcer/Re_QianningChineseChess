@@ -17,6 +17,7 @@ export function showPiece(piece: Piece) {
     //     pieceFrameElement
     // );
     pieceFrameElement.innerHTML = piece.htmlElement.innerHTML;
+    const positionElement = document.getElementById("frame-position") as HTMLSpanElement;
     const healthElement = document.getElementById("frame-health") as HTMLSpanElement;
     const healthMaxElement = document.getElementById("frame-health-max") as HTMLSpanElement;
     const attackElement = document.getElementById("frame-attack") as HTMLSpanElement;
@@ -27,6 +28,7 @@ export function showPiece(piece: Piece) {
     ) as HTMLSpanElement;
     const weight = document.getElementById("frame-weight") as HTMLSpanElement;
 
+    positionElement.innerText = piece.position.toString();
     healthElement.innerText = Math.round(piece.health).toString();
     healthMaxElement.innerText = piece.maxHealth.toExpression();
     attackElement.innerText = piece.attackDamage.toExpression();
