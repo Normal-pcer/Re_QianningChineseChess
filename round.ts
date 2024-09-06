@@ -1,8 +1,8 @@
 import { pieces } from "./piece.js";
 import { showDefaultPiece } from "./pieceFrame.js";
 import { saveCurrent } from "./save.js";
+import { runAllSchedules } from "./schedule.js";
 import { getPlayerFromTeam, Team } from "./team.js";
-import { RoundTrigger, TriggerManager } from "./trigger.js";
 
 export var round = 0;
 export const roundMap = [Team.Red, Team.Black];
@@ -11,7 +11,8 @@ export function nextRound() {
     saveCurrent();
     round++;
     console.log(`Round ${round}`);
-    TriggerManager.trigger(RoundTrigger.name, round);
+    // TriggerManager.trigger(RoundTrigger.name, round);
+    runAllSchedules();
     getPlayerFromTeam(getCurrentTeam()).showActionCards();
     getPlayerFromTeam(Team.enemy(getCurrentTeam())).showActionCards(false);
     let round_tip = document.querySelector("#round-tip>span") as HTMLElement;

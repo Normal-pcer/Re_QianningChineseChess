@@ -8,7 +8,7 @@ import { DamageType } from "./damageType.js";
 import { Team } from "./team.js";
 import { AttributeProvider, NumberAttributeProvider, } from "./attributeProvider.js";
 import { registerAnonymous } from "./callbackRegister.js";
-import { RoundTrigger, TriggerManager } from "./trigger.js";
+import { schedule } from "./schedule.js";
 const defaultAttackActionCallback = registerAnonymous((piece, target) => {
     if (target.team === piece.team)
         return false;
@@ -104,11 +104,9 @@ class Piece {
                     this.effects.splice(this.effects.indexOf(exist), 1);
                     this.effects.push(higherLevel);
                     if (lowerLevel.expire > higherLevel.expire) {
-                        TriggerManager.addTrigger(new RoundTrigger((round) => {
-                            if (round === higherLevel.expire + 1) {
-                                this.pushEffects(lowerLevel);
-                            }
-                        }));
+                        schedule(higherLevel.expire + 1, () => {
+                            this.pushEffects(lowerLevel);
+                        });
                     }
                 }
             }

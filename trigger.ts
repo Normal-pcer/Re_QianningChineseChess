@@ -31,9 +31,9 @@ export class DamageTrigger extends Trigger {
     }
 }
 
-export class RoundTrigger extends Trigger {
-    static event = "RoundTrigger";
-    constructor(action: (round: number) => void) {
-        super(action, "RoundTrigger");
-    }
-}
+// export class RoundTrigger extends Trigger {
+//     static event = "RoundTrigger";
+//     constructor(action: (round: number) => void) {
+//         super(action, "RoundTrigger");
+//     }
+// }
