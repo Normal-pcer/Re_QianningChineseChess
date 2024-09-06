@@ -17,7 +17,7 @@ import { getCurrentTeam, nextRound, round } from "./round.js";
 import { getPlayerFromTeam } from "./team.js";
 import { deepCopy } from "./utils.js";
 
-const playerCardCountMax = 5;
+const playerCardCountMax = 7;
 
 class poolItem {
     card: ActionCard;

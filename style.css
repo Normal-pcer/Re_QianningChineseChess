@@ -3,20 +3,29 @@ body {
 }
 
 #center-column {
-    width: 50vw;
+    width: 47vw;
     margin: 0 auto;
     border: 2px black solid;
     height: 95vh;
 }
 
 #left-column {
-    width: 20vw;
+    width: 24vw;
     margin: 0 auto;
     border: 2px black solid;
     height: 95vh;
     position: fixed;
     left: 2vw;
     /* overflow-y: scroll; */
+}
+
+#action-cards ul {
+    padding-left: 1vw;
+}
+
+#action-cards ul li {
+    list-style-type: none;
+    /* padding: 0; */
 }
 
 #game-container {
@@ -202,4 +211,5 @@ body {
 
 .description-text {
     color: gray;
+    font-size: 0.8em;
 }

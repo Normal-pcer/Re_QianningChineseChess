@@ -18,7 +18,7 @@ export class Player {
             let targetLiElement = document.createElement("li");
             targetLiElement.innerHTML =
                 this.actionCards[i].name +
-                ` <span style="color: gray;">(${this.actionCards[i].description})</span>`;
+                ` <span class="description-text">(${this.actionCards[i].description})</span>`;
             targetUlElement.appendChild(targetLiElement);
             if (usable) {
                 targetLiElement.addEventListener("click", () => {
