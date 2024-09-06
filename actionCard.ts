@@ -220,7 +220,7 @@ export const withBellAndTripodActionCard = singleTargetSelectorTemplate(
 );
 
 export const determinedResistanceActionCard = singleTargetSelectorTemplate(
-    "决意流博",
+    "决意流搏",
     "determinedResistance",
     "持续3回合-选中棋子的暴击率提升12%",
     PieceType.None,

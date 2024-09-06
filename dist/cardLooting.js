@@ -14,7 +14,7 @@ class poolItem {
 }
 let pool = [];
 export function initCardLooting() {
-    pool.push(new poolItem(highGunActionCard), new poolItem(limitlessHorseActionCard), new poolItem(strengthPotionActionCard), new poolItem(weaknessPotionActionCard), new poolItem(healthInstantPotionActionCard), new poolItem(strengthPotionEnhancedActionCard, 0.5), new poolItem(strengthPotionExtendedActionCard, 0.5), new poolItem(superLaughingActionCard), new poolItem(withBellAndTripodActionCard), new poolItem(determinedResistanceActionCard, 100));
+    pool.push(new poolItem(highGunActionCard), new poolItem(limitlessHorseActionCard), new poolItem(strengthPotionActionCard), new poolItem(weaknessPotionActionCard), new poolItem(healthInstantPotionActionCard), new poolItem(strengthPotionEnhancedActionCard, 0.5), new poolItem(strengthPotionExtendedActionCard, 0.5), new poolItem(superLaughingActionCard), new poolItem(withBellAndTripodActionCard), new poolItem(determinedResistanceActionCard));
 }
 function giveCard(card, to) {
     to.actionCards.push(deepCopy(card));
