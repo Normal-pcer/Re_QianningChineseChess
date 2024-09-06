@@ -1,26 +1,47 @@
 import { AttributeModifier, getAttributeModifierById } from "./attributeProvider.js";
 import { round } from "./round.js";
 
+const ROMAN_NUMBER_LIMIT = 25; // 小于等于此数值的等级将使用罗马数字表示
+const toRomanNumber = (number: number) => {
+    const HARD_LIMIT = 3999;
+    if (number > ROMAN_NUMBER_LIMIT || number > HARD_LIMIT) {
+        return number.toString();
+    }
+    const ones = ["", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX"];
+    const tens = ["", "X", "XX", "XXX", "XL", "L", "LX", "LXX", "LXXX", "XC"];
+    const hundreds = ["", "C", "CC", "CCC", "CD", "D", "DC", "DCC", "DCCC", "CM"];
+    const thousands = ["", "M", "MM", "MMM"];
+    return (
+        thousands[Math.floor(number / 1000)] +
+        hundreds[Math.floor((number % 1000) / 100)] +
+        tens[Math.floor((number % 100) / 10)] +
+        ones[Math.floor(number % 10)]
+    );
+};
+
 export class Effect {
     name: string = "";
     id: string = "";
     description: string = "";
     relatedModifierIds: number[] = [];
-    expire: number = -1;
+    _expire: number = Infinity;
     enabled: boolean = true;
     continuedAction: (() => void) | null = null;
     negative: boolean = false;
+    level: number | null = null;
 
     /**
      * @param expire -当为null时，取决于所有relatedModifiers的expire中最早的
      * @param expireOffset -当为数字时，表示参数expire的偏移量，此时实际过期时间为当前时间之后再经过
      * ($expire-$expireOffset)回合；当为null时，表示参数expire直接作为过期回合号
+     * @param level -当为null时，表示该效果不应用等级机制；否则表示该效果的等级
      */
     constructor(
         name: string,
         id: string,
         description: string = "",
         relatedModifiers: AttributeModifier<any>[] = [],
+        level: number | null = null,
         expire: number | null = null,
         expireOffset: number | null = -1
     ) {
@@ -31,20 +52,40 @@ export class Effect {
         if (expire === null) {
             let minExpire = Infinity;
             this.relatedModifiers.forEach((modifier) => {
-                if (modifier.expire < minExpire && modifier.expire !== -1)
-                    minExpire = modifier.expire;
+                if (modifier.expire < minExpire) minExpire = modifier.expire;
             });
-            this.expire = minExpire == Infinity ? -1 : minExpire;
+            this.expire = minExpire;
+            this.relatedModifiers.forEach((modifier) => {
+                modifier.expire = this.expire;
+            });
         } else {
             if (expireOffset === null) this.expire = expire;
-            else this.expire = expire === -1 ? -1 : round + expire + expireOffset;
+            else this.expire = round + expire + expireOffset;
         }
+        this.level = level;
 
-        if (this.expire !== -1) {
+        if (this.expire !== Infinity) {
             this.relatedModifiers.forEach((modifier) => {
                 modifier.expire = this.expire;
             });
         }
+    }
+
+    get expire() {
+        return this._expire;
+    }
+
+    set expire(value) {
+        this._expire = value;
+        this.relatedModifiers.forEach((modifier) => {
+            modifier.expire = value;
+        });
+    }
+
+    get displayName() {
+        if (!this.level) return this.name;
+        let roman = toRomanNumber(this.level);
+        return this.name + roman;
     }
 
     setAsNegative() {
@@ -65,6 +106,6 @@ export class Effect {
     }
 
     get available() {
-        return this.enabled && (this.expire === -1 || round <= this.expire);
+        return this.enabled && round <= this.expire;
     }
 }

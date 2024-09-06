@@ -74,7 +74,7 @@ class MultiplicationArea {
                 if (modifier.clearOnDisable)
                     this.modifiers.splice(this.modifiers.indexOf(modifier), 1);
             }
-            else if (modifier.expire !== -1 && modifier.expire < round) {
+            else if (modifier.expire < round) {
                 if (modifier.clearOnExpire)
                     this.modifiers.splice(this.modifiers.indexOf(modifier), 1);
             }
@@ -87,7 +87,7 @@ class MultiplicationArea {
 }
 export class AttributeModifier {
     amount;
-    expire = -1; // -1 表示永不过期
+    expire = Infinity;
     operation;
     enabled = true;
     clearOnExpire = true;
@@ -102,7 +102,7 @@ export class AttributeModifier {
      * ($expire-$expireOffset)回合；当为null时，表示参数expire直接作为过期回合号
      * @param numberModifier - 如果为true，则amount会被优先视为数字，否则视为普通值；如果amount不是数字，则该参数无效
      */
-    constructor(amount, expire = -1, expireOffset = -1, operation = null, numberModifier = true, clearOnExpire = true, clearOnDisable = true) {
+    constructor(amount, expire = Infinity, expireOffset = -1, operation = null, numberModifier = true, clearOnExpire = true, clearOnDisable = true) {
         this.amount = amount;
         if (operation === null) {
             if (typeof amount == "number" && numberModifier) {
@@ -118,7 +118,7 @@ export class AttributeModifier {
         if (expireOffset === null)
             this.expire = expire;
         else
-            this.expire = expire === -1 ? -1 : round + expire + expireOffset;
+            this.expire = round + expire + expireOffset;
         this.clearOnExpire = clearOnExpire;
         this.clearOnDisable = clearOnDisable;
         while (modifiers[attributeModifierId] !== undefined) {

@@ -93,7 +93,7 @@ class MultiplicationArea<T> {
             if (!modifier.enabled) {
                 if (modifier.clearOnDisable)
                     this.modifiers.splice(this.modifiers.indexOf(modifier), 1);
-            } else if (modifier.expire !== -1 && modifier.expire < round) {
+            } else if (modifier.expire < round) {
                 if (modifier.clearOnExpire)
                     this.modifiers.splice(this.modifiers.indexOf(modifier), 1);
             } else {
@@ -106,7 +106,7 @@ class MultiplicationArea<T> {
 
 export class AttributeModifier<T> {
     amount: T;
-    expire: number = -1; // -1 表示永不过期
+    expire: number = Infinity;
     operation: (arg1: T, arg2: T) => T;
     enabled: boolean = true;
     clearOnExpire: boolean = true;
@@ -124,7 +124,7 @@ export class AttributeModifier<T> {
      */
     constructor(
         amount: T,
-        expire: number = -1,
+        expire: number = Infinity,
         expireOffset: number | null = -1,
         operation: null | ((arg1: T, arg2: T) => T) = null,
         numberModifier: boolean = true,
@@ -142,7 +142,7 @@ export class AttributeModifier<T> {
             this.operation = operation;
         }
         if (expireOffset === null) this.expire = expire;
-        else this.expire = expire === -1 ? -1 : round + expire + expireOffset;
+        else this.expire = round + expire + expireOffset;
         this.clearOnExpire = clearOnExpire;
         this.clearOnDisable = clearOnDisable;
 

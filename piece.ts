@@ -13,6 +13,7 @@ import {
 } from "./attributeProvider.js";
 import { registerAnonymous } from "./callbackRegister.js";
 import { Effect } from "./effect.js";
+import { RoundTrigger, TriggerManager } from "./trigger.js";
 
 const defaultAttackActionCallback = registerAnonymous((piece: Piece, target: Piece) => {
     if (target.team === piece.team) return false;
@@ -108,7 +109,33 @@ class Piece {
     }
 
     pushEffects(...effects: Effect[]) {
-        this.effects.push(...effects);
+        for (let i = 0; i < effects.length; i++) {
+            let effect = effects[i];
+            if (!effect.available) return;
+            let exist = this.effects.find((e) => e.id == effect.id);
+            if (!exist) this.effects.push(effect);
+            else {
+                if (exist.level === effect.level || effect.level === null || exist.level === null) {
+                    exist.expire = Math.max(exist.expire, effect.expire);
+                } else {
+                    // 等级更高的效果，替换掉低的效果；如果低等级效果过期更晚，则在过期后替换回来
+                    let higherLevel = exist.level > effect.level ? exist : effect;
+                    let lowerLevel = exist.level > effect.level ? effect : exist;
+                    this.effects.splice(this.effects.indexOf(exist), 1);
+                    this.effects.push(higherLevel);
+
+                    if (lowerLevel.expire > higherLevel.expire) {
+                        TriggerManager.addTrigger(
+                            new RoundTrigger((round) => {
+                                if (round === higherLevel.expire + 1) {
+                                    this.pushEffects(lowerLevel);
+                                }
+                            })
+                        );
+                    }
+                }
+            }
+        }
         this.draw();
     }
 

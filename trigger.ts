@@ -17,7 +17,7 @@ export class TriggerManager {
     static trigger(event: string, ...args: any[]) {
         for (let trigger of this.triggers) {
             if (trigger.event == event) {
-                console.log(`Trigger: `, trigger)
+                console.log(`Trigger: `, trigger);
                 trigger.action(...args);
             }
         }
@@ -26,7 +26,14 @@ export class TriggerManager {
 
 export class DamageTrigger extends Trigger {
     static event = "DamageTrigger";
-    constructor(action: (damage: Damage)=>void) {
+    constructor(action: (damage: Damage) => void) {
         super(action, "DamageTrigger");
+    }
+}
+
+export class RoundTrigger extends Trigger {
+    static event = "RoundTrigger";
+    constructor(action: (round: number) => void) {
+        super(action, "RoundTrigger");
     }
 }

@@ -16,6 +16,7 @@ body {
     height: 95vh;
     position: fixed;
     left: 2vw;
+    /* overflow-y: scroll; */
 }
 
 #game-container {

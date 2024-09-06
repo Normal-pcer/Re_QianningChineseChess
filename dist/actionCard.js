@@ -82,7 +82,7 @@ export const limitlessHorseActionCard = singleTargetSelectorTemplate("一马平�
 export const strengthPotionActionCard = singleTargetSelectorTemplate("力量药水", "strengthPotion", "持续3回合-选中棋子的攻击力提升15%", PieceType.None, (results) => {
     let piece = results[0].data;
     let modifier = new AttributeModifier(0.15, 3 * 2);
-    let effect = new Effect("力量 I", "strengthPotionI", "攻击力提升15%", [modifier]);
+    let effect = new Effect("力量", "strength", "攻击力提升15%", [modifier], 1);
     piece.pushEffects(effect);
     piece.attackDamage.area(1).modify(modifier);
     console.log(modifier);
@@ -90,9 +90,9 @@ export const strengthPotionActionCard = singleTargetSelectorTemplate("力量药�
 export const weaknessPotionActionCard = singleTargetSelectorTemplate("虚弱药水", "weaknessPotion", "持续3回合-选中棋子的攻击力降低20%", PieceType.None, (results) => {
     let piece = results[0].data;
     let modifier = new AttributeModifier(-0.2, 3 * 2);
-    let effect = new Effect("虚弱 I", "weaknessPotionI", "攻击力降低20%", [
+    let effect = new Effect("虚弱", "weakness", "攻击力降低20%", [
         modifier,
-    ]).setAsNegative();
+    ], 1).setAsNegative();
     piece.attackDamage.area(1).modify(modifier);
     piece.pushEffects(effect);
     console.log(modifier);
@@ -105,7 +105,7 @@ export const healthInstantPotionActionCard = singleTargetSelectorTemplate("治�
 export const strengthPotionEnhancedActionCard = singleTargetSelectorTemplate("力量药水（加强）", "strengthPotionEnhanced", "持续2回合-选中棋子的攻击力提升25%", PieceType.None, (results) => {
     let piece = results[0].data;
     let modifier = new AttributeModifier(0.25, 2 * 2);
-    let effect = new Effect("力量 II", "strengthPotionII", "攻击力提升25%", [modifier]);
+    let effect = new Effect("力量", "strength", "攻击力提升25%", [modifier], 2);
     piece.pushEffects(effect);
     piece.attackDamage.area(1).modify(modifier);
     console.log(modifier);
@@ -113,7 +113,7 @@ export const strengthPotionEnhancedActionCard = singleTargetSelectorTemplate("�
 export const strengthPotionExtendedActionCard = singleTargetSelectorTemplate("力量药水（延长）", "strengthPotionExtended", "持续5回合-选中棋子的攻击力提升15%", PieceType.None, (results) => {
     let piece = results[0].data;
     let modifier = new AttributeModifier(0.15, 5 * 2);
-    let effect = new Effect("力量 I", "strengthPotionI", "攻击力提升15%", [modifier]);
+    let effect = new Effect("力量", "strength", "攻击力提升15%", [modifier], 1);
     piece.pushEffects(effect);
     piece.attackDamage.area(1).modify(modifier);
     console.log(modifier);

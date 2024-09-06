@@ -26,4 +26,10 @@ export class DamageTrigger extends Trigger {
         super(action, "DamageTrigger");
     }
 }
+export class RoundTrigger extends Trigger {
+    static event = "RoundTrigger";
+    constructor(action) {
+        super(action, "RoundTrigger");
+    }
+}
 //# sourceMappingURL=trigger.js.map
