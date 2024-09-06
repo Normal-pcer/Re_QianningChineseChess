@@ -37,7 +37,7 @@ export class Damage {
     type: DamageType = DamageType.None;
     amount: number = 0;
     source: Piece | null = null;
-    target: Piece | null = null;
+    target: Piece;
     isCritical: boolean = false;
     quasiMoveTarget: (piece: Piece, target: Piece) => Position;
     repelTarget: (piece: Piece, target: Piece) => Position;
@@ -47,7 +47,7 @@ export class Damage {
         type: DamageType,
         amount: number,
         source: Piece | null,
-        target: Piece | null,
+        target: Piece,
         isCritical: boolean = false,
         quasiMoveTarget: ((piece: Piece, target: Piece) => Position) | null = null,
         repelTarget: ((piece: Piece, target: Piece) => Position) | null = null

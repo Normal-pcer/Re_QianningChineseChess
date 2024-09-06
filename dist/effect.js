@@ -25,6 +25,7 @@ export class Effect {
     continuedAction = null;
     negative = false;
     level = null;
+    showLevel = true;
     /**
      * @param expire -当为null时，取决于所有relatedModifiers的expire中最早的
      * @param expireOffset -当为数字时，表示参数expire的偏移量，此时实际过期时间为当前时间之后再经过
@@ -60,6 +61,10 @@ export class Effect {
             });
         }
     }
+    hideLevel() {
+        this.showLevel = false;
+        return this;
+    }
     get expire() {
         return this._expire;
     }
@@ -70,7 +75,7 @@ export class Effect {
         });
     }
     get displayName() {
-        if (!this.level)
+        if (!this.level || !this.showLevel)
             return this.name;
         let roman = toRomanNumber(this.level);
         return this.name + roman;

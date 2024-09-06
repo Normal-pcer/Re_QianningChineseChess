@@ -42,5 +42,5 @@ export const WeaknessEffectTemplate = new EffectTemplate("虚弱", "weakness", (
             .area(1)
             .modify(new AttributeModifier((-10 - level * 10) / 100, expire, null)),
     ];
-});
+}).setAsNegative();
 //# sourceMappingURL=effectTemplate.js.map

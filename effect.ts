@@ -29,6 +29,7 @@ export class Effect {
     continuedAction: (() => void) | null = null;
     negative: boolean = false;
     level: number | null = null;
+    showLevel: boolean = true;
 
     /**
      * @param expire -当为null时，取决于所有relatedModifiers的expire中最早的
@@ -43,7 +44,7 @@ export class Effect {
         relatedModifiers: AttributeModifier<any>[] = [],
         level: number | null = null,
         expire: number | null = null,
-        expireOffset: number | null = -1
+        expireOffset: number | null = -1,
     ) {
         this.name = name;
         this.id = id;
@@ -71,6 +72,11 @@ export class Effect {
         }
     }
 
+    hideLevel() {
+        this.showLevel = false;
+        return this;
+    }
+
     get expire() {
         return this._expire;
     }
@@ -83,7 +89,7 @@ export class Effect {
     }
 
     get displayName() {
-        if (!this.level) return this.name;
+        if (!this.level || !this.showLevel) return this.name;
         let roman = toRomanNumber(this.level);
         return this.name + roman;
     }

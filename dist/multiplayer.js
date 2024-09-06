@@ -11,6 +11,7 @@ import { loadSave, recall, saveCurrent, storeSave } from "./save.js";
 import { registerCallback } from "./callbackRegister.js";
 import { showDefaultPiece } from "./pieceFrame.js";
 import { Effect } from "./effect.js";
+import { DamageTrigger, TriggerManager } from "./trigger.js";
 initDefaultMovingBehaviors();
 initCardLooting();
 export function stop(victor) {
@@ -37,6 +38,26 @@ window.onload = () => {
         piece.init();
     });
     registerCallback(pieces[0].attackActionCallback.result, "defaultAttackActionCallback");
+    TriggerManager.addTrigger(new DamageTrigger((damage) => {
+        if (damage.target?.type === PieceType.Master) {
+            const defenseImproveCalculation = (x) => {
+                return x >= 1000 * Math.PI ? 3 : -1.5 * Math.cos(x / 1000) + 1.5;
+            }; // 随便弄的
+            const defenseLastCalculation = (x) => {
+                return x >= 3000 ? 3 : Math.ceil(x / 1000);
+            };
+            let defense = defenseImproveCalculation(damage.amount);
+            let last = defenseLastCalculation(damage.amount);
+            console.log("defense: ", defense);
+            if (last === 0)
+                return;
+            damage.target.pushEffects(new Effect("御守三晖", "masterSelfDefense", `防御力提升${Math.round(defense * 100)}%`, [
+                damage.target.defense
+                    .area(1)
+                    .modify(new AttributeModifier(defense, last)),
+            ], Math.round(defense)).hideLevel());
+        }
+    }));
     let submit_cheating = document.getElementById("submit-cheating");
     if (submit_cheating instanceof HTMLElement)
         submit_cheating.onclick = (event) => {

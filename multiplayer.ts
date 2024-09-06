@@ -12,6 +12,8 @@ import { loadSave, recall, Save, saveCurrent, storeSave } from "./save.js";
 import { registerCallback } from "./callbackRegister.js";
 import { showDefaultPiece, showPiece } from "./pieceFrame.js";
 import { Effect } from "./effect.js";
+import { DamageTrigger, TriggerManager } from "./trigger.js";
+import { EffectTemplate } from "./effectTemplate.js";
 
 initDefaultMovingBehaviors();
 initCardLooting();
@@ -44,6 +46,38 @@ window.onload = () => {
     });
 
     registerCallback(pieces[0].attackActionCallback.result, "defaultAttackActionCallback");
+
+    TriggerManager.addTrigger(
+        new DamageTrigger((damage) => {
+            if (damage.target?.type === PieceType.Master) {
+                const defenseImproveCalculation = (x: number) => {
+                    return x >= 1000 * Math.PI ? 3 : -1.5 * Math.cos(x / 1000) + 1.5;
+                }; // 随便弄的
+                const defenseLastCalculation = (x: number) => {
+                    return x >= 3000 ? 3 : Math.ceil(x / 1000);
+                };
+
+                let defense = defenseImproveCalculation(damage.amount);
+                let last = defenseLastCalculation(damage.amount);
+                console.log("defense: ", defense);
+
+                if (last === 0) return;
+                damage.target.pushEffects(
+                    new Effect(
+                        "御守三晖",
+                        "masterSelfDefense",
+                        `防御力提升${Math.round(defense * 100)}%`,
+                        [
+                            damage.target.defense
+                                .area(1)
+                                .modify(new AttributeModifier(defense, last)),
+                        ],
+                        Math.round(defense)
+                    ).hideLevel()
+                );
+            }
+        })
+    );
 
     let submit_cheating = document.getElementById("submit-cheating");
     if (submit_cheating instanceof HTMLElement)
@@ -79,7 +113,9 @@ window.onload = () => {
         piece.defense.area(0).modify(newDefenseModifiers[newDefenseModifiers.length - 1]);
     });
     pieces.forEach((piece) => {
-        piece.pushEffects(new Effect("初始之护", "initialProtection", "提升11000点防御力", newDefenseModifiers));
+        piece.pushEffects(
+            new Effect("初始之护", "initialProtection", "提升11000点防御力", newDefenseModifiers)
+        );
     });
 
     (document.getElementById("loot-card-button") as HTMLElement).onclick = () => {

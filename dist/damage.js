@@ -34,7 +34,7 @@ export class Damage {
     type = DamageType.None;
     amount = 0;
     source = null;
-    target = null;
+    target;
     isCritical = false;
     quasiMoveTarget;
     repelTarget;
