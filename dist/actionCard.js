@@ -60,8 +60,9 @@ export const highGunActionCard = singleTargetSelectorTemplate("高射炮", "high
     piece.attackingTargetsCallback.area(0).modify(modifier);
     let effect = new Effect("高射炮", "highGun", "下一次攻击允许隔至多两个棋子", [modifier]);
     piece.pushEffects(effect);
+    let pieceElement = piece.htmlElement;
     TriggerManager.addTrigger(new DamageTrigger((damage) => {
-        if (damage.source === piece) {
+        if (damage.source?.htmlElement === pieceElement && pieceElement != null) {
             effect.enabled = false; // 攻击一次就失效
         }
     }));

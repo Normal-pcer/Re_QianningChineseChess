@@ -6,10 +6,7 @@ import { defaultPieceConfigs, PieceConfig } from "./defaultPieceConfig.js";
 import { Damage } from "./damage.js";
 import { DamageType } from "./damageType.js";
 import { Team } from "./team.js";
-import {
-    AttributeProvider,
-    NumberAttributeProvider,
-} from "./attributeProvider.js";
+import { AttributeProvider, NumberAttributeProvider } from "./attributeProvider.js";
 import { registerAnonymous } from "./callbackRegister.js";
 import { Effect } from "./effect.js";
 import { schedule } from "./schedule.js";
@@ -141,9 +138,9 @@ class Piece {
                     this.effects.push(higherLevel);
 
                     if (lowerLevel.expire > higherLevel.expire) {
-                        schedule(higherLevel.expire + 1, () => {
+                        schedule(() => {
                             this.pushEffects(lowerLevel);
-                        });
+                        }, higherLevel.expire + 1);
                     }
                 }
             }

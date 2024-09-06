@@ -1,8 +1,10 @@
 import { pieces } from "./piece.js";
 import { nextRound, round, setRound } from "./round.js";
-import { getPlayerFromTeam, setPlayerFromTeam, Team } from "./team.js";
-import { deepCopy } from "./utils.js";
+import { getPlayerFromTeam, mergePlayerFromTeam, Team } from "./team.js";
+import { deepCopy, deepMerge } from "./utils.js";
 import { getCallback, getCallbackRegistryKey } from "./callbackRegister.js";
+import { TriggerManager } from "./trigger.js";
+import { _schedules } from "./schedule.js";
 const saves = [];
 function generateSafeFunction(code) {
     const bodyStart = code.indexOf("{") + 1;
@@ -15,10 +17,14 @@ export class Save {
     pieces = [];
     players = {};
     round = 0;
-    constructor(pieces, players, round) {
+    triggers = [];
+    schedules = [];
+    constructor(pieces, players, round, triggers, schedules) {
         this.pieces = deepCopy(pieces);
         this.players = deepCopy(players);
         this.round = round;
+        this.triggers = deepCopy(triggers);
+        this.schedules = deepCopy(schedules);
     }
     storePrepare() {
         this.pieces.forEach((piece) => {
@@ -88,7 +94,7 @@ export function saveCurrent() {
     saves.push(new Save(pieces, {
         [Team.Red]: getPlayerFromTeam(Team.Red),
         [Team.Black]: getPlayerFromTeam(Team.Black),
-    }, round));
+    }, round, TriggerManager.triggers, _schedules));
 }
 export function recall() {
     console.log(saves);
@@ -96,16 +102,13 @@ export function recall() {
         saves.pop();
         const lastSave = saves.pop();
         if (lastSave) {
-            pieces.forEach((piece) => {
-                if (piece.clickListener)
-                    piece.htmlElement?.removeEventListener("click", piece.clickListener);
-            });
-            setPlayerFromTeam(Team.Red, lastSave.players[Team.Red]);
-            setPlayerFromTeam(Team.Black, lastSave.players[Team.Black]);
-            for (let index = 0; index < pieces.length; index++) {
-                Object.assign(pieces[index], lastSave.pieces[index]);
-                pieces[index].init();
-            }
+            // pieces.forEach((piece) => {
+            //     if (piece.clickListener)
+            //         piece.htmlElement?.removeEventListener("click", piece.clickListener);
+            // });
+            mergePlayerFromTeam(Team.Red, lastSave.players[Team.Red]);
+            mergePlayerFromTeam(Team.Black, lastSave.players[Team.Black]);
+            deepMerge(pieces, lastSave.pieces);
             setRound(lastSave.round);
             nextRound();
         }

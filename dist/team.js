@@ -1,4 +1,5 @@
 import { Player } from "./player.js";
+import { deepMerge } from "./utils.js";
 export class Team {
     static Red = "red";
     static Black = "black";
@@ -22,7 +23,7 @@ export const TeamPlayerMap = {
 export function getPlayerFromTeam(team) {
     return TeamPlayerMap[team] ?? TeamPlayerMap[Team.None];
 }
-export function setPlayerFromTeam(team, player) {
-    TeamPlayerMap[team] = player;
+export function mergePlayerFromTeam(team, player) {
+    deepMerge(TeamPlayerMap[team], player);
 }
 //# sourceMappingURL=team.js.map

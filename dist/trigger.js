@@ -19,6 +19,9 @@ export class TriggerManager {
             }
         }
     }
+    static setTriggers(triggers) {
+        this.triggers = triggers;
+    }
 }
 export class DamageTrigger extends Trigger {
     static event = "DamageTrigger";
@@ -26,10 +29,4 @@ export class DamageTrigger extends Trigger {
         super(action, "DamageTrigger");
     }
 }
-// export class RoundTrigger extends Trigger {
-//     static event = "RoundTrigger";
-//     constructor(action: (round: number) => void) {
-//         super(action, "RoundTrigger");
-//     }
-// }
 //# sourceMappingURL=trigger.js.map

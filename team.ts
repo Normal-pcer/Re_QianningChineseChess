@@ -1,4 +1,5 @@
 import { Player } from "./player.js";
+import { deepMerge } from "./utils.js";
 
 export class Team {
     static Red = "red";
@@ -27,6 +28,6 @@ export function getPlayerFromTeam(team: string) {
     return TeamPlayerMap[team] ?? TeamPlayerMap[Team.None];
 }
 
-export function setPlayerFromTeam(team: string, player: Player) {
-    TeamPlayerMap[team] = player;
+export function mergePlayerFromTeam(team: string, player: Player) {
+    deepMerge(TeamPlayerMap[team], player)
 }

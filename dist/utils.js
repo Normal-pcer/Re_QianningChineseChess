@@ -1,9 +1,9 @@
+function isObject(obj) {
+    return typeof obj === "object" && obj !== null;
+}
 export function deepCopy(target) {
     const map = new WeakMap();
     const stack = new Set();
-    function isObject(obj) {
-        return typeof obj === "object" && obj !== null;
-    }
     function cloneData(data) {
         if (!isObject(data))
             return data;
@@ -19,7 +19,7 @@ export function deepCopy(target) {
             return result;
         }
         if (typeof data === "function")
-            return generateSafeFunction(data);
+            return data;
         if (stack.has(data)) {
             throw new Error("Cannot clone object with circular reference");
         }
@@ -69,5 +69,72 @@ export function deepCopy(target) {
 }
 export function notNull(value) {
     return value !== null && value !== undefined;
+}
+export function deepMerge(target, source, removeExtraArrayItems = false) {
+    const stack = new Set();
+    /**
+     * @returns 是否可以合并
+     */
+    function mergeData(target, source) {
+        if (!isObject(source) || !isObject(target))
+            return false;
+        if (source instanceof Array && target instanceof Array) {
+            if (removeExtraArrayItems) {
+                if (source.length > target.length) {
+                    target.length = source.length;
+                }
+            }
+            for (let i = 0; i < source.length; i++) {
+                if (!mergeData(target[i], source[i])) {
+                    target[i] = source[i];
+                }
+            }
+            return true;
+        }
+        if (source instanceof HTMLElement && target instanceof HTMLElement) {
+            return false;
+        }
+        if (source instanceof Date && target instanceof Date) {
+            return false;
+        }
+        if (source instanceof RegExp && target instanceof RegExp) {
+            return false;
+        }
+        if (source instanceof Map && target instanceof Map) {
+            source.forEach((value, key) => {
+                let mergedValue = mergeData(target.get(key), value);
+                target.set(key, mergedValue ? mergedValue : value);
+            });
+            return true;
+        }
+        if (source instanceof Set && target instanceof Set) {
+            return false;
+        }
+        if (stack.has(source)) {
+            throw new Error("循环引用的对象");
+        }
+        stack.add(source);
+        let keys = Reflect.ownKeys(source); // source 中所有的键名
+        keys.forEach((key) => {
+            const value = source[key];
+            if (isObject(value)) {
+                if (target[key]) {
+                    // 如果已经存在
+                    mergeData(target[key], value);
+                }
+                else {
+                    // 不存在，直接赋值
+                    target[key] = value;
+                }
+            }
+            else {
+                // 如果不是对象，直接赋值
+                target[key] = value;
+            }
+        });
+        stack.delete(source);
+        return true;
+    }
+    mergeData(target, source);
 }
 //# sourceMappingURL=utils.js.map

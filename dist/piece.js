@@ -6,7 +6,7 @@ import { defaultPieceConfigs } from "./defaultPieceConfig.js";
 import { Damage } from "./damage.js";
 import { DamageType } from "./damageType.js";
 import { Team } from "./team.js";
-import { AttributeProvider, NumberAttributeProvider, } from "./attributeProvider.js";
+import { AttributeProvider, NumberAttributeProvider } from "./attributeProvider.js";
 import { registerAnonymous } from "./callbackRegister.js";
 import { schedule } from "./schedule.js";
 import { fixedRandom } from "./random.js";
@@ -112,9 +112,9 @@ class Piece {
                     this.effects.splice(this.effects.indexOf(exist), 1);
                     this.effects.push(higherLevel);
                     if (lowerLevel.expire > higherLevel.expire) {
-                        schedule(higherLevel.expire + 1, () => {
+                        schedule(() => {
                             this.pushEffects(lowerLevel);
-                        });
+                        }, higherLevel.expire + 1);
                     }
                 }
             }
