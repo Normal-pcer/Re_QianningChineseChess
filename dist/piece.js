@@ -11,7 +11,7 @@ import { registerAnonymous } from "./callbackRegister.js";
 import { schedule } from "./schedule.js";
 import { fixedRandom } from "./random.js";
 import { round } from "./round.js";
-const damageFloatLimit = 0.05;
+const damageFloatLimit = 0.02;
 const defaultAttackActionCallback = registerAnonymous((piece, target) => {
     if (target.team === piece.team)
         return false;

@@ -7,7 +7,6 @@ import { Damage } from "./damage.js";
 import { DamageType } from "./damageType.js";
 import { Team } from "./team.js";
 import {
-    AttributeModifier,
     AttributeProvider,
     NumberAttributeProvider,
 } from "./attributeProvider.js";
@@ -17,7 +16,7 @@ import { schedule } from "./schedule.js";
 import { fixedRandom } from "./random.js";
 import { round } from "./round.js";
 
-const damageFloatLimit = 0.05;
+const damageFloatLimit = 0.02;
 
 const defaultAttackActionCallback = registerAnonymous((piece: Piece, target: Piece) => {
     if (target.team === piece.team) return false;
