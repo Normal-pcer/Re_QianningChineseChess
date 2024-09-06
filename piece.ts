@@ -17,6 +17,8 @@ import { schedule } from "./schedule.js";
 import { fixedRandom } from "./random.js";
 import { round } from "./round.js";
 
+const damageFloatLimit = 0.05;
+
 const defaultAttackActionCallback = registerAnonymous((piece: Piece, target: Piece) => {
     if (target.team === piece.team) return false;
     let damageAmount = piece.attackDamage.result;
@@ -24,7 +26,18 @@ const defaultAttackActionCallback = registerAnonymous((piece: Piece, target: Pie
         fixedRandom("criticalCheck", round, piece.position.toString(), target.position.toString()) <
         piece.criticalRate.result;
     if (isCritical) damageAmount *= piece.criticalDamage.result + 1;
-    let damageObject = new Damage(piece.damageType, damageAmount, piece, target, isCritical);
+    let float =
+        fixedRandom("damageFloat", round, piece.position.toString(), target.position.toString()) *
+            damageFloatLimit *
+            2 +
+        (1 - damageFloatLimit);
+    let damageObject = new Damage(
+        piece.damageType,
+        damageAmount * float,
+        piece,
+        target,
+        isCritical
+    );
     damageObject.apply();
     return true;
 });
