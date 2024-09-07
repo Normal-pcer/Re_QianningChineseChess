@@ -7,7 +7,7 @@ import { DefaultMovingBehaviors, filterGrids } from "./defaultMovingBehaviors.js
 import { getCallback, getCallbackRegistryKey } from "./callbackRegister.js";
 import { Trigger, TriggerManager } from "./trigger.js";
 import { _schedules, Schedule } from "./schedule.js";
-import { Effect } from "./effect.js";
+import { StatusEffect } from "./effect.js";
 
 const saves: Save[] = [];
 
@@ -135,7 +135,7 @@ export function recall() {
 
             mergePlayerFromTeam(Team.Red, lastSave.players[Team.Red]);
             mergePlayerFromTeam(Team.Black, lastSave.players[Team.Black]);
-            deepMerge(pieces, lastSave.pieces);
+            deepMerge(pieces, lastSave.pieces, true);
             setRound(lastSave.round);
 
             nextRound();

@@ -2,13 +2,12 @@ import { AttributeModifier } from "./attributeProvider.js";
 import { registerAnonymous, registerCallback } from "./callbackRegister.js";
 import { returnCardById } from "./cardLooting.js";
 import { filterGrids, ray } from "./defaultMovingBehaviors.js";
-import { Effect } from "./effect.js";
+import { StatusEffect } from "./effect.js";
 import { StrengthEffectTemplate, WeaknessEffectTemplate } from "./effectTemplate.js";
 import { Piece, pieces, PieceType } from "./piece.js";
 import {
     getCurrentSelection,
     ItemType,
-    SelectedItem,
     SelectionManager,
     setCurrentSelection,
     SingleSelection,
@@ -98,7 +97,9 @@ export const highGunActionCard = singleTargetSelectorTemplate(
     (piece) => {
         let modifier = new AttributeModifier(highGunAttackCallback);
         piece.attackingTargetsCallback.area(0).modify(modifier);
-        let effect = new Effect("高射炮", "highGun", "下一次攻击允许隔至多两个棋子", [modifier]);
+        let effect = new StatusEffect("高射炮", "highGun", "下一次攻击允许隔至多两个棋子", [
+            modifier,
+        ]);
         piece.pushEffects(effect);
         let pieceElement = piece.htmlElement;
         TriggerManager.addTrigger(
@@ -126,9 +127,12 @@ export const limitlessHorseActionCard = singleTargetSelectorTemplate(
     (result) => {
         let piece = result;
         let modifier = new AttributeModifier(limitlessHorseAttackCallback, 3 * 2);
-        let effect = new Effect("一马平川", "limitlessHorse", "马的行动不再受「蹩马腿」限制", [
-            modifier,
-        ]);
+        let effect = new StatusEffect(
+            "一马平川",
+            "limitlessHorse",
+            "马的行动不再受「蹩马腿」限制",
+            [modifier]
+        );
         piece.pushEffects(effect);
         piece.attackingTargetsCallback.area(0).modify(modifier);
         piece.movingDestinationsCallback.area(0).modify(modifier);
@@ -197,7 +201,7 @@ export const superLaughingActionCard = singleTargetSelectorTemplate(
         let modifier = new AttributeModifier((piece_: Piece) => {
             return filterGrids((pos) => false);
         }, 3 * 2);
-        let effect = new Effect("忍俊不禁", "superLaughing", "不能主动移动和攻击", [
+        let effect = new StatusEffect("忍俊不禁", "superLaughing", "不能主动移动和攻击", [
             modifier,
         ]).setAsNegative();
         piece.pushEffects(effect);
@@ -214,7 +218,7 @@ export const withBellAndTripodActionCard = singleTargetSelectorTemplate(
     (result) => {
         let piece = result;
         let modifier = new AttributeModifier(60, 3 * 2);
-        let effect = new Effect("戴钟之鼎", "withBellAndTripod", "重量提升6000%", [modifier]);
+        let effect = new StatusEffect("戴钟之鼎", "withBellAndTripod", "重量提升6000%", [modifier]);
         piece.weight.area(1).modify(modifier);
         piece.pushEffects(effect);
     }
@@ -228,7 +232,9 @@ export const determinedResistanceActionCard = singleTargetSelectorTemplate(
     (result) => {
         let piece = result;
         let modifier = new AttributeModifier(0.12, 3 * 2);
-        let effect = new Effect("决意流博", "determinedResistance", "暴击率提升12%", [modifier]);
+        let effect = new StatusEffect("决意流博", "determinedResistance", "暴击率提升12%", [
+            modifier,
+        ]);
         piece.criticalRate.area(0).modify(modifier);
         piece.pushEffects(effect);
     }

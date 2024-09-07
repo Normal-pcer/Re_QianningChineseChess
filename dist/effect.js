@@ -15,7 +15,7 @@ const toRomanNumber = (number) => {
         tens[Math.floor((number % 100) / 10)] +
         ones[Math.floor(number % 10)]);
 };
-export class Effect {
+export class StatusEffect {
     name = "";
     id = "";
     description = "";

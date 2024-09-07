@@ -33,19 +33,72 @@ export function modifyPieces(newList) {
     pieces = newList;
 }
 class Piece {
+    /**
+     * 棋子的阵营，为Team枚举值(team.ts)中的一个。
+     * Team.Red表示红方，Team.Black表示黑方，Team.None表示无阵营（仅用于特殊棋子）。
+     */
     team;
+    /**
+     * 棋子的类型，为PieceType枚举值(当前文件下方)中的一个。
+     * 例如：PieceType.Horse表示「马」
+     */
     type;
+    /**
+     * 棋子所处的位置，为Position对象(position.ts)。
+     */
     position;
+    /**
+     * 棋子的HTML元素，为HTMLElement对象，可以为空。
+     * 如果为空时，包括点击事件在内的一些交互功能将不可用。
+     */
     htmlElement;
+    /**
+     * 棋子的HTML元素的ID，为字符串，可以为空。
+     * 仅在一些不能存储HTMLElement对象的场合使用。
+     */
     htmlElementId;
+    /**
+     * 棋子的生命值。
+     *
+     * TODO 更改为Getter和Setter，用于防止溢出、增加生命值上限时自动提升等。
+     */
     health = 0;
+    /**
+     * 棋子是否已经死亡
+     */
     dead = false;
+    /**
+     * 棋子的最大生命值，为一个数值提供器(attributeProvider.ts)。
+     */
     maxHealth = new NumberAttributeProvider(0);
+    /**
+     * 棋子的攻击力，为一个数值提供器(attributeProvider.ts)。
+     */
     attackDamage = new NumberAttributeProvider(0);
+    /**
+     * 棋子的防御力，为一个数值提供器(attributeProvider.ts)。
+     * 防御力会降低棋子受到的伤害，计算方式见damage.ts。
+     */
     defense = new NumberAttributeProvider(0);
+    /**
+     * 棋子的暴击率，为一个数值提供器(attributeProvider.ts)。
+     * 暴击率表示棋子攻击时暴击的概率。1表示一定暴击，0表示不可能暴击。
+     */
     criticalRate = new NumberAttributeProvider(0);
+    /**
+     * 棋子的暴击伤害倍率，为一个数值提供器(attributeProvider.ts)。
+     * 暴击伤害倍率表示棋子暴击时伤害的加成。0表示暴击伤害等于普通伤害，1表示暴击伤害是普通伤害的两倍。
+     * 暴击增伤在攻击力之后结算。
+     */
     criticalDamage = new NumberAttributeProvider(0);
+    /**
+     * 棋子的重量，为一个数值提供器(attributeProvider.ts)。
+     * 重量会影响棋子被击退的行为。重量高的棋子有更高的概率减免击退，见defaultDamageBehavior.ts。
+     */
     weight = new NumberAttributeProvider(0);
+    /**
+     * 棋子的伤害类型，为DamageType枚举值(damageType.ts)中的一个。
+     */
     damageType = DamageType.None;
     movingDestinationsCallback;
     attackingTargetsCallback;

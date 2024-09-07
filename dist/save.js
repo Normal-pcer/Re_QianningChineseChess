@@ -108,7 +108,7 @@ export function recall() {
             // });
             mergePlayerFromTeam(Team.Red, lastSave.players[Team.Red]);
             mergePlayerFromTeam(Team.Black, lastSave.players[Team.Black]);
-            deepMerge(pieces, lastSave.pieces);
+            deepMerge(pieces, lastSave.pieces, true);
             setRound(lastSave.round);
             nextRound();
         }

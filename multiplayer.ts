@@ -10,14 +10,18 @@ import { initCardLooting, lootCard } from "./cardLooting.js";
 import { loadSave, recall, saveCurrent, storeSave } from "./save.js";
 import { registerCallback } from "./callbackRegister.js";
 import { showDefaultPiece } from "./pieceFrame.js";
-import { Effect } from "./effect.js";
+import { StatusEffect } from "./effect.js";
 import { DamageTrigger, TriggerManager } from "./trigger.js";
 import { random, seed } from "./random.js";
 
+// 初始化模块
 seed();
 initDefaultMovingBehaviors();
 initCardLooting();
 
+/**
+ * 游戏结束,并显示胜利者
+ */
 export function stop(victor: string) {
     Selection.setCurrentSelection(null);
     let victor_tip_bar = document.querySelector("#victor-tip span");
@@ -25,15 +29,16 @@ export function stop(victor: string) {
 }
 
 window.onload = () => {
-    // deepCopy([1, 2, 3]);
+    // 显示游戏界面
     let container = document.getElementById("game-container");
     if (container !== null) container.style.display = "block";
-    putPieces();
+    putPieces(); // 放置棋子
 
     Selection.setCurrentSelection(Selection.MainSelection);
 
     Position._calculateGameboardSize();
 
+    // 注册棋盘点击事件
     let gameboard = document.getElementById("gameboard");
     if (gameboard instanceof HTMLElement)
         gameboard.onclick = (event) => {
@@ -41,18 +46,25 @@ window.onload = () => {
             return Selection.onGameboardClick(pos);
         };
 
+    // 初始化棋子
     pieces.forEach((piece) => {
         piece.init();
     });
-
     registerCallback(pieces[0].attackActionCallback.result, "defaultAttackActionCallback");
 
     TriggerManager.addTrigger(
+        // 注册触发器，用于触发御守三晖状态效果
         new DamageTrigger((damage) => {
+            // 如果「将」被攻击
             if (damage.target?.type === PieceType.Master) {
+                /**
+                 * x从0到3141.5，防御力增量从0到300%；x足够大时，防御力增量固定为300%。
+                 * 前半段曲线为余弦函数，后半段曲线为直线。
+                 */
                 const defenseImproveCalculation = (x: number) => {
                     return x >= 1000 * Math.PI ? 3 : -1.5 * Math.cos(x / 1000) + 1.5;
-                }; // 随便弄的
+                };
+                // x从0到3000，防御力增量次数从0到3；x足够大时，防御力增量次数固定为3。
                 const defenseLastCalculation = (x: number) => {
                     return x >= 3000 ? 3 : Math.ceil(x / 1000);
                 };
@@ -61,9 +73,9 @@ window.onload = () => {
                 let last = defenseLastCalculation(damage.amount);
                 console.log("defense: ", defense);
 
-                if (last === 0) return;
+                if (last === 0) return; // 伤害过低（<0.5）无需触发御守三晖
                 damage.target.pushEffects(
-                    new Effect(
+                    new StatusEffect(
                         "御守三晖",
                         "masterSelfDefense",
                         `防御力提升${Math.round(defense * 100)}%`,
@@ -78,7 +90,7 @@ window.onload = () => {
             }
         })
     );
-
+    // 作弊框相关内容
     let submit_cheating = document.getElementById("submit-cheating");
     if (submit_cheating instanceof HTMLElement)
         submit_cheating.onclick = (event) => {
@@ -105,8 +117,8 @@ window.onload = () => {
                 loadSave();
             }
         };
-
-    // 开局三回合攻击无效，避免开局打马
+    // 注册初始之护状态效果，用于防止开局打马
+    // 对于所有棋子，提升11000点防御力，持续3回合
     let newDefenseModifiers: AttributeModifier<number>[] = [];
     pieces.forEach((piece) => {
         newDefenseModifiers.push(new AttributeModifier(11000, 3 * 2));
@@ -114,10 +126,15 @@ window.onload = () => {
     });
     pieces.forEach((piece) => {
         piece.pushEffects(
-            new Effect("初始之护", "initialProtection", "提升11000点防御力", newDefenseModifiers)
+            new StatusEffect(
+                "初始之护",
+                "initialProtection",
+                "提升11000点防御力",
+                newDefenseModifiers
+            )
         );
     });
-
+    // 注册按钮的点击事件
     (document.getElementById("loot-card-button") as HTMLElement).onclick = () => {
         lootCard();
         getPlayerFromTeam(getCurrentTeam()).showActionCards();
@@ -143,16 +160,16 @@ window.onload = () => {
     (document.getElementById("action-bar") as HTMLElement).onclick = (event) => {
         Selection.cancelCurrentSelection();
     };
-
+    // 第零轮开始
     saveCurrent();
     showDefaultPiece();
 };
 
 // 当页面大小改变
 window.onresize = () => {
-    Position._calculateGameboardSize();
+    Position._calculateGameboardSize(); // 重新计算棋盘大小
     pieces.forEach((piece) => {
-        piece.draw();
+        piece.draw(); // 重新绘制棋子，移动到正确的位置
     });
 };
 

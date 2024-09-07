@@ -1,9 +1,9 @@
 import { AttributeModifier } from "./attributeProvider.js";
-import { Effect } from "./effect.js";
+import { StatusEffect } from "./effect.js";
 import { Piece } from "./piece.js";
 import { round } from "./round.js";
 
-export class EffectTemplate {
+export class StatusEffectTemplate {
     name: string;
     id: string;
     descriptionCallback: (level: number) => string;
@@ -41,7 +41,7 @@ export class EffectTemplate {
             level,
             expireOffset !== null ? expireOffset + round + expire : expire
         );
-        let effect = new Effect(
+        let effect = new StatusEffect(
             this.name,
             this.id,
             this.descriptionCallback(level),
@@ -56,7 +56,7 @@ export class EffectTemplate {
     }
 }
 
-export const StrengthEffectTemplate = new EffectTemplate(
+export const StrengthEffectTemplate = new StatusEffectTemplate(
     "力量",
     "strength",
     (level) => `攻击力提升${Math.round(5 + level * 10)}%`,
@@ -69,7 +69,7 @@ export const StrengthEffectTemplate = new EffectTemplate(
     }
 );
 
-export const WeaknessEffectTemplate = new EffectTemplate(
+export const WeaknessEffectTemplate = new StatusEffectTemplate(
     "虚弱",
     "weakness",
     (level) => `攻击力降低${Math.round(10 + level * 10)}%`,

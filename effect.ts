@@ -19,7 +19,7 @@ const toRomanNumber = (number: number) => {
     );
 };
 
-export class Effect {
+export class StatusEffect {
     name: string = "";
     id: string = "";
     description: string = "";
