@@ -2,7 +2,7 @@ import { Piece } from "./piece.js";
 import { DamageType } from "./damageType.js";
 import { Vector2 } from "./vector.js";
 import { Position } from "./position.js";
-import { fixedRandom } from "./random.js";
+import { fixedRandom, random } from "./random.js";
 import { round } from "./round.js";
 
 export const defaultQuasiMoveTargets: {
@@ -22,7 +22,7 @@ export const defaultQuasiMoveTargets: {
         /*prettier-ignore*/
         while (steps --> 0) {
                 let integer_position = position.integerGrid(-0.05, -0.05, true);
-                if (integer_position.piece === null) return integer_position;
+                if (integer_position.owner === null) return integer_position;
                 position = Position.of(Vector2.of(position).sub(step));
             }
 
@@ -42,7 +42,7 @@ const positionAvailable = (position: Position) => {
         position.x < 9 &&
         0 <= position.y &&
         position.y < 10 &&
-        position.piece === null
+        position.owner === null
     );
 };
 
@@ -75,7 +75,7 @@ function correctDistanceByWeight(distance: number, weight: number) {
     console.log("reduceProbability: " + reduceProbability);
     let result = 0;
     for (let i = 1; i <= distance; i++) {
-        if (fixedRandom("repelDistanceReduceJudgement", round, i) > reduceProbability) {
+        if (random() > reduceProbability) {
             result++;
         }
     }

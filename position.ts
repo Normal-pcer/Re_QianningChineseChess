@@ -1,6 +1,7 @@
 import { pieces, Piece } from "./piece.js";
 import { PositionedItem } from "./positionedItem.js";
 
+// 用于计算屏幕坐标的量
 var gameboardRealWidth: number;
 var gameboardRealHeight: number;
 var gameboardLeftTopX: number;
@@ -16,17 +17,26 @@ const gameboardImageMarginLeft = 39 / 545;
 
 export class Position extends PositionedItem {
     /**
-     * 用于统一屏幕坐标和棋盘坐标
-     * @param {number} x
-     * @param {number} y
-     * @property {number} screenX
-     * @property {number} screenY
-     * @property {number} gridX
-     * @property {number} gridY
+     * 屏幕坐标的X轴，单位为像素。
+     * 请不要直接访问这个值，而是通过screenX访问器访问，否则可能会获得未更新的坐标或NaN。
      */
     private _screenX: number = NaN;
+    /**
+     * 屏幕坐标的Y轴，单位为像素。
+     * 请不要直接访问这个值，而是通过screenY访问器访问，否则可能会获得未更新的坐标或NaN。
+     */
     private _screenY: number = NaN;
+    /**
+     * 网格坐标的X轴，单位为格点。
+     * 网格坐标不会随着屏幕坐标的变化而变化。
+     * 构造函数会自动将屏幕坐标转换为网格坐标，所以该值实际上不会为NaN。
+     */
     x: number = NaN;
+    /**
+     * 网格坐标的Y轴，单位为格点。
+     * 网格坐标不会随着屏幕坐标的变化而变化。
+     * 构造函数会自动将屏幕坐标转换为网格坐标，所以该值实际上不会为NaN。
+     */
     y: number = NaN;
 
     constructor(x: number, y: number, grid = true) {
@@ -38,12 +48,12 @@ export class Position extends PositionedItem {
         }
     }
 
+    /**
+     * 重新计算棋盘的大小，以进行正确的坐标转换。
+     * 该方法会在查询屏幕坐标时自动调用，无需手动调用。
+     */
     static _calculateGameboardSize = () => {
         // 读取棋盘图片实际显示大小
-        // let gameboardImage = document
-        //     .getElementById("gameboard")
-        //     .getElementsByClassName("background")[0]
-        //     .getElementsByTagName("img")[0];
         let gameboardImage = document.querySelector(
             "#gameboard .background img"
         ) as HTMLImageElement;
@@ -161,7 +171,7 @@ export class Position extends PositionedItem {
     /**
      * @returns {Piece?}
      */
-    get piece() {
+    get owner() {
         for (let piece of pieces) {
             if (piece.position.x == this.x && piece.position.y == this.y) {
                 return piece;
@@ -172,10 +182,10 @@ export class Position extends PositionedItem {
 
     toString() {
         if (0 <= this.x && this.x <= 8 && 0 <= this.y && this.y <= 9) {
-            let letterX = String.fromCharCode('A'.charCodeAt(0) + this.x);
+            let letterX = String.fromCharCode("A".charCodeAt(0) + this.x);
             let numberY = this.y.toString();
             return letterX + numberY;
         }
-        return `(${this.x}, ${this.y})`
+        return `(${this.x}, ${this.y})`;
     }
 }

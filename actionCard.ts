@@ -1,6 +1,8 @@
 import { AttributeModifier } from "./attributeProvider.js";
 import { registerAnonymous, registerCallback } from "./callbackRegister.js";
 import { returnCardById } from "./cardLooting.js";
+import { Damage } from "./damage.js";
+import { DamageType } from "./damageType.js";
 import { filterGrids, ray } from "./defaultMovingBehaviors.js";
 import { StatusEffect } from "./effect.js";
 import { StrengthEffectTemplate, WeaknessEffectTemplate } from "./effectTemplate.js";
@@ -102,10 +104,12 @@ export const highGunActionCard = singleTargetSelectorTemplate(
         ]);
         piece.pushEffects(effect);
         let pieceElement = piece.htmlElement;
+
+        // 添加触发器，当棋子主动攻击时移除效果。
         TriggerManager.addTrigger(
             new DamageTrigger((damage) => {
                 if (damage.source?.htmlElement === pieceElement && pieceElement != null) {
-                    effect.enabled = false; // 攻击一次就失效
+                    effect.enabled = false;
                 }
             })
         );
@@ -135,7 +139,7 @@ export const limitlessHorseActionCard = singleTargetSelectorTemplate(
         );
         piece.pushEffects(effect);
         piece.attackingTargetsCallback.area(0).modify(modifier);
-        piece.movingDestinationsCallback.area(0).modify(modifier);
+        piece.movingDestinationsCallbackProvider.area(0).modify(modifier);
     }
 );
 
@@ -205,7 +209,7 @@ export const superLaughingActionCard = singleTargetSelectorTemplate(
             modifier,
         ]).setAsNegative();
         piece.pushEffects(effect);
-        piece.movingDestinationsCallback.area(0).modify(modifier);
+        piece.movingDestinationsCallbackProvider.area(0).modify(modifier);
         piece.attackingTargetsCallback.area(0).modify(modifier);
     }
 );
@@ -237,5 +241,71 @@ export const determinedResistanceActionCard = singleTargetSelectorTemplate(
         ]);
         piece.criticalRate.area(0).modify(modifier);
         piece.pushEffects(effect);
+    }
+);
+
+const areaGunAttackActionCallback = registerAnonymous((thisPiece: Piece, targetCenter: Piece) => {
+    const applyDamageToEnemyOnly = (damageObject: Damage) => {
+        if (damageObject.target.team === damageObject.source?.team) return false;
+        else {
+            damageObject.apply();
+            return true;
+        }
+    };
+
+    const spreadDamageScale = 0.4;
+    const spreadDamageType = DamageType.Ranged;
+
+    let centerPosition = targetCenter.position;
+    let nearbyPositions = [
+        centerPosition.add(new Vector2(0, 1)),
+        centerPosition.add(new Vector2(0, -1)),
+        centerPosition.add(new Vector2(1, 0)),
+        centerPosition.add(new Vector2(-1, 0)),
+    ];
+
+    let targets = nearbyPositions
+        .map((pos) => {
+            return pos.owner;
+        })
+        .filter((piece) => piece != null);
+
+    let centerDamageObject = thisPiece.SimulateAttack(targetCenter);
+    // 模拟一个与中心棋子重合的虚拟棋子，直接使用中心棋子作为攻击源会识别成攻击队友
+    let explosionCenter = Piece.virtualPiece(centerPosition);
+    explosionCenter.team = thisPiece.team; // 正确标识队伍，而不是None
+    let spreadDamageObjects = targets.map((target) => {
+        let object = thisPiece.SimulateAttack(target);
+        object.amount *= spreadDamageScale;
+        object.type = spreadDamageType;
+        object.source = explosionCenter;
+        return object;
+    });
+
+    // 先攻击外围，为击退腾出空间
+    spreadDamageObjects.forEach(applyDamageToEnemyOnly);
+    return applyDamageToEnemyOnly(centerDamageObject);
+}, "areaGunAttackActionCallback");
+
+export const areaGunActionCard = singleTargetSelectorTemplate(
+    "威震四方",
+    "areaGun",
+    "一次性-选中的「炮」造成会造成范围伤害",
+    PieceType.Gun,
+    (result) => {
+        let piece = result;
+        let modifier = new AttributeModifier(areaGunAttackActionCallback);
+        piece.attackActionCallbackProvider.area(0).modify(modifier);
+        let effect = new StatusEffect("威震四方", "areaGun", "下一次攻击造成范围伤害", [modifier]);
+        piece.pushEffects(effect);
+
+        // 添加触发器，在主动攻击后移除效果，达到一次性使用。
+        TriggerManager.addTrigger(
+            new DamageTrigger((damage) => {
+                if (damage.source === piece) {
+                    effect.enabled = false;
+                }
+            })
+        );
     }
 );

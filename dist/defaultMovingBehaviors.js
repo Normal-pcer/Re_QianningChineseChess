@@ -66,7 +66,7 @@ export function ray(origin, direction, barriers_max = 0, barriers_min = -1) {
     while (GridAvailable(pos)) {
         if (barriersCount >= barriers_min && barriersCount <= barriers_max)
             grids.push(pos);
-        if (pos.piece != null) {
+        if (pos.owner != null) {
             barriersCount++;
             if (barriersCount > barriers_max) {
                 break;
@@ -99,7 +99,7 @@ export class DefaultMovingBehaviors {
         console.log(piece);
         return DefaultMovingBehaviors.master(piece).concat(ray(piece.position, new Vector2(0, 1))
             .concat(ray(piece.position, new Vector2(0, -1)))
-            .filter((pos) => pos.piece != null && pos.piece.type === PieceType.Master));
+            .filter((pos) => pos.owner != null && pos.owner.type === PieceType.Master));
     };
     static guard = (piece) => {
         let team = piece.team;
@@ -115,7 +115,7 @@ export class DefaultMovingBehaviors {
                 piece.position.chebyshevDistance(pos) == 2) {
                 let pointer = Vector2.point(piece.position, pos);
                 let check = piece.position.add(pointer.div(2));
-                return check.piece === null;
+                return check.owner === null;
             }
             return false;
         }, config);
@@ -125,7 +125,7 @@ export class DefaultMovingBehaviors {
             if (piece.position.manhattanDistance(pos) != 3 ||
                 piece.position.chebyshevDistance(pos) != 2)
                 return false;
-            let neighbors = filterGrids((pos) => piece.position.manhattanDistance(pos) == 1 && pos.piece !== null);
+            let neighbors = filterGrids((pos) => piece.position.manhattanDistance(pos) == 1 && pos.owner !== null);
             let pointer = Vector2.point(piece.position, pos);
             return !neighbors.some((neighbor) => pointer.dot(Vector2.point(piece.position, neighbor)) == 2);
         });
@@ -134,7 +134,7 @@ export class DefaultMovingBehaviors {
         return ray(piece.position, new Vector2(1, 0)).concat(ray(piece.position, new Vector2(-1, 0)), ray(piece.position, new Vector2(0, 1)), ray(piece.position, new Vector2(0, -1)));
     };
     static gunMove = (piece) => {
-        return DefaultMovingBehaviors.chariot(piece).filter((pos) => pos.piece === null);
+        return DefaultMovingBehaviors.chariot(piece).filter((pos) => pos.owner === null);
     };
     static gunAttack = (piece) => {
         return ray(piece.position, new Vector2(1, 0), 1).concat(ray(piece.position, new Vector2(-1, 0), 1), ray(piece.position, new Vector2(0, 1), 1), ray(piece.position, new Vector2(0, -1), 1));

@@ -41,7 +41,6 @@ export class Damage {
     isCritical: boolean = false;
     quasiMoveTarget: (piece: Piece, target: Piece) => Position;
     repelTarget: (piece: Piece, target: Piece) => Position;
-    realAmount: number = 0; /*计算目标的防御力*/
 
     constructor(
         type: DamageType,
@@ -59,7 +58,14 @@ export class Damage {
         this.isCritical = isCritical;
         this.quasiMoveTarget = quasiMoveTarget ?? defaultQuasiMoveTargets[type];
         this.repelTarget = repelTarget ?? defaultRepelTargets[type];
-        this.realAmount = amount * (target ? Math.pow(2, -target.defense.result / 1000) : 1);
+    }
+
+    /**
+     * 获取计算目标防御力的实际伤害值，即目标扣血量。
+     * 计算公式：实际伤害 = 伤害值 * (1/2)^(目标防御力/1000)
+     */
+    get realAmount() {
+        return this.amount * Math.pow(2, -this.target.defense.result / 1000);
     }
 
     public apply() {
@@ -74,6 +80,6 @@ export class Damage {
         }
         TriggerManager.trigger(DamageTrigger.event, this);
         this.target?.draw();
-        showEffect(this, position);
+        showEffect(this, this.target.position);
     }
 }

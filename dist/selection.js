@@ -258,7 +258,7 @@ export const MainSelection = new SelectionManager(new SingleSelection([], ItemTy
     showPiece(selectedPiece);
     return new SingleSelection(validMove.concat(validTarget), ItemType.Grid, "请选择要移动到的位置", (selectedGrid) => {
         let pos = selectedGrid.data;
-        if (pos.integerGrid().piece !== null) {
+        if (pos.integerGrid().owner !== null) {
             return validTarget.some((item) => item.nearby(pos));
         }
         else {
@@ -270,9 +270,9 @@ export const MainSelection = new SelectionManager(new SingleSelection([], ItemTy
     let selectedPiece = results[0].data;
     let selectedTarget = results[1].data.integerGrid();
     let success = false;
-    if (selectedTarget.piece !== null) {
-        success = selectedPiece.attack(selectedTarget.piece);
-        console.log(selectedPiece, "attack", selectedTarget.piece, success);
+    if (selectedTarget.owner !== null) {
+        success = selectedPiece.attack(selectedTarget.owner);
+        console.log(selectedPiece, "attack", selectedTarget.owner, success);
     }
     else {
         success = selectedPiece.move(selectedTarget);

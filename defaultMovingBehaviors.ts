@@ -72,7 +72,7 @@ export function ray(origin: Position, direction: Vector2, barriers_max = 0, barr
     if (barriers_min == -1) barriers_min = barriers_max;
     while (GridAvailable(pos)) {
         if (barriersCount >= barriers_min && barriersCount <= barriers_max) grids.push(pos);
-        if (pos.piece != null) {
+        if (pos.owner != null) {
             barriersCount++;
             if (barriersCount > barriers_max) {
                 break;
@@ -113,7 +113,7 @@ export class DefaultMovingBehaviors {
         return DefaultMovingBehaviors.master(piece).concat(
             ray(piece.position, new Vector2(0, 1))
                 .concat(ray(piece.position, new Vector2(0, -1)))
-                .filter((pos) => pos.piece != null && pos.piece.type === PieceType.Master)
+                .filter((pos) => pos.owner != null && pos.owner.type === PieceType.Master)
         );
     };
 
@@ -138,7 +138,7 @@ export class DefaultMovingBehaviors {
             ) {
                 let pointer = Vector2.point(piece.position, pos);
                 let check = piece.position.add(pointer.div(2));
-                return check.piece === null;
+                return check.owner === null;
             }
             return false;
         }, config);
@@ -152,7 +152,7 @@ export class DefaultMovingBehaviors {
             )
                 return false;
             let neighbors = filterGrids(
-                (pos) => piece.position.manhattanDistance(pos) == 1 && pos.piece !== null
+                (pos) => piece.position.manhattanDistance(pos) == 1 && pos.owner !== null
             );
             let pointer = Vector2.point(piece.position, pos);
             return !neighbors.some(
@@ -170,7 +170,7 @@ export class DefaultMovingBehaviors {
     };
 
     static gunMove = (piece: Piece) => {
-        return DefaultMovingBehaviors.chariot(piece).filter((pos) => pos.piece === null);
+        return DefaultMovingBehaviors.chariot(piece).filter((pos) => pos.owner === null);
     };
 
     static gunAttack = (piece: Piece) => {

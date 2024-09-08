@@ -11,20 +11,15 @@ import { registerAnonymous } from "./callbackRegister.js";
 import { schedule } from "./schedule.js";
 import { fixedRandom } from "./random.js";
 import { round } from "./round.js";
+/**
+ * 伤害浮动范围。伤害浮动在暴击之后结算，会影响Damage对象的amount属性。
+ * 0.02表示伤害浮动会造成原始伤害的98%到102%。
+ */
 const damageFloatLimit = 0.02;
 const defaultAttackActionCallback = registerAnonymous((piece, target) => {
     if (target.team === piece.team)
-        return false;
-    let damageAmount = piece.attackDamage.result;
-    let isCritical = fixedRandom("criticalCheck", round, piece.position.toString(), target.position.toString()) <
-        piece.criticalRate.result;
-    if (isCritical)
-        damageAmount *= piece.criticalDamage.result + 1;
-    let float = fixedRandom("damageFloat", round, piece.position.toString(), target.position.toString()) *
-        damageFloatLimit *
-        2 +
-        (1 - damageFloatLimit);
-    let damageObject = new Damage(piece.damageType, damageAmount * float, piece, target, isCritical);
+        return false; // 不能攻击友军
+    let damageObject = piece.SimulateAttack(target);
     damageObject.apply();
     return true;
 });
@@ -94,23 +89,42 @@ class Piece {
     /**
      * 棋子的重量，为一个数值提供器(attributeProvider.ts)。
      * 重量会影响棋子被击退的行为。重量高的棋子有更高的概率减免击退，见defaultDamageBehavior.ts。
+     * 重量**不会**影响棋子的主动移动。
      */
     weight = new NumberAttributeProvider(0);
     /**
      * 棋子的伤害类型，为DamageType枚举值(damageType.ts)中的一个。
+     * 伤害类型会影响棋子攻击时的自身移动和击退。
      */
     damageType = DamageType.None;
-    movingDestinationsCallback;
+    /**
+     * 一个属性提供器，返回值为一个回调函数，用于获取棋子可能移动到的位置。
+     */
+    movingDestinationsCallbackProvider;
+    /**
+     * 一个属性提供器，返回值为一个回调函数，用于获取棋子可能攻击到的棋子。
+     */
     attackingTargetsCallback;
-    attackActionCallback;
+    /**
+     * 一个属性提供器，返回值为一个回调函数，用于执行棋子的攻击动作。
+     * 回调函数的返回值表示攻击成功与否。攻击失败的原因可能是攻击目标不是敌方棋子等。
+     */
+    attackActionCallbackProvider;
+    /**
+     * 棋子的点击事件监听器，为回调函数，可以为空。
+     */
     clickListener = null;
-    effects = [];
+    /**
+     * 棋子的状态效果列表。
+     */
+    statusEffects = [];
     constructor(team, type, position, htmlElement, config = null) {
         this.team = team;
         this.type = type;
         this.position = position;
         this.htmlElement = htmlElement;
         this.htmlElementId = htmlElement?.id ?? null;
+        // 根据棋子类型获取默认初始数值
         config = config ?? defaultPieceConfigs[this.type];
         if (config) {
             this.attackDamage = new NumberAttributeProvider(config.attackDamage);
@@ -122,10 +136,15 @@ class Piece {
             this.health = this.maxHealth.result;
             this.weight = new NumberAttributeProvider(config.weight);
         }
-        this.movingDestinationsCallback = new AttributeProvider(DefaultMovingBehaviors.auto(this, false));
+        // 初始化回调函数提供器
+        this.movingDestinationsCallbackProvider = new AttributeProvider(DefaultMovingBehaviors.auto(this, false));
         this.attackingTargetsCallback = new AttributeProvider(DefaultMovingBehaviors.auto(this, true));
-        this.attackActionCallback = new AttributeProvider(defaultAttackActionCallback);
+        this.attackActionCallbackProvider = new AttributeProvider(defaultAttackActionCallback);
     }
+    /**
+     * 选中或取消选中棋子。
+     * 如果棋子的htmlElement为空，则不执行任何操作。
+     */
     toggleSelected() {
         if (!this.htmlElement)
             return;
@@ -141,55 +160,9 @@ class Piece {
             this.htmlElement.classList.add("selected-piece");
         }
     }
-    get selected() {
-        if (!this.htmlElement)
-            return false;
-        return this.htmlElement.classList.contains("selected-piece");
-    }
-    pushEffects(...effects) {
-        for (let i = 0; i < effects.length; i++) {
-            let effect = effects[i];
-            if (!effect.available)
-                return;
-            let exist = this.effects.find((e) => e.id == effect.id);
-            if (!exist)
-                this.effects.push(effect);
-            else {
-                if (exist.level === effect.level || effect.level === null || exist.level === null) {
-                    exist.expire = Math.max(exist.expire, effect.expire);
-                }
-                else {
-                    // 等级更高的效果，替换掉低的效果；如果低等级效果过期更晚，则在过期后替换回来
-                    let higherLevel = exist.level > effect.level ? exist : effect;
-                    let lowerLevel = exist.level > effect.level ? effect : exist;
-                    this.effects.splice(this.effects.indexOf(exist), 1);
-                    this.effects.push(higherLevel);
-                    if (lowerLevel.expire > higherLevel.expire) {
-                        schedule(() => {
-                            this.pushEffects(lowerLevel);
-                        }, higherLevel.expire + 1);
-                    }
-                }
-            }
-        }
-        this.draw();
-    }
-    set selected(value) {
-        if (!this.htmlElement)
-            return;
-        if (value) {
-            this.htmlElement.classList.add("selected-piece");
-        }
-        else {
-            this.htmlElement.classList.remove("selected-piece");
-        }
-    }
-    get destinations() {
-        return this.movingDestinationsCallback.result(this);
-    }
-    get attackTargets() {
-        return this.attackingTargetsCallback.result(this);
-    }
+    /**
+     * 初始化棋子。会将棋子绑定到对应的html元素上，并添加点击事件监听器和血条。
+     */
     init() {
         if (!this.htmlElement) {
             if (!this.htmlElementId)
@@ -220,6 +193,17 @@ class Piece {
         }
         this.draw();
     }
+    /**
+     * 绘制棋子。将会更新棋子html元素的位置和一些状态。
+     * 如果棋子死亡或者htmlElement为空，则不执行任何操作。
+     *
+     * 具体流程：
+     * - 移动到正确的位置。
+     * - 更新血条。将会用一个圆心角不等的圆弧来表示生命值的比例。
+     * - 检查是否有状态效果，并添加对应类名。
+     *
+     * TODO 拆分不同流程至不同函数
+     */
     draw() {
         if (this.dead || !this.htmlElement)
             return;
@@ -231,7 +215,7 @@ class Piece {
         // 计算、刷新血条
         let healthProportion = this.health / this.maxHealth.result;
         if (healthProportion >= 1)
-            healthProportion = 0.99999; // 防止血条消失😋
+            healthProportion = 0.99999; // 防止血条消失
         let arc = healthProportion * 2 * Math.PI;
         let sin = Math.sin(arc);
         let cos = Math.cos(arc);
@@ -241,9 +225,9 @@ class Piece {
         let d = `M 100,10 A 90,90 0 ${largeArcFlag},1 ${x},${y}`;
         this.htmlElement.querySelector(".health-bar")?.setAttribute("d", d);
         // 检查是否有有效的状态效果
-        this.effects = this.effects.filter((effect) => effect.available);
-        let hasEffect = this.effects.some((effect) => effect.available);
-        let allNegative = hasEffect && this.effects.every((effect) => effect.negative);
+        this.statusEffects = this.statusEffects.filter((effect) => effect.available);
+        let hasEffect = this.statusEffects.some((effect) => effect.available);
+        let allNegative = hasEffect && this.statusEffects.every((effect) => effect.negative);
         if (allNegative) {
             this.htmlElement.classList.remove("has-effect");
             this.htmlElement.classList.add("has-negative-effect");
@@ -257,16 +241,82 @@ class Piece {
             this.htmlElement.classList.remove("has-negative-effect");
         }
     }
-    move(position) {
-        if (position.integerGrid().piece !== null)
+    /**
+     * 添加状态效果。
+     * 将会自动处理相同效果的覆盖问题。具体来讲，id相同的效果被视为相同效果，应用以下逻辑：
+     * - 如果效果等级相同，或不应用等级机制（即level为空），则效果过期时间取最大值，即刷新时间
+     * - 如果效果等级不同，则高等级效果会替代低等级。特别地，如果低等级效果更晚过期，则在高等级效果过期后重新应用。
+     *
+     * 特别地，「不可用」的效果将被忽略。
+     */
+    pushEffects(...effects) {
+        for (let i = 0; i < effects.length; i++) {
+            let effect = effects[i];
+            if (!effect.available)
+                return; // 忽略不可用效果
+            let exist = this.statusEffects.find((e) => e.id == effect.id);
+            if (!exist)
+                this.statusEffects.push(effect);
+            else {
+                if (exist.level === effect.level || effect.level === null || exist.level === null) {
+                    exist.expire = Math.max(exist.expire, effect.expire);
+                }
+                else {
+                    let higherLevel = exist.level > effect.level ? exist : effect;
+                    let lowerLevel = exist.level > effect.level ? effect : exist;
+                    this.statusEffects.splice(this.statusEffects.indexOf(exist), 1);
+                    this.statusEffects.push(higherLevel);
+                    if (lowerLevel.expire > higherLevel.expire) {
+                        schedule(() => {
+                            this.pushEffects(lowerLevel);
+                        }, higherLevel.expire + 1);
+                    }
+                }
+            }
+        }
+        this.draw();
+    }
+    /**
+     * 移动到指定位置，并自动重绘以更新位置。
+     * @returns 是否移动成功。失败的原因可能为目标位置已经有棋子。
+     */
+    move(targetPosition) {
+        if (targetPosition.integerGrid().owner !== null)
             return false;
-        this.position = position.integerGrid();
+        this.position = targetPosition.integerGrid();
         this.draw();
         return true;
     }
-    attack(piece) {
-        return this.attackActionCallback.result(this, piece);
+    /**
+     * 「模拟」对一个棋子进行攻击，并返回伤害对象。
+     * 该操作仅有数值上的计算，不会造成实际影响。
+     * @param targetPiece 被攻击的棋子。必须提供，用于构造伤害对象，和用于生成随机值。
+     * @returns 本次攻击的伤害对象。
+     */
+    SimulateAttack(targetPiece) {
+        let damageAmount = this.attackDamage.result;
+        let isCritical = fixedRandom("criticalCheck", round, this.position.toString(), targetPiece.position.toString()) < this.criticalRate.result;
+        if (isCritical)
+            damageAmount *= this.criticalDamage.result + 1;
+        let float = fixedRandom("damageFloat", round, this.position.toString(), targetPiece.position.toString()) *
+            damageFloatLimit *
+            2 +
+            (1 - damageFloatLimit);
+        let damageObject = new Damage(this.damageType, damageAmount * float, this, targetPiece, isCritical);
+        return damageObject;
     }
+    /**
+     * 攻击一个目标棋子。
+     * 将会获取棋子的「攻击行为」回调参数并调用，并返回其返回值。
+     * @returns 回调参数的返回值。应当表示是否攻击成功。
+     */
+    attack(targetPiece) {
+        return this.attackActionCallbackProvider.result(this, targetPiece);
+    }
+    /**
+     * 被摧毁/杀死。
+     * 这不会移除棋子，而是将其设为无效，移至无效位置，并隐藏其HTML元素。
+     */
     destroyed() {
         if (this.htmlElement) {
             this.htmlElement.style.display = "none"; // 隐藏棋子
@@ -277,7 +327,10 @@ class Piece {
             stop(Team.enemy(this.team));
     }
     /**
-     * @returns Destroyed or not
+     * 受到一次伤害。
+     * 将会自动计算生命值，若生命值小于等于0，则自动调用死亡方法。
+     * @param damage 伤害对象。如果为null，则表示受到无伤害。
+     * @returns 伤害是否「致命」，即导致棋子死亡。
      */
     damaged(damage = null) {
         if (damage === null)
@@ -289,14 +342,65 @@ class Piece {
             this.destroyed();
         return this.health <= 0;
     }
-    static virtualPiece(position) {
-        return new Piece(Team.None, PieceType.None, position, null);
+    /**
+     * 创建一个虚拟棋子。
+     * 虚拟棋子没有阵营、类型、HTML元素等属性，仅作占位用途。
+     * @param piecePosition
+     * @returns 新的棋子对象
+     */
+    static virtualPiece(piecePosition) {
+        return new Piece(Team.None, PieceType.None, piecePosition, null);
     }
+    /**
+     * 加入到棋子列表中。
+     * 如果棋子已经存在，则不会重复添加。
+     */
     join() {
         if (!pieces.includes(this))
             pieces.push(this);
     }
+    /**
+     * 是否被选中。
+     * 如果棋子没有HTML元素，则永远返回false。
+     */
+    get selected() {
+        if (!this.htmlElement)
+            return false;
+        return this.htmlElement.classList.contains("selected-piece");
+    }
+    /**
+     * 设置是否被选中。
+     * 如果棋子没有HTML元素，则不会做任何操作。
+     */
+    set selected(value) {
+        if (!this.htmlElement)
+            return;
+        if (value) {
+            this.htmlElement.classList.add("selected-piece");
+        }
+        else {
+            this.htmlElement.classList.remove("selected-piece");
+        }
+    }
+    /**
+     * 获取棋子可能的移动目标位置。
+     * 将会获取棋子的「移动行为」回调参数并调用，并返回其返回值。
+     */
+    get destinations() {
+        return this.movingDestinationsCallbackProvider.result(this);
+    }
+    /**
+     * 获取棋子可能的攻击目标位置。
+     * 将会获取棋子的「攻击行为」回调参数并调用，并返回其返回值。
+     */
+    get attackTargets() {
+        return this.attackingTargetsCallback.result(this);
+    }
 }
+/**
+ * 棋子类型。
+ * TODO: 重构成typescript的enum类型
+ */
 class PieceType {
     static Master = "master";
     static Guard = "guard";
@@ -308,7 +412,12 @@ class PieceType {
     static None = "none";
 }
 export { Piece, PieceType };
+/**
+ * 获取指定阵营的将或者帅。
+ * @param team 阵营
+ * @returns 获取到的棋子。如果没有找到，则返回null。
+ */
 export function getTeamMaster(team) {
-    return pieces.find((piece) => piece.team === team && piece.type === PieceType.Master);
+    return pieces.find((piece) => piece.team === team && piece.type === PieceType.Master) ?? null;
 }
 //# sourceMappingURL=piece.js.map

@@ -42,14 +42,14 @@ export function showPiece(piece: Piece) {
 
     const effectsListElement = document.getElementById("effect-list") as HTMLUListElement;
     effectsListElement.innerHTML = "";
-    if (piece.effects.length === 0) effectsListElement.innerHTML = "暂无";
+    if (piece.statusEffects.length === 0) effectsListElement.innerHTML = "暂无";
     else
-        for (let index = 0; index < piece.effects.length; index++) {
-            let effect = piece.effects[index];
+        for (let index = 0; index < piece.statusEffects.length; index++) {
+            let effect = piece.statusEffects[index];
             const effectElement = document.createElement("li");
             if (!effect.available) {
                 // 直接删除
-                piece.effects.splice(index, 1);
+                piece.statusEffects.splice(index, 1);
                 index--;
                 continue;
             }

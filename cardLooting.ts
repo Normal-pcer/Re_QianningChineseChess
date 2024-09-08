@@ -1,5 +1,6 @@
 import {
     ActionCard,
+    areaGunActionCard,
     determinedResistanceActionCard,
     healthInstantPotionActionCard,
     highGunActionCard,
@@ -41,7 +42,8 @@ export function initCardLooting() {
         new poolItem(strengthPotionExtendedActionCard, 0.5),
         new poolItem(superLaughingActionCard),
         new poolItem(withBellAndTripodActionCard),
-        new poolItem(determinedResistanceActionCard)
+        new poolItem(determinedResistanceActionCard),
+        new poolItem(areaGunActionCard)
     );
 }
 

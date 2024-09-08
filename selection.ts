@@ -305,7 +305,7 @@ export const MainSelection = new SelectionManager(
             "请选择要移动到的位置",
             (selectedGrid) => {
                 let pos = selectedGrid.data as Position;
-                if (pos.integerGrid().piece !== null) {
+                if (pos.integerGrid().owner !== null) {
                     return validTarget.some((item) => item.nearby(pos));
                 } else {
                     return validMove.some((item) => item.nearby(pos));
@@ -318,9 +318,9 @@ export const MainSelection = new SelectionManager(
         let selectedTarget = (results[1].data as Position).integerGrid();
         let success = false;
 
-        if (selectedTarget.piece !== null) {
-            success = selectedPiece.attack(selectedTarget.piece);
-            console.log(selectedPiece, "attack", selectedTarget.piece, success);
+        if (selectedTarget.owner !== null) {
+            success = selectedPiece.attack(selectedTarget.owner);
+            console.log(selectedPiece, "attack", selectedTarget.owner, success);
         } else {
             success = selectedPiece.move(selectedTarget);
             console.log(selectedPiece, "move", selectedTarget, success);
