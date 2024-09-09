@@ -97,15 +97,11 @@ export function saveCurrent() {
     }, round, TriggerManager.triggers, _schedules));
 }
 export function recall() {
-    console.log(saves);
+    console.log("落子无悔！！！！！！");
     if (saves.length > 1) {
         saves.pop();
         const lastSave = saves.pop();
         if (lastSave) {
-            // pieces.forEach((piece) => {
-            //     if (piece.clickListener)
-            //         piece.htmlElement?.removeEventListener("click", piece.clickListener);
-            // });
             mergePlayerFromTeam(Team.Red, lastSave.players[Team.Red]);
             mergePlayerFromTeam(Team.Black, lastSave.players[Team.Black]);
             deepMerge(pieces, lastSave.pieces, true);

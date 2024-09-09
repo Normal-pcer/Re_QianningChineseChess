@@ -29,5 +29,5 @@ export function getPlayerFromTeam(team: string) {
 }
 
 export function mergePlayerFromTeam(team: string, player: Player) {
-    deepMerge(TeamPlayerMap[team], player)
+    deepMerge(TeamPlayerMap[team], player, true);
 }

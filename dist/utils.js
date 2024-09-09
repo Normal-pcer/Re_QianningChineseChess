@@ -70,7 +70,7 @@ export function deepCopy(target) {
 export function notNull(value) {
     return value !== null && value !== undefined;
 }
-export function deepMerge(target, source, removeExtraArrayItems = false) {
+export function deepMerge(target, source, removeFuckingExtraArrayItems = false) {
     const stack = new Set();
     /**
      * @returns 是否可以合并
@@ -79,8 +79,8 @@ export function deepMerge(target, source, removeExtraArrayItems = false) {
         if (!isObject(source) || !isObject(target))
             return false;
         if (source instanceof Array && target instanceof Array) {
-            if (removeExtraArrayItems) {
-                if (source.length > target.length) {
+            if (removeFuckingExtraArrayItems) {
+                if (source.length < target.length) {
                     target.length = source.length;
                 }
             }

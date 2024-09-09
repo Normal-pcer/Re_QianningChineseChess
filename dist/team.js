@@ -24,6 +24,6 @@ export function getPlayerFromTeam(team) {
     return TeamPlayerMap[team] ?? TeamPlayerMap[Team.None];
 }
 export function mergePlayerFromTeam(team, player) {
-    deepMerge(TeamPlayerMap[team], player);
+    deepMerge(TeamPlayerMap[team], player, true);
 }
 //# sourceMappingURL=team.js.map
