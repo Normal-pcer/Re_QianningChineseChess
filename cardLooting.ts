@@ -11,7 +11,6 @@ import {
     superLaughingActionCard,
     weaknessPotionActionCard,
     withBellAndTripodActionCard,
-    launchGenshinImpactActionCard
 } from "./actionCard.js";
 import { Player } from "./player.js";
 import { fixedRandom } from "./random.js";
@@ -45,7 +44,6 @@ export function initCardLooting() {
         new poolItem(withBellAndTripodActionCard),
         new poolItem(determinedResistanceActionCard),
         new poolItem(areaGunActionCard),
-        new poolItem(launchGenshinImpactActionCard, 2),
     );
 }
 
