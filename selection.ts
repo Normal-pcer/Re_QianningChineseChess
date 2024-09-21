@@ -4,18 +4,34 @@ import { getCurrentTeam, nextRound } from "./round.js";
 import { showPiece, showDefaultPiece } from "./pieceFrame.js";
 import { runAllSchedules } from "./schedule.js";
 
+/**
+ * 返回一个对象本身。
+ * //并没有什么用途，只是多套一层会显得很高级
+ * 用于统一直接传参和递推传参。
+ */
 const returnSelf = (obj: any) => obj;
 
+/**
+ * 正在进行的选择器。
+ */
 var currentSelection: SelectionManager | null = null;
 
+/**
+ * 用于监听棋子的点击事件。
+ * 将在棋子的eventListener中调用。见Piece.init函数(piece.ts)
+ * 如果当前不是在选择棋子则忽略，由其他监听器处理。
+ * @param piece 被点击的棋子。
+ * @returns 是否处理了该点击事件。
+ */
 var PieceClickListener = (piece: Piece) => {
     let currentSingleSelection = currentSelection?.current;
     let item = new SelectedItem(piece);
     if (
-        currentSingleSelection instanceof SingleSelection &&
-        currentSingleSelection.type == ItemType.Piece
+        currentSingleSelection instanceof SingleSelection && // 一并排除null和undefined
+        currentSingleSelection.type == ItemType.Piece // 如果当前不是在选择棋子则忽略
     ) {
         if (piece.selected) {
+            // 如果选择已经被选中的棋子，则视为取消选择。
             piece.selected = false;
             currentSelection?.stop();
         } else if (currentSingleSelection.check(item)) {
@@ -32,6 +48,12 @@ var PieceClickListener = (piece: Piece) => {
     return false;
 };
 
+/**
+ * 用于监听屏幕的点击事件。
+ * 将在棋盘的eventListener中调用。翻multiplayer.ts去，我记不得在哪。
+ * @param position 被点击的位置。
+ * @returns 是否处理了该点击事件。
+ */
 var GameboardClickListener = (position: Position) => {
     let currentSingleSelection = currentSelection?.current;
     let item = new SelectedItem(position);
@@ -52,15 +74,53 @@ var GameboardClickListener = (position: Position) => {
     return false;
 };
 
+/**
+ * 选择器。
+ * 
+ * 选择器用于组织单选项（SingleSelection，见下文）。
+ */
 export class SelectionManager {
-    afterSelection: ((results: SelectedItem[]) => void | any) | null = null;
-    oncancelCallback: ((results: SelectedItem[]) => void | any) | null = null;
-    recursions: (((past: SelectedItem[]) => SingleSelection) | SingleSelection)[];
-    index: number = 0;
-    doOnce: boolean;
-    current: SingleSelection | null = null;
-    results: SelectedItem[] = [];
-    replaceWithFinally_: SelectionManager | null = null;
+    /**
+     * 完成选择之后将会调用的回调函数。
+     * 仅当所有单选项都正确选择后调用，中断选择不会调用该函数。
+     * 当此项为null时，完成选择后不会有更多行为。
+     */
+    private afterSelection: ((results: SelectedItem[]) => void | any) | null = null;
+    /**
+     * 选择中断或取消之后将会调用的回调函数。
+     * 当此项为null时，选择中断或取消后不会有更多行为。
+     */
+    private oncancelCallback: ((results: SelectedItem[]) => void | any) | null = null;
+    /**
+     * 回调函数的数组，每一项均用于递推计算下一个单选项。
+     * 每个回调函数输入先前的选择结果作为参数，返回下一个单选项。
+     * 
+     * 特别地，如果数组项直接为一个单选项(SingleSelection)对象，则会省略调用的过程，恒定使用该单选项。
+     */
+    private recursions: (((past: SelectedItem[]) => SingleSelection) | SingleSelection)[];
+    /**
+     * 当前单选项在recursions数组中的索引。
+     * 可以用于确认当前的选择进度。
+     */
+    private index: number = 0;
+    /**
+     * 一个布尔值，表示选择器是否选择一次就结束。
+     * @see this.cycle
+     */
+    private doOnce: boolean;
+    /**
+     * 当前正在进行选择的单选项。当选择器停止后，该值为null。
+     */
+    public current: SingleSelection | null = null;
+    /**
+     * 直至现在所有选择的结果。
+     */
+    private results: SelectedItem[] = [];
+    /**
+     * 选择器停止后用于替换的另一个选择器。
+     * 如果为null，则不继续应用任何选择器
+     */
+    private _replaceWithFinally: SelectionManager | null = null;
 
     constructor(...singleSelections: SingleSelection[]) {
         this.recursions = singleSelections;
@@ -93,7 +153,7 @@ export class SelectionManager {
     }
 
     replaceWithFinally(manager: SelectionManager | null) {
-        this.replaceWithFinally_ = manager;
+        this._replaceWithFinally = manager;
         return this;
     }
 
@@ -134,9 +194,9 @@ export class SelectionManager {
 
         pieces.forEach((p) => (p.selected = false));
 
-        if (this.replaceWithFinally_ != null) {
-            this.replaceWithFinally_.reset();
-            setCurrentSelection(this.replaceWithFinally_);
+        if (this._replaceWithFinally != null) {
+            this._replaceWithFinally.reset();
+            setCurrentSelection(this._replaceWithFinally);
         }
     }
 }
@@ -278,23 +338,13 @@ export function cancelCurrentSelection(continueMainSelection = true) {
  * @description 主要选择器，在几乎整个游戏周期内使用，用于移动棋子和控制攻击
  */
 export const MainSelection = new SelectionManager(
-    new SingleSelection(
-        [],
-        ItemType.Piece,
-        "请选择要移动的棋子",
-        (piece) => true
-    )
+    new SingleSelection([], ItemType.Piece, "请选择要移动的棋子", (piece) => true)
 )
     .then((past) => {
         let selectedPiece = past[0].data as Piece;
         if (getCurrentTeam() !== selectedPiece.team) {
             showPiece(selectedPiece);
-            return new SingleSelection(
-                [],
-                ItemType.Grid,
-                "查看棋子信息",
-                (grid) => false
-            );
+            return new SingleSelection([], ItemType.Grid, "查看棋子信息", (grid) => false);
         }
         let validMove = selectedPiece.destinations;
         let validTarget = selectedPiece.attackTargets;

@@ -178,5 +178,4 @@ export const areaGunActionCard = singleTargetSelectorTemplate("威震四方", "a
         }
     }));
 });
-export const launchGenshinImpactActionCard = new ActionCard("原神，启动！", "launchGenshinImpact", "启动《原神》", () => window.location.href = "https://ys.mihoyo.com/cloud");
 //# sourceMappingURL=actionCard.js.map

@@ -71,6 +71,7 @@ export class Damage {
     public apply() {
         if (this.target === null) return;
         let position = this.target.position;
+        showEffect(this, this.target.position);
         if (this.target.damaged(this) === true) {
             this.source?.move(position);
         } else {
@@ -80,6 +81,5 @@ export class Damage {
         }
         TriggerManager.trigger(DamageTrigger.event, this);
         this.target?.draw();
-        showEffect(this, this.target.position);
     }
 }
