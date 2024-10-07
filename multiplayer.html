@@ -39,10 +39,119 @@
                 </div>
                 <div id="player-assets">
                     <div id="action-cards">
+                        <style>
+                            .action-card-frame {
+                                width: 9vh;
+                                height: 12vh;
+                                border: 2px solid #000;
+                                border-radius: 1vh;
+                                background-color: hsl(30, 75%, 85%);
+                                padding: 5px;
+                                margin: 5px;
+                                display: block;
+                                white-space: normal;
+
+                                /* 展示框之间横向排列 */
+                                display: inline-block;
+                            }
+
+                            .action-card-title {
+                                width: 100%;
+                                font-size: 2vh;
+                                font-weight: bold;
+                                text-align: center;
+                            }
+
+                            .action-card-description {
+                                width: 100%;
+                                font-size: 0.5vh;
+                                color: gray;
+                            }
+
+                            .action-card-footer {
+                                width: 100%;
+                                font-size: 0.7vh;
+                                position: absolute;
+                                bottom: 0;
+                                left: 0;
+                                right: 0;
+                                text-align: center;
+                            }
+
+                            /* 卡牌槽允许横向滚动 */
+                            .action-cards-list {
+                                height: 18vh;
+                                width: 23vw;
+                                overflow-x: scroll;
+                                white-space: nowrap;
+                                position: relative;
+                                top: 3vw;
+                                overflow: visible;
+                                border-top: 2px solid #000;
+                                border-bottom: 2px solid #000;
+                            }
+
+                            .action-cards-list-container {
+                                /* 允许子节点的元素向上溢出 */
+                                overflow-x: hidden;
+                                position: relative;
+                                height: 25vh;
+                            }
+                        </style>
                         <p>红方技能卡</p>
-                        <ul id="red-action-cards-list"></ul>
+                        <div class="action-cards-list-container">
+                            <ul id="red-action-cards-list" class="action-cards-list">
+                                <!-- 一个矩形的「技能卡」展示框 -->
+                                <div class="action-card-frame">
+                                    <div class="action-card-title">戴钟之鼎</div>
+                                    <div class="action-card-description">
+                                        选中棋子重量提升
+                                        <span class="action-card-digit">6000</span> %
+                                    </div>
+                                    <div class="action-card-footer">持续 5 回合</div>
+                                </div>
+                                <div class="action-card-frame" style="transform: translateX(-6vh)">
+                                    <div class="action-card-title">戴钟之鼎</div>
+                                    <div class="action-card-description">
+                                        选中棋子重量提升
+                                        <span class="action-card-digit">6000</span> %
+                                    </div>
+                                    <div class="action-card-footer">持续 5 回合</div>
+                                </div>
+
+                                <div
+                                    class="action-card-frame"
+                                    style="transform: translate(-12vh, -5vh)"
+                                >
+                                    <div class="action-card-title">戴钟之鼎</div>
+                                    <div class="action-card-description">
+                                        选中棋子重量提升
+                                        <span class="action-card-digit">6000</span> %
+                                    </div>
+                                    <div class="action-card-footer">持续 5 回合</div>
+                                </div>
+                                <div class="action-card-frame" style="transform: translateX(-18vh)">
+                                    <div class="action-card-title">戴钟之鼎</div>
+                                    <div class="action-card-description">
+                                        选中棋子重量提升
+                                        <span class="action-card-digit">6000</span> %
+                                    </div>
+                                    <div class="action-card-footer">持续 5 回合</div>
+                                </div>
+                                <div class="action-card-frame" style="transform: translateX(-24vh)">
+                                    <div class="action-card-title">戴钟之鼎</div>
+                                    <div class="action-card-description">
+                                        选中棋子重量提升
+                                        <span class="action-card-digit">6000</span> %
+                                    </div>
+                                    <div class="action-card-footer">持续 5 回合</div>
+                                </div>
+                            </ul>
+                        </div>
                         <p>黑方技能卡</p>
-                        <ul id="black-action-cards-list"></ul>
+                        <div class="action-cards-list-container">
+                            <ul id="black-action-cards-list" class="action-cards-list"></ul>
+                        </div>
                     </div>
                 </div>
             </div>

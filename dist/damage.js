@@ -12,7 +12,7 @@ function showEffect(damage, targetPosition, lastTime = 750) {
     let parent = document.getElementById("damage-numbers");
     effectElement.innerText = `${Math.round(damage.realAmount)}`;
     effectElement.className = `damage-effect ${damage.isCritical ? "critical-damage-effect" : ""}`;
-    // effectElement.style.animation = `damage-number ${lastTime}ms ease-out`;
+    effectElement.style.animation = `damage-number ${lastTime}ms ease-out`;
     if (damage.source?.team === Team.Red) {
         effectElement.style.color = "red";
         effectElement.style.textShadow = "0 0 3px aqua";
@@ -21,9 +21,9 @@ function showEffect(damage, targetPosition, lastTime = 750) {
         effectElement.style.color = "black";
         effectElement.style.textShadow = "0 0 3px white";
     }
-    // setTimeout(() => {
-    //     parent.removeChild(effectElement);
-    // }, lastTime - 20); // 提前20ms，防止来不及删
+    setTimeout(() => {
+        parent.removeChild(effectElement);
+    }, lastTime - 20); // 提前20ms，防止来不及删
     parent.appendChild(effectElement);
     let realWidth = effectElement.offsetWidth;
     let realHeight = effectElement.offsetHeight;

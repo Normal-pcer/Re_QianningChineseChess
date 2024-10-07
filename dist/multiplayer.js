@@ -52,7 +52,7 @@ window.onload = () => {
         // 如果「将」被攻击
         if (damage.target?.type === PieceType.Master) {
             /**
-             * x从0到3141.5，防御力增量从0到300%；x足够大时，防御力增量固定为300%。
+             * x从0到3141.6，防御力增量从0到300%；x足够大时，防御力增量固定为300%。
              * 前半段曲线为余弦函数，后半段曲线为直线。
              */
             const defenseImproveCalculation = (x) => {
