@@ -55,7 +55,7 @@ class Piece {
     /**
      * 棋子的生命值。
      *
-     * TODO 更改为Getter和Setter，用于防止溢出、增加生命值上限时自动提升等。
+     * TODO: 更改为Getter和Setter，用于防止溢出、增加生命值上限时自动提升等。
      */
     health = 0;
     /**
@@ -246,7 +246,7 @@ class Piece {
      * 将会自动处理相同效果的覆盖问题。具体来讲，id相同的效果被视为相同效果，应用以下逻辑：
      * - 如果效果等级相同，或不应用等级机制（即level为空），则效果过期时间取最大值，即刷新时间
      * - 如果效果等级不同，则高等级效果会替代低等级。特别地，如果低等级效果更晚过期，则在高等级效果过期后重新应用。
-     *
+     * 同时，这种情况下，会自动禁用被替代效果及其关联的修饰符。
      * 特别地，「不可用」的效果将被忽略。
      */
     pushEffects(...effects) {
@@ -255,18 +255,26 @@ class Piece {
             if (!effect.available)
                 return; // 忽略不可用效果
             let exist = this.statusEffects.find((e) => e.id == effect.id);
-            if (!exist)
+            if (!exist) {
                 this.statusEffects.push(effect);
+            }
             else {
                 if (exist.level === effect.level || effect.level === null || exist.level === null) {
                     exist.expire = Math.max(exist.expire, effect.expire);
+                    effect.disable();
                 }
                 else {
                     let higherLevel = exist.level > effect.level ? exist : effect;
                     let lowerLevel = exist.level > effect.level ? effect : exist;
+                    lowerLevel.disable(); // 临时禁用已经存在的效果
                     this.statusEffects.splice(this.statusEffects.indexOf(exist), 1);
                     this.statusEffects.push(higherLevel);
-                    if (lowerLevel.expire > higherLevel.expire) {
+                    this.statusEffects[this.statusEffects.length - 1].enable(); // 启用新的效果
+                    // 解释上述操作的原因
+                    // 如果原先的效果更强，则会被移除、重新加入和启用，新效果则被禁用。
+                    // 如果新的效果更强，原效果被禁用和移除，新效果被加入和启用。
+                    // 如果不进行这样的操作，原效果关联的修饰符会持续启用，导致效果实际上会叠加
+                    if (lowerLevel.expire > higherLevel.expire) { // 计划重新启用
                         schedule(() => {
                             this.pushEffects(lowerLevel);
                         }, higherLevel.expire + 1);
@@ -337,7 +345,6 @@ class Piece {
             return;
         let realAmount = damage.realAmount; // 1000 防御伤害减半
         this.health -= realAmount;
-        console.log(damage, realAmount, this.health);
         if (this.health <= 0)
             this.destroyed();
         return this.health <= 0;

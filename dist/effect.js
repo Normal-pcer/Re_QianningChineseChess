@@ -97,5 +97,25 @@ export class StatusEffect {
     get available() {
         return this.enabled && round <= this.expire;
     }
+    /**
+     * 启用这个状态效果
+     * 将会把这个状态效果关联的属性修改器一并启用
+     */
+    enable() {
+        this.enabled = true;
+        this.relatedModifiers.forEach((modifier) => {
+            modifier.enable();
+        });
+    }
+    /**
+     * 禁用这个状态效果
+     * 将会把这个状态效果关联的属性修改器一并禁用
+     */
+    disable() {
+        this.enabled = false;
+        this.relatedModifiers.forEach((modifier) => {
+            modifier.disable();
+        });
+    }
 }
 //# sourceMappingURL=effect.js.map

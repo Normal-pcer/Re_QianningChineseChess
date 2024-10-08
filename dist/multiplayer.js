@@ -52,7 +52,7 @@ window.onload = () => {
         // 如果「将」被攻击
         if (damage.target?.type === PieceType.Master) {
             /**
-             * x从0到3141.5，防御力增量从0到300%；x足够大时，防御力增量固定为300%。
+             * x从0到3141.6，防御力增量从0到300%；x足够大时，防御力增量固定为300%。
              * 前半段曲线为余弦函数，后半段曲线为直线。
              */
             const defenseImproveCalculation = (x) => {
@@ -67,11 +67,14 @@ window.onload = () => {
             console.log("defense: ", defense);
             if (last === 0)
                 return; // 伤害过低（<0.5）无需触发御守三晖
-            damage.target.pushEffects(new StatusEffect("御守三晖", "masterSelfDefense", `防御力提升${Math.round(defense * 100)}%`, [
+            let effect = new StatusEffect("御守三晖", "masterSelfDefense", `防御力提升${Math.round(defense * 100)}%`, [
                 damage.target.defense
                     .area(1)
                     .modify(new AttributeModifier(defense, last)),
-            ], Math.round(defense)).hideLevel());
+            ], Math.round(defense)).hideLevel();
+            damage.target.pushEffects(effect);
+            console.log(damage.target);
+            console.log("对其应用了御守三晖");
         }
     }));
     // 作弊框相关内容
