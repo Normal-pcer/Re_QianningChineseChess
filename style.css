@@ -25,7 +25,7 @@ body {
 
 #action-cards ul li {
     list-style-type: none;
-    /* padding: 0; */
+    vertical-align: bottom;
 }
 
 #game-container {
@@ -262,21 +262,13 @@ body {
 
 /* 卡牌槽允许横向滚动 */
 .action-cards-list {
-    height: 20vh;
+    height: 17vh;
     width: 23vw;
     overflow-x: scroll;
     white-space: nowrap;
     position: relative;
     top: 3vw;
-    overflow-x: hidden;
     overflow-y: visible;
     border-top: 2px solid #000;
     border-bottom: 2px solid #000;
-}
-
-.action-cards-list-container {
-    /* 允许子节点的元素向上溢出 */
-    overflow-x: hidden;
-    position: relative;
-    height: 30vh;
 }
