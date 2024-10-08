@@ -4,7 +4,7 @@ import * as Selection from "./selection.js";
 import { initDefaultMovingBehaviors } from "./defaultMovingBehaviors.js";
 import { getPlayerFromTeam, Team } from "./team.js";
 import { getCurrentTeam } from "./round.js";
-import { AttributeModifier } from "./attributeProvider.js";
+import { AttributeModifier, getAttributeModifierById } from "./attributeProvider.js";
 import { highGunActionCard, limitlessHorseActionCard } from "./actionCard.js";
 import { initCardLooting, lootCard } from "./cardLooting.js";
 import { loadSave, recall, saveCurrent, storeSave } from "./save.js";
@@ -74,19 +74,24 @@ window.onload = () => {
                 console.log("defense: ", defense);
 
                 if (last === 0) return; // 伤害过低（<0.5）无需触发御守三晖
-                damage.target.pushEffects(
-                    new StatusEffect(
-                        "御守三晖",
-                        "masterSelfDefense",
-                        `防御力提升${Math.round(defense * 100)}%`,
-                        [
-                            damage.target.defense
-                                .area(1)
-                                .modify(new AttributeModifier(defense, last)),
-                        ],
-                        Math.round(defense)
-                    ).hideLevel()
-                );
+
+                let effect = new StatusEffect(
+                    "御守三晖",
+                    "masterSelfDefense",
+                    `防御力提升${Math.round(defense * 100)}%`,
+                    [
+                        damage.target.defense
+                            .area(1)
+                            .modify(new AttributeModifier(defense, last)),
+                    ],
+                    Math.round(defense)
+                ).hideLevel()
+                damage.target.pushEffects(effect);
+
+                console.log(damage.target);
+                console.log("对其应用了御守三晖")
+
+
             }
         })
     );

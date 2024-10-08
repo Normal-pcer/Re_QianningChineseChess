@@ -162,6 +162,14 @@ export class AttributeModifier<T> {
         modifiers[attributeModifierId] = this;
         attributeModifierId++;
     }
+
+    enable() {
+        this.enabled = true;
+    }
+
+    disable() {
+        this.enabled = false;
+    }
 }
 
 export function getAttributeModifierById(id: number) {
