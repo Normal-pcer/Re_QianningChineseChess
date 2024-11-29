@@ -4,7 +4,7 @@ import * as Selection from "./selection.js";
 import { initDefaultMovingBehaviors } from "./defaultMovingBehaviors.js";
 import { getPlayerFromTeam, Team } from "./team.js";
 import { getCurrentTeam } from "./round.js";
-import { AttributeModifier, getAttributeModifierById } from "./attributeProvider.js";
+import { AttributeModifier } from "./attributeProvider.js";
 import { highGunActionCard, limitlessHorseActionCard } from "./actionCard.js";
 import { initCardLooting, lootCard } from "./cardLooting.js";
 import { loadSave, recall, saveCurrent, storeSave } from "./save.js";

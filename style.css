@@ -227,6 +227,7 @@ body {
     margin: 5px;
     display: block;
     white-space: normal;
+    position: relative;
 
     /* 展示框之间横向排列 */
     display: inline-block;
@@ -235,6 +236,8 @@ body {
 
 .action-cards-list li {
     display: inline-block;
+    position: absolute;
+    transform: translate(0, 64%);
 }
 
 .action-card-title {
@@ -262,13 +265,14 @@ body {
 
 /* 卡牌槽允许横向滚动 */
 .action-cards-list {
-    height: 17vh;
+    height: 25vh;
     width: 23vw;
     overflow-x: scroll;
     white-space: nowrap;
     position: relative;
     top: 3vw;
-    overflow-y: visible;
-    border-top: 2px solid #000;
-    border-bottom: 2px solid #000;
+    /* overflow-y: visible; */
+    transform: translateY(-60%);
+    /* border-top: 2px solid #000; */
+    /* border-bottom: 2px solid #000; */
 }
