@@ -35,13 +35,6 @@ export class Player {
 <div class="action-card-description">${this.actionCards[i].description}</div>
 </div>`;
             targetUlElement.appendChild(targetLiElement);
-            if (usable) {
-                targetLiElement.addEventListener("click", () => {
-                    this.actionCards[i].apply();
-                    this.actionCards.splice(i, 1);
-                    this.showActionCards();
-                });
-            }
 
             const singleOffsetX = 15; // 单个卡牌的横向偏移量，单位：1%
 
@@ -50,14 +43,29 @@ export class Player {
             // let targetDivElement = targetLiElement.getElementsByTagName('div')[0];
             targetLiElement.style.left = offsetX + "%";
 
-            // 点击后向上位移或移回原位
+            // 点击后向上位移或移回原位；特别地，对于可用卡牌，选中后再次点击则会使用。
+            // 当选中了一个卡牌，则会复原当前所有的已选中卡牌
             targetLiElement.addEventListener("click", () => {
+                const reset = (element: HTMLLIElement) => {
+                    element.style.transform = `translateY(64%)`;
+                    element.setAttribute("selected", "false");
+                }
                 // 使用元素的 selected 属性标记是否不在原位
                 let selected = targetLiElement.getAttribute("selected") === "true"; // 为 false 或不存在，说明处于原位
                 if (selected) {
-                    targetLiElement.style.transform = `translateY(64%)`; // 归位
-                    targetLiElement.setAttribute("selected", "false");
+                    if (usable) {
+                        this.actionCards[i].apply();
+                        this.actionCards.splice(i, 1);
+                        this.showActionCards();
+                    }
+                    reset(targetLiElement);
                 } else {
+                    // 复原无关卡牌
+                    document.querySelectorAll(".action-cards-list li").forEach((element) => {
+                        if (element.getAttribute("selected") === "true") {
+                            reset(element as HTMLLIElement);
+                        }
+                    })
                     targetLiElement.style.transform = `translateY(0)`; // 选中
                     targetLiElement.setAttribute("selected", "true");
                 }
