@@ -32,7 +32,6 @@ export class Player {
             const singleOffsetX = 15; // 单个卡牌的横向偏移量，单位：1%
             // 添加一定的偏移
             let offsetX = i * singleOffsetX; // 横向偏移量的绝对值
-            // let targetDivElement = targetLiElement.getElementsByTagName('div')[0];
             targetLiElement.style.left = offsetX + "%";
             // 点击后向上位移或移回原位；特别地，对于可用卡牌，选中后再次点击则会使用。
             // 当选中了一个卡牌，则会复原当前所有的已选中卡牌
@@ -58,7 +57,7 @@ export class Player {
                             reset(element);
                         }
                     });
-                    targetLiElement.style.transform = `translateY(0)`; // 选中
+                    targetLiElement.style.transform = `translateY(20%)`; // 选中
                     targetLiElement.setAttribute("selected", "true");
                 }
             });

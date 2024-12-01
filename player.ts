@@ -40,7 +40,6 @@ export class Player {
 
             // 添加一定的偏移
             let offsetX = i * singleOffsetX; // 横向偏移量的绝对值
-            // let targetDivElement = targetLiElement.getElementsByTagName('div')[0];
             targetLiElement.style.left = offsetX + "%";
 
             // 点击后向上位移或移回原位；特别地，对于可用卡牌，选中后再次点击则会使用。
@@ -66,7 +65,7 @@ export class Player {
                             reset(element as HTMLLIElement);
                         }
                     })
-                    targetLiElement.style.transform = `translateY(0)`; // 选中
+                    targetLiElement.style.transform = `translateY(20%)`; // 选中
                     targetLiElement.setAttribute("selected", "true");
                 }
             });

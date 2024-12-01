@@ -23,25 +23,59 @@ var currentSelection = null;
 var PieceClickListener = (piece) => {
     let currentSingleSelection = currentSelection?.current;
     let item = new SelectedItem(piece);
-    if (currentSingleSelection instanceof SingleSelection && // 一并排除null和undefined
-        currentSingleSelection.type == ItemType.Piece // 如果当前不是在选择棋子则忽略
-    ) {
-        if (piece.selected) {
-            // 如果选择已经被选中的棋子，则视为取消选择。
-            piece.selected = false;
-            currentSelection?.stop();
-        }
-        else if (currentSingleSelection.check(item)) {
-            piece.selected = true;
-            let r = null;
-            if (currentSingleSelection.nextCallback != null)
-                r = currentSingleSelection.nextCallback(item);
-            currentSelection?.next(r);
-            return true;
-        }
-        else {
-            if (currentSingleSelection.autoCancel)
+    if (currentSingleSelection instanceof SingleSelection && // 一并排除 null 和 undefined
+        currentSelection) {
+        if (currentSingleSelection.type == ItemType.Piece) {
+            // 如果当前不是在选择棋子则忽略
+            if (piece.selected) {
+                // 如果选择已经被选中的棋子，则视为取消选择。
+                piece.selected = false;
                 currentSelection?.stop();
+            }
+            else if (currentSingleSelection.check(item)) {
+                piece.selected = true;
+                let r = null;
+                if (currentSingleSelection.nextCallback != null)
+                    r = currentSingleSelection.nextCallback(item);
+                currentSelection?.next(r);
+                return true;
+            }
+            else if (currentSingleSelection.temp && currentSingleSelection.autoCancel) {
+                // 如果当前选择器允许临时选择，则立即停止并开始替换项。
+                currentSelection.stop(false);
+                currentSingleSelection = currentSelection?.current;
+                if (currentSelection === null)
+                    return false; // 没有替换项
+                if (currentSingleSelection == null)
+                    return false; // 替换项不工作
+                if (currentSingleSelection.type !== ItemType.Piece) {
+                    // 不匹配
+                    if (currentSingleSelection.type === ItemType.Grid) {
+                        // 特别地，棋子可以退化成格点
+                        // 即允许替换为一次格点点击
+                        // 计算实际作用的结果
+                        let r = null;
+                        if (currentSingleSelection.nextCallback) {
+                            r = currentSingleSelection.nextCallback(new SelectedItem(piece.position));
+                        }
+                        currentSelection.next(r);
+                        return true;
+                    }
+                    return false;
+                }
+                // 进行选择
+                piece.selected = true;
+                let r = null;
+                if (currentSingleSelection.nextCallback) {
+                    r = currentSingleSelection.nextCallback(item);
+                }
+                currentSelection.next(r);
+                return true;
+            }
+            else {
+                if (currentSingleSelection.autoCancel)
+                    currentSelection?.stop();
+            }
         }
     }
     return false;
@@ -55,8 +89,7 @@ var PieceClickListener = (piece) => {
 var GameboardClickListener = (position) => {
     let currentSingleSelection = currentSelection?.current;
     let item = new SelectedItem(position);
-    if (currentSingleSelection instanceof SingleSelection &&
-        currentSingleSelection.type == ItemType.Grid) {
+    if (currentSingleSelection instanceof SingleSelection && currentSingleSelection.type == ItemType.Grid) {
         if (currentSingleSelection.check(item)) {
             let r = null;
             if (currentSingleSelection.nextCallback != null)
@@ -118,6 +151,7 @@ export class SelectionManager {
      * 如果为null，则不继续应用任何选择器
      */
     _replaceWithFinally = null;
+    temp = false;
     constructor(...singleSelections) {
         this.recursions = singleSelections;
         this.doOnce = true;
@@ -190,6 +224,10 @@ export class SelectionManager {
             setCurrentSelection(this._replaceWithFinally);
         }
     }
+    setTemp(temp = true) {
+        this.temp = temp;
+        return this;
+    }
 }
 /**
  * @description: Describe the type of single-selection item
@@ -238,15 +276,16 @@ export class SingleSelection {
     checkCallback;
     autoCancel;
     nextCallback;
+    /**
+     * 是否将选项标记为“临时”。
+     * 临时选项被取消后，则会把取消操作直接应用到进一步操作上（若有）。
+     */
+    temp = false;
     constructor(positions, type, description = null, checkCallback = null, nextCallback = null, autoCancel = true) {
         this.positions = positions;
         this.type = type;
         this.description =
-            description === null
-                ? type === ItemType.Piece
-                    ? "请选择一个棋子"
-                    : "请选择一个格点"
-                : description;
+            description === null ? (type === ItemType.Piece ? "请选择一个棋子" : "请选择一个格点") : description;
         this.checkCallback = checkCallback;
         this.autoCancel = autoCancel;
         this.nextCallback = nextCallback === null ? returnSelf : nextCallback;
@@ -266,6 +305,10 @@ export class SingleSelection {
             if (element.parentElement instanceof HTMLElement)
                 element.parentElement.style.display = "block";
         }
+    }
+    setTemp(temp = true) {
+        this.temp = temp;
+        return this;
     }
 }
 export class PieceMoveSelection extends SingleSelection {
@@ -312,7 +355,7 @@ export const MainSelection = new SelectionManager(new SingleSelection([], ItemTy
     let selectedPiece = past[0].data;
     if (getCurrentTeam() !== selectedPiece.team) {
         showPiece(selectedPiece);
-        return new SingleSelection([], ItemType.Grid, "查看棋子信息", (grid) => false);
+        return new SingleSelection([], ItemType.Piece, "查看棋子信息", (grid) => false).setTemp();
     }
     let validMove = selectedPiece.destinations;
     let validTarget = selectedPiece.attackTargets;
