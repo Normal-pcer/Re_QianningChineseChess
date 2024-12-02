@@ -87,9 +87,9 @@ export class StatusEffect {
     get relatedModifiers() {
         return this.relatedModifierIds.map((id) => getAttributeModifierById(id));
     }
-    runContinuedAction() {
+    runContinuedAction(target) {
         if (this.continuedAction !== null && this.available)
-            this.continuedAction();
+            this.continuedAction(target);
     }
     setContinuedAction(action) {
         this.continuedAction = action;

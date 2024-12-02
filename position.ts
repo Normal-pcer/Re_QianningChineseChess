@@ -54,9 +54,7 @@ export class Position extends PositionedItem {
      */
     static _calculateGameboardSize = () => {
         // 读取棋盘图片实际显示大小
-        let gameboardImage = document.querySelector(
-            "#gameboard .background img"
-        ) as HTMLImageElement;
+        let gameboardImage = document.querySelector("#gameboard .background img") as HTMLImageElement;
 
         gameboardImageWidth = gameboardImage.width;
         gameboardImageHeight = gameboardImage.height;
@@ -66,10 +64,8 @@ export class Position extends PositionedItem {
         gameboardRealHeight = gameboardImageHeight * (1 - gameboardImageMarginTop * 2);
 
         // 获取棋盘左上角格点实际位置（像素）
-        gameboardLeftTopX =
-            gameboardImage.offsetLeft + gameboardImageMarginLeft * gameboardImageWidth;
-        gameboardLeftTopY =
-            gameboardImage.offsetTop + gameboardImageMarginTop * gameboardImageHeight;
+        gameboardLeftTopX = gameboardImage.offsetLeft + gameboardImageMarginLeft * gameboardImageWidth;
+        gameboardLeftTopY = gameboardImage.offsetTop + gameboardImageMarginTop * gameboardImageHeight;
 
         // 获取棋盘格点实际大小（像素）
         gameboardGridWidthPx = gameboardRealWidth / (gameboardGridWidth - 1);

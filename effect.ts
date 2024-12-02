@@ -1,4 +1,5 @@
 import { AttributeModifier, getAttributeModifierById } from "./attributeProvider.js";
+import { Piece } from "./piece.js";
 import { round } from "./round.js";
 
 const ROMAN_NUMBER_LIMIT = 25; // 小于等于此数值的等级将使用罗马数字表示
@@ -26,7 +27,7 @@ export class StatusEffect {
     relatedModifierIds: number[] = [];
     _expire: number = Infinity;
     enabled: boolean = true;
-    continuedAction: (() => void) | null = null;
+    continuedAction: ((target: Piece) => void) | null = null;
     negative: boolean = false;
     level: number | null = null;
     showLevel: boolean = true;
@@ -103,8 +104,8 @@ export class StatusEffect {
         return this.relatedModifierIds.map((id) => getAttributeModifierById(id));
     }
 
-    runContinuedAction() {
-        if (this.continuedAction !== null && this.available) this.continuedAction();
+    runContinuedAction(target: Piece) {
+        if (this.continuedAction !== null && this.available) this.continuedAction(target);
     }
 
     setContinuedAction(action: () => void) {

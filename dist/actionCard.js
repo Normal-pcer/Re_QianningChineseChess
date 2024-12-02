@@ -4,7 +4,7 @@ import { returnCardById } from "./cardLooting.js";
 import { DamageType } from "./damageType.js";
 import { filterGrids, ray } from "./defaultMovingBehaviors.js";
 import { StatusEffect } from "./effect.js";
-import { StrengthEffectTemplate, WeaknessEffectTemplate } from "./effectTemplate.js";
+import { StrengthEffectTemplate, WeaknessEffectTemplate, RegenerationEffectTemplate } from "./effectTemplate.js";
 import { Piece, pieces, PieceType } from "./piece.js";
 import { getCurrentSelection, ItemType, SelectionManager, setCurrentSelection, SingleSelection, } from "./selection.js";
 import { DamageTrigger, TriggerManager } from "./trigger.js";
@@ -93,6 +93,9 @@ export const healthInstantPotionActionCard = singleTargetSelectorTemplate("治�
     piece.health = Math.min(piece.health + 600, piece.maxHealth.result);
     piece.draw();
 });
+export const regenerationPotionActionCard = singleTargetSelectorTemplate("再生药水", "regenerationPotion", "持续3回合-选中棋子每回合回复6%生命值", PieceType.None, (result) => {
+    RegenerationEffectTemplate.apply(result, 1, 3 * 2);
+});
 export const strengthPotionEnhancedActionCard = singleTargetSelectorTemplate("力量药水（加强）", "strengthPotionEnhanced", "持续2回合-选中棋子的攻击力提升25%", PieceType.None, (result) => {
     StrengthEffectTemplate.apply(result, 2, 2 * 2);
 });
@@ -165,7 +168,7 @@ const areaGunAttackActionCallback = registerAnonymous((thisPiece, targetCenter) 
     spreadDamageObjects.forEach(applyDamageToEnemyOnly);
     return applyDamageToEnemyOnly(centerDamageObject);
 }, "areaGunAttackActionCallback");
-export const areaGunActionCard = singleTargetSelectorTemplate("威震四方", "areaGun", "一次性-选中的「炮」造成会造成范围伤害", PieceType.Gun, (result) => {
+export const areaGunActionCard = singleTargetSelectorTemplate("威震四方", "areaGun", "一次性-选中的「炮」会造成范围伤害", PieceType.Gun, (result) => {
     let piece = result;
     let modifier = new AttributeModifier(areaGunAttackActionCallback);
     piece.attackActionCallbackProvider.area(0).modify(modifier);

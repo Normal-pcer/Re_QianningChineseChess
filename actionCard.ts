@@ -5,7 +5,7 @@ import { Damage } from "./damage.js";
 import { DamageType } from "./damageType.js";
 import { filterGrids, ray } from "./defaultMovingBehaviors.js";
 import { StatusEffect } from "./effect.js";
-import { StrengthEffectTemplate, WeaknessEffectTemplate } from "./effectTemplate.js";
+import { StrengthEffectTemplate, WeaknessEffectTemplate, RegenerationEffectTemplate } from "./effectTemplate.js";
 import { Piece, pieces, PieceType } from "./piece.js";
 import {
     getCurrentSelection,
@@ -14,7 +14,7 @@ import {
     setCurrentSelection,
     SingleSelection,
 } from "./selection.js";
-import { DamageTrigger, Trigger, TriggerManager } from "./trigger.js";
+import { DamageTrigger, TriggerManager } from "./trigger.js";
 import { Vector2 } from "./vector.js";
 
 export class ActionCard {
@@ -175,6 +175,16 @@ export const healthInstantPotionActionCard = singleTargetSelectorTemplate(
     }
 );
 
+export const regenerationPotionActionCard = singleTargetSelectorTemplate(
+    "再生药水",
+    "regenerationPotion",
+    "持续3回合-选中棋子每回合回复6%生命值",
+    PieceType.None,
+    (result) => {
+        RegenerationEffectTemplate.apply(result, 1, 3 * 2);
+    }
+);
+
 export const strengthPotionEnhancedActionCard = singleTargetSelectorTemplate(
     "力量药水（加强）",
     "strengthPotionEnhanced",
@@ -290,7 +300,7 @@ const areaGunAttackActionCallback = registerAnonymous((thisPiece: Piece, targetC
 export const areaGunActionCard = singleTargetSelectorTemplate(
     "威震四方",
     "areaGun",
-    "一次性-选中的「炮」造成会造成范围伤害",
+    "一次性-选中的「炮」会造成范围伤害",
     PieceType.Gun,
     (result) => {
         let piece = result;
@@ -309,3 +319,4 @@ export const areaGunActionCard = singleTargetSelectorTemplate(
         );
     }
 );
+
