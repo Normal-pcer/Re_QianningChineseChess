@@ -5,7 +5,7 @@ import { Damage } from "./damage.js";
 import { DamageType } from "./damageType.js";
 import { filterGrids, ray } from "./defaultMovingBehaviors.js";
 import { StatusEffect } from "./effect.js";
-import { StrengthEffectTemplate, WeaknessEffectTemplate, RegenerationEffectTemplate } from "./effectTemplate.js";
+import { StrengthEffectTemplate, WeaknessEffectTemplate, RegenerationEffectTemplate, PotionEffectTemplate } from "./effectTemplate.js";
 import { Piece, pieces, PieceType } from "./piece.js";
 import {
     getCurrentSelection,
@@ -182,6 +182,16 @@ export const regenerationPotionActionCard = singleTargetSelectorTemplate(
     PieceType.None,
     (result) => {
         RegenerationEffectTemplate.apply(result, 1, 3 * 2);
+    }
+);
+
+export const potionPotionActionCard = singleTargetSelectorTemplate(
+    "剧毒药水",
+    "potionPotion",
+    "持续3回合-选中棋子每回合减少6%生命值，至多减至10%",
+    PieceType.None,
+    (result) => {
+        PotionEffectTemplate.apply(result, 1, 3 * 2);
     }
 );
 

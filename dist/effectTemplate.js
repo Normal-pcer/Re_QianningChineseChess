@@ -42,4 +42,13 @@ export const RegenerationEffectTemplate = new StatusEffectTemplate("再生", "re
     let increasing = (3 + level * 3) / 100;
     target.health = Math.min(target.maxHealth.result, target.health + target.maxHealth.result * increasing);
 });
+export const PotionEffectTemplate = new StatusEffectTemplate("剧毒", "potion", (level) => `每回合减少${3 + level * 3}%生命值，至多减至10%`, (target, level, expire) => {
+    return [];
+}, (target, level) => {
+    let decreasing = (3 + level * 3) / 100;
+    let limit = target.maxHealth.result / 10;
+    if (target.health >= limit) {
+        target.health = Math.max(limit, target.health - target.maxHealth.result * decreasing);
+    }
+}).setAsNegative();
 //# sourceMappingURL=effectTemplate.js.map
