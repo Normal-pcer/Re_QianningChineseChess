@@ -180,7 +180,7 @@ export const areaGunActionCard = singleTargetSelectorTemplate("威震四方", "a
     // 添加触发器，在主动攻击后移除效果，达到一次性使用。
     TriggerManager.addTrigger(new DamageTrigger((damage) => {
         if (damage.source === piece) {
-            effect.enabled = false;
+            effect.disable(); // 禁用效果
         }
     }));
 });

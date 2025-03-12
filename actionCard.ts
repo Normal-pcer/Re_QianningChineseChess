@@ -323,7 +323,7 @@ export const areaGunActionCard = singleTargetSelectorTemplate(
         TriggerManager.addTrigger(
             new DamageTrigger((damage) => {
                 if (damage.source === piece) {
-                    effect.enabled = false;
+                    effect.disable();  // 禁用效果
                 }
             })
         );
