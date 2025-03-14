@@ -109,7 +109,7 @@ export const highGunActionCard = singleTargetSelectorTemplate(
         TriggerManager.addTrigger(
             new DamageTrigger((damage) => {
                 if (damage.source?.htmlElement === pieceElement && pieceElement != null) {
-                    effect.enabled = false;
+                    effect.disable();
                 }
             })
         );

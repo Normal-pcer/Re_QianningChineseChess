@@ -26,7 +26,7 @@ export class StatusEffect {
     description: string = "";
     relatedModifierIds: number[] = [];
     _expire: number = Infinity;
-    enabled: boolean = true;
+    private enabled: boolean = true;
     continuedAction: ((target: Piece) => void) | null = null;
     negative: boolean = false;
     level: number | null = null;

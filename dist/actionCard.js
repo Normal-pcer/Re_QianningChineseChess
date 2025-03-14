@@ -67,7 +67,7 @@ export const highGunActionCard = singleTargetSelectorTemplate("高射炮", "high
     // 添加触发器，当棋子主动攻击时移除效果。
     TriggerManager.addTrigger(new DamageTrigger((damage) => {
         if (damage.source?.htmlElement === pieceElement && pieceElement != null) {
-            effect.enabled = false;
+            effect.disable();
         }
     }));
 });
