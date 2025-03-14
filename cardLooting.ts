@@ -43,7 +43,7 @@ export function initCardLooting() {
         new poolItem(regenerationPotionActionCard),
         new poolItem(strengthPotionEnhancedActionCard, 0.5),
         new poolItem(strengthPotionExtendedActionCard, 0.5),
-        new poolItem(superLaughingActionCard),
+        new poolItem(superLaughingActionCard, 0.5),
         new poolItem(withBellAndTripodActionCard),
         new poolItem(determinedResistanceActionCard),
         new poolItem(areaGunActionCard),

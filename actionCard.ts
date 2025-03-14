@@ -218,13 +218,13 @@ export const strengthPotionExtendedActionCard = singleTargetSelectorTemplate(
 export const superLaughingActionCard = singleTargetSelectorTemplate(
     "忍俊不禁",
     "superLaughing",
-    "持续3回合-选中棋子不能移动",
+    "持续2回合-选中棋子不能移动",
     PieceType.None,
     (result) => {
         let piece = result;
         let modifier = new AttributeModifier((piece_: Piece) => {
             return filterGrids((pos) => false);
-        }, 3 * 2);
+        }, 2 * 2);
         let effect = new StatusEffect("忍俊不禁", "superLaughing", "不能主动移动和攻击", [
             modifier,
         ]).setAsNegative();

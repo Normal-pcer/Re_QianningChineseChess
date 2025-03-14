@@ -105,11 +105,11 @@ export const strengthPotionEnhancedActionCard = singleTargetSelectorTemplate("�
 export const strengthPotionExtendedActionCard = singleTargetSelectorTemplate("力量药水（延长）", "strengthPotionExtended", "持续5回合-选中棋子的攻击力提升15%", PieceType.None, (result) => {
     StrengthEffectTemplate.apply(result, 1, 5 * 2);
 });
-export const superLaughingActionCard = singleTargetSelectorTemplate("忍俊不禁", "superLaughing", "持续3回合-选中棋子不能移动", PieceType.None, (result) => {
+export const superLaughingActionCard = singleTargetSelectorTemplate("忍俊不禁", "superLaughing", "持续2回合-选中棋子不能移动", PieceType.None, (result) => {
     let piece = result;
     let modifier = new AttributeModifier((piece_) => {
         return filterGrids((pos) => false);
-    }, 3 * 2);
+    }, 2 * 2);
     let effect = new StatusEffect("忍俊不禁", "superLaughing", "不能主动移动和攻击", [
         modifier,
     ]).setAsNegative();
