@@ -1,1 +1,1 @@
-{"version":3,"file":"damageType.js","sourceRoot":"","sources":["../damageType.ts"],"names":[],"mappings":"AAAA,MAAM,CAAN,IAAY,UAMX;AAND,WAAY,UAAU;IAClB,2CAAI,CAAA;IACJ,mDAAQ,CAAA;IACR,yDAAW,CAAA;IACX,qDAAS,CAAA;IACT,+CAAM,CAAA;AACV,CAAC,EANW,UAAU,KAAV,UAAU,QAMrB"}
+{"version":3,"file":"damageType.js","sourceRoot":"","sources":["../damageType.ts"],"names":[],"mappings":"AAAA,MAAM,CAAN,IAAY,UAOX;AAPD,WAAY,UAAU;IAClB,2CAAI,CAAA;IACJ,mDAAQ,CAAA;IACR,yDAAW,CAAA;IACX,qDAAS,CAAA;IACT,+CAAM,CAAA;IACN,6CAAK,CAAA;AACT,CAAC,EAPW,UAAU,KAAV,UAAU,QAOrB"}

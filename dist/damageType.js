@@ -5,5 +5,6 @@ export var DamageType;
     DamageType[DamageType["MeleeMedium"] = 2] = "MeleeMedium";
     DamageType[DamageType["MeleeHigh"] = 3] = "MeleeHigh";
     DamageType[DamageType["Ranged"] = 4] = "Ranged";
+    DamageType[DamageType["Magic"] = 5] = "Magic";
 })(DamageType || (DamageType = {}));
 //# sourceMappingURL=damageType.js.map

@@ -65,7 +65,9 @@ export class Damage {
      * 计算公式：实际伤害 = 伤害值 * (1/2)^(目标防御力/1000)
      */
     get realAmount() {
-        return this.amount * Math.pow(2, -this.target.defense.result / 1000);
+        let defense = this.target.defense.result;
+        if (this.type == DamageType.Magic)  defense /= 2;
+        return this.amount * Math.pow(2, -defense / 1000);
     }
 
     public apply() {

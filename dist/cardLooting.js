@@ -1,4 +1,4 @@
-import { areaGunActionCard, determinedResistanceActionCard, healthInstantPotionActionCard, highGunActionCard, limitlessHorseActionCard, regenerationPotionActionCard, strengthPotionActionCard, strengthPotionEnhancedActionCard, strengthPotionExtendedActionCard, superLaughingActionCard, weaknessPotionActionCard, withBellAndTripodActionCard, potionPotionActionCard } from "./actionCard.js";
+import { areaGunActionCard, determinedResistanceActionCard, healthInstantPotionActionCard, highGunActionCard, limitlessHorseActionCard, regenerationPotionActionCard, strengthPotionActionCard, strengthPotionEnhancedActionCard, strengthPotionExtendedActionCard, superLaughingActionCard, weaknessPotionActionCard, withBellAndTripodActionCard, potionPotionActionCard, potionPotionEnhancedActionCard } from "./actionCard.js";
 import { fixedRandom } from "./random.js";
 import { getCurrentTeam, nextRound, round } from "./round.js";
 import { getPlayerFromTeam } from "./team.js";
@@ -14,7 +14,7 @@ class poolItem {
 }
 let pool = [];
 export function initCardLooting() {
-    pool.push(new poolItem(highGunActionCard), new poolItem(limitlessHorseActionCard), new poolItem(strengthPotionActionCard), new poolItem(weaknessPotionActionCard), new poolItem(healthInstantPotionActionCard), new poolItem(regenerationPotionActionCard), new poolItem(strengthPotionEnhancedActionCard, 0.5), new poolItem(strengthPotionExtendedActionCard, 0.5), new poolItem(superLaughingActionCard, 0.5), new poolItem(withBellAndTripodActionCard), new poolItem(determinedResistanceActionCard), new poolItem(areaGunActionCard), new poolItem(potionPotionActionCard));
+    pool.push(new poolItem(highGunActionCard), new poolItem(limitlessHorseActionCard), new poolItem(strengthPotionActionCard), new poolItem(weaknessPotionActionCard), new poolItem(healthInstantPotionActionCard), new poolItem(regenerationPotionActionCard), new poolItem(strengthPotionEnhancedActionCard, 0.5), new poolItem(strengthPotionExtendedActionCard, 0.5), new poolItem(superLaughingActionCard, 0.5), new poolItem(withBellAndTripodActionCard), new poolItem(determinedResistanceActionCard), new poolItem(areaGunActionCard), new poolItem(potionPotionActionCard), new poolItem(potionPotionEnhancedActionCard, 0.5));
 }
 function giveCard(card, to) {
     to.actionCards.push(deepCopy(card));

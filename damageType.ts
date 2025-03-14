@@ -4,4 +4,5 @@ export enum DamageType {
     MeleeMedium,
     MeleeHigh,
     Ranged,
+    Magic,
 }

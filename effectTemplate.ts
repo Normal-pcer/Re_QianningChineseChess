@@ -1,4 +1,6 @@
 import { AttributeModifier } from "./attributeProvider.js";
+import { Damage } from "./damage.js";
+import { DamageType } from "./damageType.js";
 import { StatusEffect } from "./effect.js";
 import { Piece } from "./piece.js";
 import { round } from "./round.js";
@@ -76,15 +78,16 @@ export const RegenerationEffectTemplate = new StatusEffectTemplate(
 export const PotionEffectTemplate = new StatusEffectTemplate(
     "剧毒",
     "potion",
-    (level) => `每回合减少${3 + level * 3}%生命值，至多减至10%`,
+    (level) => `每轮造成${2 * level + 1}%生命值上限+${40 * level}的魔法伤害，至多使生命值减至5%`,
     (target, level, expire) => {
         return [];
     },
     (target: Piece, level: number) => {
-        let decreasing = (3 + level * 3) / 100;
-        let limit = target.maxHealth.result / 10;
+        let limit = target.maxHealth.result / 20;
         if (target.health >= limit) {
-            target.health = Math.max(limit, target.health - target.maxHealth.result * decreasing);
+            let amount = target.maxHealth.result * (2 * level + 1) / 100 + (40 * level);
+            let damage = new Damage(DamageType.Magic, amount, null, target);
+            damage.apply();
         }
     }
 ).setAsNegative();

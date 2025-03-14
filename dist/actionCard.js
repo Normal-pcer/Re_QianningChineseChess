@@ -96,8 +96,11 @@ export const healthInstantPotionActionCard = singleTargetSelectorTemplate("治�
 export const regenerationPotionActionCard = singleTargetSelectorTemplate("再生药水", "regenerationPotion", "持续3回合-选中棋子每回合回复6%生命值", PieceType.None, (result) => {
     RegenerationEffectTemplate.apply(result, 1, 3 * 2);
 });
-export const potionPotionActionCard = singleTargetSelectorTemplate("剧毒药水", "potionPotion", "持续3回合-选中棋子每回合减少6%生命值，至多减至10%", PieceType.None, (result) => {
+export const potionPotionActionCard = singleTargetSelectorTemplate("剧毒药水", "potionPotion", "持续3回合-选中棋子每轮受到3%+40魔法伤害", PieceType.None, (result) => {
     PotionEffectTemplate.apply(result, 1, 3 * 2);
+});
+export const potionPotionEnhancedActionCard = singleTargetSelectorTemplate("剧毒药水（加强）", "potionPotion", "持续3回合-选中棋子每轮受到5%+80魔法伤害", PieceType.None, (result) => {
+    PotionEffectTemplate.apply(result, 2, 2 * 2);
 });
 export const strengthPotionEnhancedActionCard = singleTargetSelectorTemplate("力量药水（加强）", "strengthPotionEnhanced", "持续2回合-选中棋子的攻击力提升25%", PieceType.None, (result) => {
     StrengthEffectTemplate.apply(result, 2, 2 * 2);

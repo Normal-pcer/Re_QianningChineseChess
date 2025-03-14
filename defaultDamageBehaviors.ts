@@ -11,6 +11,9 @@ export const defaultQuasiMoveTargets: {
     [DamageType.None]: (piece, target) => {
         return piece.position;
     },
+    [DamageType.Magic]: (piece, target) => {
+        return piece.position;
+    },
     [DamageType.MeleeLow]: (piece, target) => {
         return piece.position;
     },
@@ -86,6 +89,9 @@ export const defaultRepelTargets: {
     [key in DamageType]: (piece: Piece, target: Piece) => Position;
 } = {
     [DamageType.None]: (piece, target) => {
+        return piece.position;
+    },
+    [DamageType.Magic]: (piece, target) => {
         return piece.position;
     },
     [DamageType.MeleeLow]: (piece, target) => {

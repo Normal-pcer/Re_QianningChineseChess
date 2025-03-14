@@ -12,7 +12,8 @@ import {
     superLaughingActionCard,
     weaknessPotionActionCard,
     withBellAndTripodActionCard,
-    potionPotionActionCard
+    potionPotionActionCard,
+    potionPotionEnhancedActionCard
 } from "./actionCard.js";
 import { Player } from "./player.js";
 import { fixedRandom } from "./random.js";
@@ -48,6 +49,7 @@ export function initCardLooting() {
         new poolItem(determinedResistanceActionCard),
         new poolItem(areaGunActionCard),
         new poolItem(potionPotionActionCard),
+        new poolItem(potionPotionEnhancedActionCard, 0.5),
     );
 }
 
