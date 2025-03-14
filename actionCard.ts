@@ -196,7 +196,7 @@ export const potionPotionActionCard = singleTargetSelectorTemplate(
 );
 export const potionPotionEnhancedActionCard = singleTargetSelectorTemplate(
     "剧毒药水（加强）",
-    "potionPotion",
+    "potionPotionEnhanced",
     "持续3回合-选中棋子每轮受到5%+80魔法伤害",
     PieceType.None,
     (result) => {

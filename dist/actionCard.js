@@ -99,7 +99,7 @@ export const regenerationPotionActionCard = singleTargetSelectorTemplate("再生
 export const potionPotionActionCard = singleTargetSelectorTemplate("剧毒药水", "potionPotion", "持续3回合-选中棋子每轮受到3%+40魔法伤害", PieceType.None, (result) => {
     PotionEffectTemplate.apply(result, 1, 3 * 2);
 });
-export const potionPotionEnhancedActionCard = singleTargetSelectorTemplate("剧毒药水（加强）", "potionPotion", "持续3回合-选中棋子每轮受到5%+80魔法伤害", PieceType.None, (result) => {
+export const potionPotionEnhancedActionCard = singleTargetSelectorTemplate("剧毒药水（加强）", "potionPotionEnhanced", "持续3回合-选中棋子每轮受到5%+80魔法伤害", PieceType.None, (result) => {
     PotionEffectTemplate.apply(result, 2, 2 * 2);
 });
 export const strengthPotionEnhancedActionCard = singleTargetSelectorTemplate("力量药水（加强）", "strengthPotionEnhanced", "持续2回合-选中棋子的攻击力提升25%", PieceType.None, (result) => {
