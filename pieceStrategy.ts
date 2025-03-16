@@ -29,3 +29,16 @@ export class DefaultPieceAttackingStrategy implements PieceAttackingStrategy {
         return DefaultMovingBehaviors.auto(piece, true)(piece);
     }
 }
+
+export interface PieceActionStrategy {
+    attack(a: Piece, b: Piece): boolean;
+}
+
+export class DefaultPieceActionStrategy implements PieceActionStrategy {
+    attack(piece: Piece, target: Piece): boolean {
+        if (target.team === piece.team) return false; // 不能攻击友军
+        let damageObject = piece.SimulateAttack(target);
+        damageObject.apply();
+        return true;
+    }
+}

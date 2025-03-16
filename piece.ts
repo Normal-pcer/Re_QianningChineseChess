@@ -12,7 +12,7 @@ import { StatusEffect } from "./effect.js";
 import { schedule } from "./schedule.js";
 import { fixedRandom } from "./random.js";
 import { round } from "./round.js";
-import { PieceMovingStrategy, DefaultPieceMovingStrategy, PieceAttackingStrategy, DefaultPieceAttackingStrategy } from "./pieceStrategy.js";
+import { PieceMovingStrategy, DefaultPieceMovingStrategy, PieceAttackingStrategy, DefaultPieceAttackingStrategy, PieceActionStrategy, DefaultPieceActionStrategy } from "./pieceStrategy.js";
 
 /**
  * 伤害浮动范围。伤害浮动在暴击之后结算，会影响Damage对象的amount属性。
@@ -118,7 +118,7 @@ class Piece {
      * 一个属性提供器，返回值为一个回调函数，用于执行棋子的攻击动作。
      * 回调函数的返回值表示攻击成功与否。攻击失败的原因可能是攻击目标不是敌方棋子等。
      */
-    attackActionCallbackProvider: AttributeProvider<(piece: Piece, target: Piece) => boolean>;
+    attackActionCallbackProvider: AttributeProvider<PieceActionStrategy>;
 
     /**
      * 棋子的点击事件监听器，为回调函数，可以为空。
@@ -162,7 +162,9 @@ class Piece {
         this.attackingTargetsCallback = new AttributeProvider(
             new DefaultPieceAttackingStrategy()
         );
-        this.attackActionCallbackProvider = new AttributeProvider(defaultAttackActionCallback);
+        this.attackActionCallbackProvider = new AttributeProvider(
+            new DefaultPieceActionStrategy()
+        );
     }
 
     /**
@@ -354,7 +356,7 @@ class Piece {
      * @returns 回调参数的返回值。应当表示是否攻击成功。
      */
     attack(targetPiece: Piece) {
-        return this.attackActionCallbackProvider.result(this, targetPiece);
+        return this.attackActionCallbackProvider.result.attack(this, targetPiece);
     }
 
     /**

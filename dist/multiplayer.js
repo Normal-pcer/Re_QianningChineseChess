@@ -8,7 +8,6 @@ import { AttributeModifier } from "./attributeProvider.js";
 import { highGunActionCard, limitlessHorseActionCard } from "./actionCard.js";
 import { initCardLooting, lootCard } from "./cardLooting.js";
 import { loadSave, recall, saveCurrent, storeSave } from "./save.js";
-import { registerCallback } from "./callbackRegister.js";
 import { showDefaultPiece } from "./pieceFrame.js";
 import { StatusEffect } from "./effect.js";
 import { DamageTrigger, TriggerManager } from "./trigger.js";
@@ -45,7 +44,6 @@ window.onload = () => {
     pieces.forEach((piece) => {
         piece.init();
     });
-    registerCallback(pieces[0].attackActionCallbackProvider.result, "defaultAttackActionCallback");
     TriggerManager.addTrigger(
     // 注册触发器，用于触发御守三晖状态效果
     new DamageTrigger((damage) => {

@@ -10,7 +10,7 @@ import { registerAnonymous } from "./callbackRegister.js";
 import { schedule } from "./schedule.js";
 import { fixedRandom } from "./random.js";
 import { round } from "./round.js";
-import { DefaultPieceMovingStrategy, DefaultPieceAttackingStrategy } from "./pieceStrategy.js";
+import { DefaultPieceMovingStrategy, DefaultPieceAttackingStrategy, DefaultPieceActionStrategy } from "./pieceStrategy.js";
 /**
  * 伤害浮动范围。伤害浮动在暴击之后结算，会影响Damage对象的amount属性。
  * 0.02表示伤害浮动会造成原始伤害的98%到102%。
@@ -139,7 +139,7 @@ class Piece {
         // 初始化回调函数提供器
         this.movingDestinationsCallbackProvider = new AttributeProvider(new DefaultPieceMovingStrategy());
         this.attackingTargetsCallback = new AttributeProvider(new DefaultPieceAttackingStrategy());
-        this.attackActionCallbackProvider = new AttributeProvider(defaultAttackActionCallback);
+        this.attackActionCallbackProvider = new AttributeProvider(new DefaultPieceActionStrategy());
     }
     /**
      * 选中或取消选中棋子。
@@ -319,7 +319,7 @@ class Piece {
      * @returns 回调参数的返回值。应当表示是否攻击成功。
      */
     attack(targetPiece) {
-        return this.attackActionCallbackProvider.result(this, targetPiece);
+        return this.attackActionCallbackProvider.result.attack(this, targetPiece);
     }
     /**
      * 被摧毁/杀死。

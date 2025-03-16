@@ -50,7 +50,6 @@ window.onload = () => {
     pieces.forEach((piece) => {
         piece.init();
     });
-    registerCallback(pieces[0].attackActionCallbackProvider.result, "defaultAttackActionCallback");
 
     TriggerManager.addTrigger(
         // 注册触发器，用于触发御守三晖状态效果

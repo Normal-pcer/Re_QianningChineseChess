@@ -12,4 +12,13 @@ export class DefaultPieceAttackingStrategy {
         return DefaultMovingBehaviors.auto(piece, true)(piece);
     }
 }
+export class DefaultPieceActionStrategy {
+    attack(piece, target) {
+        if (target.team === piece.team)
+            return false; // 不能攻击友军
+        let damageObject = piece.SimulateAttack(target);
+        damageObject.apply();
+        return true;
+    }
+}
 //# sourceMappingURL=pieceStrategy.js.map

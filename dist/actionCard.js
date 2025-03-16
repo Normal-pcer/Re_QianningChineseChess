@@ -201,9 +201,14 @@ const areaGunAttackActionCallback = registerAnonymous((thisPiece, targetCenter) 
     spreadDamageObjects.forEach(applyDamageToEnemyOnly);
     return applyDamageToEnemyOnly(centerDamageObject);
 }, "areaGunAttackActionCallback");
+class AreaGunActionStrategy {
+    attack(a, b) {
+        return areaGunAttackActionCallback(a, b);
+    }
+}
 export const areaGunActionCard = singleTargetSelectorTemplate("威震四方", "areaGun", "一次性-选中的「炮」会造成范围伤害", PieceType.Gun, (result) => {
     let piece = result;
-    let modifier = new AttributeModifier(areaGunAttackActionCallback);
+    let modifier = new AttributeModifier(new AreaGunActionStrategy());
     piece.attackActionCallbackProvider.area(0).modify(modifier);
     let effect = new StatusEffect("威震四方", "areaGun", "下一次攻击造成范围伤害", [modifier]);
     piece.pushEffects(effect);

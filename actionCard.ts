@@ -7,7 +7,7 @@ import { filterGrids, ray } from "./defaultMovingBehaviors.js";
 import { StatusEffect } from "./effect.js";
 import { StrengthEffectTemplate, WeaknessEffectTemplate, RegenerationEffectTemplate, PotionEffectTemplate } from "./effectTemplate.js";
 import { Piece, pieces, PieceType } from "./piece.js";
-import { PieceAttackingStrategy, PieceMovingStrategy } from "./pieceStrategy.js";
+import { PieceActionStrategy, PieceAttackingStrategy, PieceMovingStrategy } from "./pieceStrategy.js";
 import { Position } from "./position.js";
 import {
     getCurrentSelection,
@@ -356,6 +356,12 @@ const areaGunAttackActionCallback = registerAnonymous((thisPiece: Piece, targetC
     return applyDamageToEnemyOnly(centerDamageObject);
 }, "areaGunAttackActionCallback");
 
+class AreaGunActionStrategy implements PieceActionStrategy {
+    attack(a: Piece, b: Piece): boolean {
+        return areaGunAttackActionCallback(a, b);
+    }
+}
+
 export const areaGunActionCard = singleTargetSelectorTemplate(
     "威震四方",
     "areaGun",
@@ -363,7 +369,7 @@ export const areaGunActionCard = singleTargetSelectorTemplate(
     PieceType.Gun,
     (result) => {
         let piece = result;
-        let modifier = new AttributeModifier(areaGunAttackActionCallback);
+        let modifier = new AttributeModifier(new AreaGunActionStrategy());
         piece.attackActionCallbackProvider.area(0).modify(modifier);
         let effect = new StatusEffect("威震四方", "areaGun", "下一次攻击造成范围伤害", [modifier]);
         piece.pushEffects(effect);
