@@ -12,6 +12,7 @@ import { StatusEffect } from "./effect.js";
 import { schedule } from "./schedule.js";
 import { fixedRandom } from "./random.js";
 import { round } from "./round.js";
+import { PieceMovingStrategy, DefaultPieceMovingStrategy, PieceAttackingStrategy, DefaultPieceAttackingStrategy } from "./pieceStrategy.js";
 
 /**
  * 伤害浮动范围。伤害浮动在暴击之后结算，会影响Damage对象的amount属性。
@@ -108,11 +109,11 @@ class Piece {
     /**
      * 一个属性提供器，返回值为一个回调函数，用于获取棋子可能移动到的位置。
      */
-    movingDestinationsCallbackProvider: AttributeProvider<(piece: Piece) => Position[]>;
+    movingDestinationsCallbackProvider: AttributeProvider<PieceMovingStrategy>;
     /**
      * 一个属性提供器，返回值为一个回调函数，用于获取棋子可能攻击到的棋子。
      */
-    attackingTargetsCallback: AttributeProvider<(piece: Piece) => Position[]>;
+    attackingTargetsCallback: AttributeProvider<PieceAttackingStrategy>;
     /**
      * 一个属性提供器，返回值为一个回调函数，用于执行棋子的攻击动作。
      * 回调函数的返回值表示攻击成功与否。攻击失败的原因可能是攻击目标不是敌方棋子等。
@@ -156,10 +157,10 @@ class Piece {
 
         // 初始化回调函数提供器
         this.movingDestinationsCallbackProvider = new AttributeProvider(
-            DefaultMovingBehaviors.auto(this, false)
+            new DefaultPieceMovingStrategy()
         );
         this.attackingTargetsCallback = new AttributeProvider(
-            DefaultMovingBehaviors.auto(this, true)
+            new DefaultPieceAttackingStrategy()
         );
         this.attackActionCallbackProvider = new AttributeProvider(defaultAttackActionCallback);
     }
@@ -429,7 +430,7 @@ class Piece {
      * 将会获取棋子的「移动行为」回调参数并调用，并返回其返回值。
      */
     get destinations() {
-        return this.movingDestinationsCallbackProvider.result(this);
+        return this.movingDestinationsCallbackProvider.result.getPosition(this);
     }
 
     /**
@@ -437,7 +438,7 @@ class Piece {
      * 将会获取棋子的「攻击行为」回调参数并调用，并返回其返回值。
      */
     get attackTargets() {
-        return this.attackingTargetsCallback.result(this);
+        return this.attackingTargetsCallback.result.getPosition(this);
     }
 }
 

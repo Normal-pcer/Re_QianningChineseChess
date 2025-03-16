@@ -1,4 +1,3 @@
-import { DefaultMovingBehaviors } from "./defaultMovingBehaviors.js";
 import { Position } from "./position.js";
 import { onPieceClick } from "./selection.js";
 import { stop } from "./multiplayer.js";
@@ -11,6 +10,7 @@ import { registerAnonymous } from "./callbackRegister.js";
 import { schedule } from "./schedule.js";
 import { fixedRandom } from "./random.js";
 import { round } from "./round.js";
+import { DefaultPieceMovingStrategy, DefaultPieceAttackingStrategy } from "./pieceStrategy.js";
 /**
  * 伤害浮动范围。伤害浮动在暴击之后结算，会影响Damage对象的amount属性。
  * 0.02表示伤害浮动会造成原始伤害的98%到102%。
@@ -137,8 +137,8 @@ class Piece {
             this.weight = new NumberAttributeProvider(config.weight);
         }
         // 初始化回调函数提供器
-        this.movingDestinationsCallbackProvider = new AttributeProvider(DefaultMovingBehaviors.auto(this, false));
-        this.attackingTargetsCallback = new AttributeProvider(DefaultMovingBehaviors.auto(this, true));
+        this.movingDestinationsCallbackProvider = new AttributeProvider(new DefaultPieceMovingStrategy());
+        this.attackingTargetsCallback = new AttributeProvider(new DefaultPieceAttackingStrategy());
         this.attackActionCallbackProvider = new AttributeProvider(defaultAttackActionCallback);
     }
     /**
@@ -394,14 +394,14 @@ class Piece {
      * 将会获取棋子的「移动行为」回调参数并调用，并返回其返回值。
      */
     get destinations() {
-        return this.movingDestinationsCallbackProvider.result(this);
+        return this.movingDestinationsCallbackProvider.result.getPosition(this);
     }
     /**
      * 获取棋子可能的攻击目标位置。
      * 将会获取棋子的「攻击行为」回调参数并调用，并返回其返回值。
      */
     get attackTargets() {
-        return this.attackingTargetsCallback.result(this);
+        return this.attackingTargetsCallback.result.getPosition(this);
     }
 }
 /**

@@ -56,8 +56,13 @@ const singleTargetSelectorTemplate = (name, id, description, pieceType, final) =
 const highGunAttackCallback = registerAnonymous((piece_) => {
     return ray(piece_.position, new Vector2(1, 0), 2, 1).concat(ray(piece_.position, new Vector2(-1, 0), 2, 1), ray(piece_.position, new Vector2(0, 1), 2, 1), ray(piece_.position, new Vector2(0, -1), 2, 1));
 }, "highGunAttackCallback");
+class HighGunAttackingStrategy {
+    getPosition(piece) {
+        return ray(piece.position, new Vector2(1, 0), 2, 1).concat(ray(piece.position, new Vector2(-1, 0), 2, 1), ray(piece.position, new Vector2(0, 1), 2, 1), ray(piece.position, new Vector2(0, -1), 2, 1));
+    }
+}
 export const highGunActionCard = singleTargetSelectorTemplate("高射炮", "highGun", "一次性-允许炮至多隔两个棋子攻击", PieceType.Gun, (piece) => {
-    let modifier = new AttributeModifier(highGunAttackCallback);
+    let modifier = new AttributeModifier(new HighGunAttackingStrategy());
     piece.attackingTargetsCallback.area(0).modify(modifier);
     let effect = new StatusEffect("高射炮", "highGun", "下一次攻击允许隔至多两个棋子", [
         modifier,
@@ -71,16 +76,29 @@ export const highGunActionCard = singleTargetSelectorTemplate("高射炮", "high
         }
     }));
 });
-const limitlessHorseAttackCallback = registerAnonymous((piece) => {
-    return filterGrids((pos) => piece.position.manhattanDistance(pos) == 3 && piece.position.chebyshevDistance(pos) == 2);
-}, "limitlessHorseAttackCallback");
+/**
+ * “一马平川”状态下的马的移动、攻击策略
+ */
+class LimitlessHorseMovingStrategy {
+    getPosition(piece) {
+        return filterGrids((pos) => piece.position.manhattanDistance(pos) == 3 &&
+            piece.position.chebyshevDistance(pos) == 2);
+    }
+}
+class LimitlessHorseAttackingStrategy {
+    getPosition(piece) {
+        return filterGrids((pos) => piece.position.manhattanDistance(pos) == 3 &&
+            piece.position.chebyshevDistance(pos) == 2);
+    }
+}
 export const limitlessHorseActionCard = singleTargetSelectorTemplate("一马平川", "limitlessHorse", "持续3回合-马的行动不再受「蹩马腿」限制", PieceType.Horse, (result) => {
     let piece = result;
-    let modifier = new AttributeModifier(limitlessHorseAttackCallback, 3 * 2);
-    let effect = new StatusEffect("一马平川", "limitlessHorse", "马的行动不再受「蹩马腿」限制", [modifier]);
+    let attacking_modifier = new AttributeModifier(new LimitlessHorseAttackingStrategy(), 3 * 2);
+    let moving_modifier = new AttributeModifier(new LimitlessHorseMovingStrategy(), 3 * 2);
+    let effect = new StatusEffect("一马平川", "limitlessHorse", "马的行动不再受「蹩马腿」限制", [attacking_modifier, moving_modifier]);
     piece.pushEffects(effect);
-    piece.attackingTargetsCallback.area(0).modify(modifier);
-    piece.movingDestinationsCallbackProvider.area(0).modify(modifier);
+    piece.attackingTargetsCallback.area(0).modify(attacking_modifier);
+    piece.movingDestinationsCallbackProvider.area(0).modify(moving_modifier);
 });
 export const strengthPotionActionCard = singleTargetSelectorTemplate("力量药水", "strengthPotion", "持续3回合-选中棋子的攻击力提升15%", PieceType.None, (result) => {
     StrengthEffectTemplate.apply(result, 1, 3 * 2);
@@ -108,17 +126,26 @@ export const strengthPotionEnhancedActionCard = singleTargetSelectorTemplate("�
 export const strengthPotionExtendedActionCard = singleTargetSelectorTemplate("力量药水（延长）", "strengthPotionExtended", "持续5回合-选中棋子的攻击力提升15%", PieceType.None, (result) => {
     StrengthEffectTemplate.apply(result, 1, 5 * 2);
 });
+class SuperLaughingMovingStrategy {
+    getPosition(piece) {
+        return [];
+    }
+}
+class SuperLaughingAttackingStrategy {
+    getPosition(piece) {
+        return [];
+    }
+}
 export const superLaughingActionCard = singleTargetSelectorTemplate("忍俊不禁", "superLaughing", "持续2回合-选中棋子不能移动", PieceType.None, (result) => {
     let piece = result;
-    let modifier = new AttributeModifier((piece_) => {
-        return filterGrids((pos) => false);
-    }, 2 * 2);
+    let moving_modifier = new AttributeModifier(new SuperLaughingMovingStrategy, 2 * 2);
+    let attacking_modifier = new AttributeModifier(new SuperLaughingAttackingStrategy(), 2 * 2);
     let effect = new StatusEffect("忍俊不禁", "superLaughing", "不能主动移动和攻击", [
-        modifier,
+        moving_modifier, attacking_modifier
     ]).setAsNegative();
     piece.pushEffects(effect);
-    piece.movingDestinationsCallbackProvider.area(0).modify(modifier);
-    piece.attackingTargetsCallback.area(0).modify(modifier);
+    piece.movingDestinationsCallbackProvider.area(0).modify(moving_modifier);
+    piece.attackingTargetsCallback.area(0).modify(attacking_modifier);
 });
 export const withBellAndTripodActionCard = singleTargetSelectorTemplate("戴钟之鼎", "withBellAndTripod", "持续3回合-选中棋子重量提升6000%", PieceType.None, (result) => {
     let piece = result;
