@@ -116,7 +116,7 @@ class MultiplicationArea<T> {
 export class AttributeModifier<T> {
     amount: T;
     expire: number = Infinity;
-    operation: (arg1: T, arg2: T) => T;
+    operation: (arg1: any, arg2: any) => T;
     enabled: boolean = true;
     clearOnExpire: boolean = true;
     clearOnDisable: boolean = true;
@@ -135,7 +135,7 @@ export class AttributeModifier<T> {
         amount: T,
         expire: number = Infinity,
         expireOffset: number | null = -1,
-        operation: null | ((arg1: T, arg2: T) => T) = null,
+        operation: null | ((arg1: any, arg2: any) => T) = null,
         numberModifier: boolean = true,
         clearOnExpire: boolean = true,
         clearOnDisable: boolean = true

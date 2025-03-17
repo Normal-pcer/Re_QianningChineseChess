@@ -5,7 +5,6 @@ import { initDefaultMovingBehaviors } from "./defaultMovingBehaviors.js";
 import { getPlayerFromTeam, Team } from "./team.js";
 import { getCurrentTeam } from "./round.js";
 import { AttributeModifier } from "./attributeProvider.js";
-import { highGunActionCard, limitlessHorseActionCard } from "./actionCard.js";
 import { initCardLooting, lootCard } from "./cardLooting.js";
 import { loadSave, recall, saveCurrent, storeSave } from "./save.js";
 import { showDefaultPiece } from "./pieceFrame.js";
@@ -85,12 +84,6 @@ window.onload = () => {
                 pieces
                     .filter((piece) => piece.type === PieceType.Master && piece.team != text)[0]
                     .damaged();
-            }
-            if (text === "/high") {
-                highGunActionCard.apply();
-            }
-            if (text === "/limitlessHorse") {
-                limitlessHorseActionCard.apply();
             }
             if (text === "/recall") {
                 recall();
