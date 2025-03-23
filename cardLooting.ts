@@ -1,5 +1,7 @@
 import {
     ActionCard,
+    HighGunActionCard,
+    LimitlessHorseActionCard,
     StrengthPotionActionCard,
     TestActionCard
 } from "./actionCard.js";
@@ -22,6 +24,8 @@ class poolItem {
 
 let pool: poolItem[] = [
     new poolItem(new StrengthPotionActionCard()),
+    new poolItem(new HighGunActionCard()),
+    new poolItem(new LimitlessHorseActionCard()),
 ];
 
 export function initCardLooting() {

@@ -1,4 +1,4 @@
-import { StrengthPotionActionCard } from "./actionCard.js";
+import { HighGunActionCard, LimitlessHorseActionCard, StrengthPotionActionCard } from "./actionCard.js";
 import { fixedRandom } from "./random.js";
 import { getCurrentTeam, nextRound, round } from "./round.js";
 import { getPlayerFromTeam } from "./team.js";
@@ -14,6 +14,8 @@ class poolItem {
 }
 let pool = [
     new poolItem(new StrengthPotionActionCard()),
+    new poolItem(new HighGunActionCard()),
+    new poolItem(new LimitlessHorseActionCard()),
 ];
 export function initCardLooting() {
 }

@@ -9,7 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 import { AttributeModifier } from "./attributeProvider.js";
 import { returnCardById } from "./cardLooting.js";
-import { ray } from "./defaultMovingBehaviors.js";
+import { filterGrids, ray } from "./defaultMovingBehaviors.js";
 import { StatusEffect } from "./effect.js";
 import { StrengthEffectTemplate } from "./effectTemplate.js";
 import { Piece, PieceType } from "./piece.js";
@@ -119,4 +119,37 @@ HighGunActionCard = __decorate([
     __metadata("design:paramtypes", [])
 ], HighGunActionCard);
 export { HighGunActionCard };
+/**
+ * “一马平川”状态下的马的移动、攻击策略
+ */
+class LimitlessHorseMovingStrategy {
+    getPosition(piece) {
+        return filterGrids((pos) => piece.position.manhattanDistance(pos) == 3 &&
+            piece.position.chebyshevDistance(pos) == 2);
+    }
+}
+class LimitlessHorseAttackingStrategy {
+    getPosition(piece) {
+        return filterGrids((pos) => piece.position.manhattanDistance(pos) == 3 &&
+            piece.position.chebyshevDistance(pos) == 2);
+    }
+}
+let LimitlessHorseActionCard = class LimitlessHorseActionCard extends SelectorActionCard {
+    constructor() {
+        super("一马平川", "limitlessHorse", "持续 3 回合 - 马的行动不再受「蹩马腿」限制", PieceType.Horse);
+    }
+    final(target) {
+        let attackingModifier = new AttributeModifier(new LimitlessHorseAttackingStrategy(), 3 * 2);
+        let movingModifier = new AttributeModifier(new LimitlessHorseMovingStrategy(), 3 * 2);
+        let effect = new StatusEffect("一马平川", "limitlessHorse", "马的行动不再受「蹩马腿」限制", [attackingModifier, movingModifier]);
+        target.pushEffects(effect);
+        target.attackingTargetsCallback.area(0).modify(attackingModifier);
+        target.movingDestinationsCallbackProvider.area(0).modify(movingModifier);
+    }
+};
+LimitlessHorseActionCard = __decorate([
+    TypeRegistry.register(),
+    __metadata("design:paramtypes", [])
+], LimitlessHorseActionCard);
+export { LimitlessHorseActionCard };
 //# sourceMappingURL=actionCard.js.map
