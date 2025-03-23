@@ -248,7 +248,7 @@ class Piece {
         // 检查是否有有效的状态效果
         this.statusEffects = this.statusEffects.filter((effect) => effect.available);
         let hasEffect = this.statusEffects.some((effect) => effect.available);
-        let allNegative = hasEffect && this.statusEffects.every((effect) => effect.negative);
+        let allNegative = hasEffect && this.statusEffects.every((effect) => effect.isNegative());
         if (allNegative) {
             this.htmlElement.classList.remove("has-effect");
             this.htmlElement.classList.add("has-negative-effect");

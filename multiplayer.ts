@@ -73,21 +73,21 @@ window.onload = () => {
 
                 if (last === 0) return; // 伤害过低（<0.5）无需触发御守三晖
 
-                let effect = new StatusEffect(
-                    "御守三晖",
-                    "masterSelfDefense",
-                    `防御力提升${Math.round(defense * 100)}%`,
-                    [
-                        damage.target.defense
-                            .area(1)
-                            .modify(new AttributeModifier(defense, last)),
-                    ],
-                    Math.round(defense)
-                ).hideLevel()
-                damage.target.pushEffects(effect);
+                // let effect = new StatusEffect(
+                //     "御守三晖",
+                //     "masterSelfDefense",
+                //     `防御力提升${Math.round(defense * 100)}%`,
+                //     [
+                //         damage.target.defense
+                //             .area(1)
+                //             .modify(new AttributeModifier(defense, last)),
+                //     ],
+                //     Math.round(defense)
+                // ).hideLevel()
+                // damage.target.pushEffects(effect);
 
-                console.log(damage.target);
-                console.log("对其应用了御守三晖")
+                // console.log(damage.target);
+                // console.log("对其应用了御守三晖")
 
 
             }
@@ -104,6 +104,12 @@ window.onload = () => {
                     .filter((piece) => piece.type === PieceType.Master && piece.team != text)[0]
                     .damaged();
             }
+            // if (text === "/high") {
+            //     highGunActionCard.apply();
+            // }
+            // if (text === "/limitlessHorse") {
+            //     limitlessHorseActionCard.apply();
+            // }
             if (text === "/recall") {
                 recall();
             }
