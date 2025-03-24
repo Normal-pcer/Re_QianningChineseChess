@@ -1,6 +1,7 @@
 import { AttributeModifier, getAttributeModifierById, modifiers } from "./attributeProvider.js";
 import { Piece } from "./piece.js";
 import { round } from "./round.js";
+import { Serializable } from "./serialize.js";
 
 const ROMAN_NUMBER_LIMIT = 25; // 小于等于此数值的等级将使用罗马数字表示
 const toRomanNumber = (number: number) => {
@@ -19,6 +20,17 @@ const toRomanNumber = (number: number) => {
         ones[Math.floor(number % 10)]
     );
 };
+
+/**
+ * 策略类，用于指定状态效果在每一轮进行后都需要进行的操作。
+ */
+export abstract class TickActionStrategy extends Serializable {
+    /**
+     * 对持有该效果的棋子执行操作。将会在每一轮之后被调用。
+     * @param piece 目标棋子。
+     */
+    abstract action(piece: Piece): void;
+}
 
 export class StatusEffect {
     readonly name: string = "";
@@ -52,11 +64,10 @@ export class StatusEffect {
      */
     private showLevel: boolean = true;
     /**
-     * 执行状态效果持续动作。
-     * 期望每轮都调用这个方法（如果存在）。
-     * @param target 持有这个效果的棋子。
+     * 每一轮结束后希望执行的动作。
+     * 将会调用 action 方法。
      */
-    continuedAction?(target: Piece): void;
+    private tickAction: TickActionStrategy | null = null;
 
     /**
      * 构造一个状态效果（StatusEffect）。
@@ -182,9 +193,13 @@ export class StatusEffect {
         return this.negative;
     }
 
+    setTickAction(strategy: TickActionStrategy): void {
+        this.tickAction = strategy;
+    }
+
     runContinuedAction(target: Piece) {
-        if (this.continuedAction !== undefined) {
-            this.continuedAction(target);
+        if (this.tickAction !== null) {
+            this.tickAction.action(target);
         }
     }
 }

@@ -5,26 +5,27 @@
 import { DefaultMovingBehaviors } from "./defaultMovingBehaviors.js";
 import { Piece } from "./piece.js";
 import { Position } from "./position.js";
+import { Serializable } from "./serialize.js";
 
 /**
  * 棋子移动策略。
  * 通过 getPosition 方法获取棋子可以移动到的全部位置。
  */
-export interface PieceMovingStrategy {
-    getPosition(piece: Piece): Position[];
+export abstract class PieceMovingStrategy extends Serializable {
+    abstract getPosition(piece: Piece): Position[];
 }
 
-export class DefaultPieceMovingStrategy implements PieceMovingStrategy {
+export class DefaultPieceMovingStrategy extends PieceMovingStrategy {
     getPosition(piece: Piece): Position[] {
         return DefaultMovingBehaviors.auto(piece, false)(piece);
     }
 }
 
-export interface PieceAttackingStrategy {
-    getPosition(piece: Piece): Position[];
+export abstract class PieceAttackingStrategy extends Serializable {
+    abstract getPosition(piece: Piece): Position[];
 }
 
-export class DefaultPieceAttackingStrategy implements PieceAttackingStrategy {
+export class DefaultPieceAttackingStrategy extends PieceAttackingStrategy {
     getPosition(piece: Piece): Position[] {
         return DefaultMovingBehaviors.auto(piece, true)(piece);
     }

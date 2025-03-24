@@ -1,7 +1,8 @@
 import { AttributeModifier } from "./attributeProvider.js";
-import { StatusEffect } from "./effect.js";
+import { StatusEffect, TickActionStrategy } from "./effect.js";
 import { Piece } from "./piece.js";
 import { round } from "./round.js";
+import { TypeRegistry } from "./serialize.js";
 
 /**
  * 一个便利基类，用于创建一些相似的状态效果。
@@ -11,9 +12,9 @@ export abstract class StatusEffectTemplate {
     readonly name: string;
     readonly id: string;
     private negative: boolean = false;
+    protected tickActionStrategy: TickActionStrategy | null = null;
 
     abstract onApply(target: Piece, level: number, expire: number): AttributeModifier<any>[];
-
     abstract getDescription(level: number): string;
     constructor(name: string, id: string) {
         this.name = name;
@@ -55,6 +56,10 @@ export abstract class StatusEffectTemplate {
             expire
         );
 
+        if (this.tickActionStrategy !== null) {
+            effect.setTickAction(this.tickActionStrategy);
+        }
+
         if (this.isNegative()) {
             effect.setAsNegative();
         }
@@ -78,3 +83,48 @@ export class StrengthEffectTemplate extends StatusEffectTemplate {
     }
 }
 
+export class WeaknessEffectTemplate extends StatusEffectTemplate {
+    constructor() {
+        super("虚弱", "weakness");
+    }
+
+    getDescription(level: number): string {
+        return `攻击力降低 ${Math.round(10 + level * 10)}`;
+    }
+
+    onApply(target: Piece, level: number, expire: number): AttributeModifier<any>[] {
+        let modifier = new AttributeModifier((10 + level * 10) / 100, expire, null);
+        target.attackDamage.area(1).modify(modifier);
+        return [modifier];
+    }
+}
+
+@TypeRegistry.register()
+class RegenerationTickAction extends TickActionStrategy {
+    readonly level: number;
+    constructor(level: number) {
+        super();
+        this.level = level;
+    }
+    action(target: Piece): void {
+        let limit = target.maxHealth.result;
+        let scale = 0.03 + this.level * 0.03;
+        target.health = Math.min(target.health + scale * limit, limit);
+    }
+}
+
+export class RegenerationEffectTemplate extends StatusEffectTemplate {
+    constructor() {
+        super("生命恢复", "regeneration");
+    }
+
+    getDescription(level: number): string {
+        return `攻击力降低 ${Math.round(10 + level * 10)}`;
+    }
+
+    onApply(target: Piece, level: number, expire: number): AttributeModifier<any>[] {
+        let modifier = new AttributeModifier((10 + level * 10) / 100, expire, null);
+        target.attackDamage.area(1).modify(modifier);
+        return [modifier];
+    }
+}
