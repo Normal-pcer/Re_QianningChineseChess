@@ -12,10 +12,12 @@ export abstract class StatusEffectTemplate {
     readonly name: string;
     readonly id: string;
     private negative: boolean = false;
-    protected tickActionStrategy: TickActionStrategy | null = null;
 
     abstract onApply(target: Piece, level: number, expire: number): AttributeModifier<any>[];
     abstract getDescription(level: number): string;
+    createTickAction(level: number): TickActionStrategy | null {
+        return null;
+    }
     constructor(name: string, id: string) {
         this.name = name;
         this.id = id;
@@ -56,8 +58,9 @@ export abstract class StatusEffectTemplate {
             expire
         );
 
-        if (this.tickActionStrategy !== null) {
-            effect.setTickAction(this.tickActionStrategy);
+        let tickAction = this.createTickAction(level);
+        if (tickAction !== null) {
+            effect.setTickAction(tickAction);
         }
 
         if (this.isNegative()) {
@@ -126,5 +129,9 @@ export class RegenerationEffectTemplate extends StatusEffectTemplate {
         let modifier = new AttributeModifier((10 + level * 10) / 100, expire, null);
         target.attackDamage.area(1).modify(modifier);
         return [modifier];
+    }
+
+    createTickAction(level: number): TickActionStrategy | null {
+        return new RegenerationTickAction(level);
     }
 }

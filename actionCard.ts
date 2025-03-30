@@ -236,6 +236,6 @@ export class RegenerationPotionActionCard extends SelectorActionCard {
         super("再生药水", "regenerationPotion", "持续 3 回合 - 选中棋子每回合回复 6% 生命值");
     }
     final(target: Piece): void {
-        new RegenerationEffectTemplate().apply(target, 1);
+        new RegenerationEffectTemplate().apply(target, 1, 3 * 2);
     }
 }

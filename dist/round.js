@@ -21,8 +21,7 @@ export function nextRound() {
     pieces.forEach((p) => {
         // 执行状态效果持续动作
         p.statusEffects.forEach((eff) => {
-            if (eff.continuedAction)
-                eff.continuedAction(p);
+            eff.runContinuedAction(p);
         });
         // 重绘棋子
         p.draw();

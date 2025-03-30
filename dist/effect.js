@@ -1,5 +1,6 @@
 import { getAttributeModifierById } from "./attributeProvider.js";
 import { round } from "./round.js";
+import { Serializable } from "./serialize.js";
 const ROMAN_NUMBER_LIMIT = 25; // 小于等于此数值的等级将使用罗马数字表示
 const toRomanNumber = (number) => {
     const HARD_LIMIT = 3999;
@@ -15,6 +16,11 @@ const toRomanNumber = (number) => {
         tens[Math.floor((number % 100) / 10)] +
         ones[Math.floor(number % 10)]);
 };
+/**
+ * 策略类，用于指定状态效果在每一轮进行后都需要进行的操作。
+ */
+export class TickActionStrategy extends Serializable {
+}
 export class StatusEffect {
     name = "";
     id = "";
@@ -45,6 +51,11 @@ export class StatusEffect {
      * 如果 level 为 null，忽略此字段。
      */
     showLevel = true;
+    /**
+     * 每一轮结束后希望执行的动作。
+     * 将会调用 action 方法。
+     */
+    tickAction = null;
     /**
      * 构造一个状态效果（StatusEffect）。
      *
@@ -153,9 +164,15 @@ export class StatusEffect {
     isNegative() {
         return this.negative;
     }
+    setTickAction(strategy) {
+        this.tickAction = strategy;
+    }
     runContinuedAction(target) {
-        if (this.continuedAction !== undefined) {
-            this.continuedAction(target);
+        if (!this.available) {
+            return; // 剔除不可用的效果
+        }
+        if (this.tickAction !== null) {
+            this.tickAction.action(target);
         }
     }
 }

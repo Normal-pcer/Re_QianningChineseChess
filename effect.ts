@@ -198,6 +198,9 @@ export class StatusEffect {
     }
 
     runContinuedAction(target: Piece) {
+        if (!this.available) {
+            return; // 剔除不可用的效果
+        }
         if (this.tickAction !== null) {
             this.tickAction.action(target);
         }
