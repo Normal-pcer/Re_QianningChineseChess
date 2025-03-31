@@ -1,7 +1,8 @@
 import { DamageType } from "./damageType.js";
 import { Vector2 } from "./vector.js";
 import { Position } from "./position.js";
-import { random } from "./random.js";
+import { fixedRandom } from "./random.js";
+import { getCurrentTeam, round } from "./round.js";
 export const defaultQuasiMoveTargets = {
     [DamageType.None]: (piece, target) => {
         return piece.position;
@@ -62,7 +63,7 @@ function correctDistanceByWeight(distance, weight) {
     console.log("reduceProbability: " + reduceProbability);
     let result = 0;
     for (let i = 1; i <= distance; i++) {
-        if (random() > reduceProbability) {
+        if (fixedRandom(`correctDistanceByWeight round ${round} team ${getCurrentTeam()}`) > reduceProbability) {
             result++;
         }
     }
