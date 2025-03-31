@@ -1,6 +1,7 @@
 import { areaGunActionCard, determinedResistanceActionCard, healthInstantPotionActionCard, highGunActionCard, limitlessHorseActionCard, regenerationPotionActionCard, strengthPotionActionCard, strengthPotionEnhancedActionCard, strengthPotionExtendedActionCard, superLaughingActionCard, weaknessPotionActionCard, withBellAndTripodActionCard, potionPotionActionCard, potionPotionEnhancedActionCard } from "./actionCard.js";
 import { fixedRandom } from "./random.js";
 import { getCurrentTeam, nextRound, round } from "./round.js";
+import { getCurrentSelection, MainSelection } from "./selection.js";
 import { getPlayerFromTeam } from "./team.js";
 import { deepCopy } from "./utils.js";
 const playerCardCountMax = 7;
@@ -21,6 +22,10 @@ function giveCard(card, to) {
     to.showActionCards();
 }
 export function lootCard() {
+    // 取消当前选择
+    if (MainSelection !== getCurrentSelection()) {
+        getCurrentSelection()?.stop();
+    }
     let player = getPlayerFromTeam(getCurrentTeam());
     if (player.actionCards.length >= playerCardCountMax)
         return;

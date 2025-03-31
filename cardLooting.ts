@@ -18,6 +18,7 @@ import {
 import { Player } from "./player.js";
 import { fixedRandom } from "./random.js";
 import { getCurrentTeam, nextRound, round } from "./round.js";
+import { getCurrentSelection, MainSelection } from "./selection.js";
 import { getPlayerFromTeam } from "./team.js";
 import { deepCopy } from "./utils.js";
 
@@ -59,6 +60,10 @@ function giveCard(card: ActionCard, to: Player) {
 }
 
 export function lootCard() {
+    // 取消当前选择
+    if (MainSelection !== getCurrentSelection()) {
+        getCurrentSelection()?.stop();
+    }
     let player = getPlayerFromTeam(getCurrentTeam());
     if (player.actionCards.length >= playerCardCountMax) return;
     let weightSum = pool.reduce((sum, item) => sum + item.weight, 0);
