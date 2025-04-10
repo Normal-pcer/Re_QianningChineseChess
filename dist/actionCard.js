@@ -39,14 +39,19 @@ export class ActionCard extends Serializable {
         this.onApply();
     }
 }
-export class TestActionCard extends ActionCard {
+let TestActionCard = class TestActionCard extends ActionCard {
     constructor() {
         super("测试卡牌", "test", "这是一个测试卡牌");
     }
     onApply() {
         console.log("使用测试卡牌");
     }
-}
+};
+TestActionCard = __decorate([
+    TypeRegistry.register(),
+    __metadata("design:paramtypes", [])
+], TestActionCard);
+export { TestActionCard };
 /**
  * 进行一次单选棋子，然后进行接下来的操作。
  * pieceType 成员指定棋子类型，null 表示没有限制
@@ -81,7 +86,7 @@ export class SelectorActionCard extends ActionCard {
         setCurrentSelection(targetSelection);
     }
 }
-export class StrengthPotionActionCard extends SelectorActionCard {
+let StrengthPotionActionCard = class StrengthPotionActionCard extends SelectorActionCard {
     constructor() {
         super("力量药水", "streangthPotion", "持续 3 回合-选中棋子的攻击力提升 15%");
     }
@@ -89,7 +94,12 @@ export class StrengthPotionActionCard extends SelectorActionCard {
         let factory = new StrengthEffectTemplate();
         factory.apply(target, 1, 3 * 2);
     }
-}
+};
+StrengthPotionActionCard = __decorate([
+    TypeRegistry.register(),
+    __metadata("design:paramtypes", [])
+], StrengthPotionActionCard);
+export { StrengthPotionActionCard };
 let HighGunAttackingStrategy = class HighGunAttackingStrategy extends PieceAttackingStrategy {
     getPosition(piece) {
         return ray(piece.position, new Vector2(1, 0), 2, 1).concat(ray(piece.position, new Vector2(-1, 0), 2, 1), ray(piece.position, new Vector2(0, 1), 2, 1), ray(piece.position, new Vector2(0, -1), 2, 1));
@@ -272,7 +282,7 @@ let SuperLaughingAttackingStrategy = class SuperLaughingAttackingStrategy extend
 SuperLaughingAttackingStrategy = __decorate([
     TypeRegistry.register()
 ], SuperLaughingAttackingStrategy);
-export class SuperLaughingActionCard extends SelectorActionCard {
+let SuperLaughingActionCard = class SuperLaughingActionCard extends SelectorActionCard {
     constructor() {
         super("忍俊不禁", "superLaughing", "持续 2 回合 - 棋子不能主动移动和攻击。");
     }
@@ -287,8 +297,13 @@ export class SuperLaughingActionCard extends SelectorActionCard {
         piece.movingDestinationsCallbackProvider.area(0).modify(movingModifier);
         piece.attackingTargetsCallback.area(0).modify(attackingModifier);
     }
-}
-export class WithBellAndTripodActionCard extends SelectorActionCard {
+};
+SuperLaughingActionCard = __decorate([
+    TypeRegistry.register(),
+    __metadata("design:paramtypes", [])
+], SuperLaughingActionCard);
+export { SuperLaughingActionCard };
+let WithBellAndTripodActionCard = class WithBellAndTripodActionCard extends SelectorActionCard {
     constructor() {
         super("戴钟之鼎", "withBellAndTripod", "持续 3 回合 - 选中棋子重量提升 6000%。");
     }
@@ -298,8 +313,13 @@ export class WithBellAndTripodActionCard extends SelectorActionCard {
         piece.weight.area(1).modify(modifier);
         piece.pushEffects(effect);
     }
-}
-export class DeterminedResistanceActionCard extends SelectorActionCard {
+};
+WithBellAndTripodActionCard = __decorate([
+    TypeRegistry.register(),
+    __metadata("design:paramtypes", [])
+], WithBellAndTripodActionCard);
+export { WithBellAndTripodActionCard };
+let DeterminedResistanceActionCard = class DeterminedResistanceActionCard extends SelectorActionCard {
     constructor() {
         super("决意流搏", "determinedResistance", "持续 3 回合 - 选中棋子暴击率提升 12%。");
     }
@@ -309,7 +329,12 @@ export class DeterminedResistanceActionCard extends SelectorActionCard {
         piece.criticalRate.area(0).modify(modifier);
         piece.pushEffects(effect);
     }
-}
+};
+DeterminedResistanceActionCard = __decorate([
+    TypeRegistry.register(),
+    __metadata("design:paramtypes", [])
+], DeterminedResistanceActionCard);
+export { DeterminedResistanceActionCard };
 const areaGunAttackActionCallback = registerAnonymous((thisPiece, targetCenter) => {
     const applyDamageToEnemyOnly = (damageObject) => {
         if (damageObject.target.team === damageObject.source?.team)
@@ -356,7 +381,7 @@ let AreaGunActionStrategy = class AreaGunActionStrategy extends PieceActionStrat
 AreaGunActionStrategy = __decorate([
     TypeRegistry.register()
 ], AreaGunActionStrategy);
-export class AreaGunActionCard extends SelectorActionCard {
+let AreaGunActionCard = class AreaGunActionCard extends SelectorActionCard {
     constructor() {
         super("威震四方", "areaGun", "一次性 - 选中的「炮」下次攻击造成范围伤害。");
     }
@@ -372,5 +397,10 @@ export class AreaGunActionCard extends SelectorActionCard {
             }
         }));
     }
-}
+};
+AreaGunActionCard = __decorate([
+    TypeRegistry.register(),
+    __metadata("design:paramtypes", [])
+], AreaGunActionCard);
+export { AreaGunActionCard };
 //# sourceMappingURL=actionCard.js.map

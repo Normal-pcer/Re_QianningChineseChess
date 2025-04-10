@@ -5,6 +5,7 @@ import { deepCopy, deepMerge } from "./utils.js";
 import { getCallback, getCallbackRegistryKey } from "./callbackRegister.js";
 import { TriggerManager } from "./trigger.js";
 import { _schedules } from "./schedule.js";
+import { Serializable } from "./serialize.js";
 const saves = [];
 function generateSafeFunction(code) {
     const bodyStart = code.indexOf("{") + 1;
@@ -33,6 +34,9 @@ export class Save {
     }
     stringify() {
         let json = JSON.stringify(this, (key, value) => {
+            if (value instanceof Serializable) {
+                return value.serialize();
+            }
             if (typeof value === "function") {
                 let registryKey = getCallbackRegistryKey(value);
                 if (registryKey) {

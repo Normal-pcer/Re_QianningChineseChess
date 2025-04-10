@@ -8,6 +8,7 @@ import { getCallback, getCallbackRegistryKey } from "./callbackRegister.js";
 import { Trigger, TriggerManager } from "./trigger.js";
 import { _schedules, Schedule } from "./schedule.js";
 import { StatusEffect } from "./effect.js";
+import { Serializable } from "./serialize.js";
 
 const saves: Save[] = [];
 
@@ -31,7 +32,7 @@ export class Save {
         players: { [key: string]: Player },
         round: number,
         triggers: Trigger[],
-        schedules: Schedule[],
+        schedules: Schedule[]
     ) {
         this.pieces = deepCopy(pieces);
         this.players = deepCopy(players);
@@ -48,6 +49,9 @@ export class Save {
 
     stringify() {
         let json = JSON.stringify(this, (key, value) => {
+            if (value instanceof Serializable) {
+                return value.serialize();
+            }
             if (typeof value === "function") {
                 let registryKey = getCallbackRegistryKey(value);
                 if (registryKey) {
@@ -117,7 +121,7 @@ export function saveCurrent() {
             },
             round,
             TriggerManager.triggers,
-            _schedules,
+            _schedules
         )
     );
 }

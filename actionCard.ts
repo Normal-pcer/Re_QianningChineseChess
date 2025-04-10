@@ -48,6 +48,7 @@ export abstract class ActionCard extends Serializable {
     }
 }
 
+@TypeRegistry.register()
 export class TestActionCard extends ActionCard {
     constructor() {
         super("测试卡牌", "test", "这是一个测试卡牌");
@@ -105,6 +106,7 @@ export abstract class SelectorActionCard extends ActionCard {
     abstract final(target: Piece): void;
 }
 
+@TypeRegistry.register()
 export class StrengthPotionActionCard extends SelectorActionCard {
     constructor() {
         super("力量药水", "streangthPotion", "持续 3 回合-选中棋子的攻击力提升 15%");
@@ -308,6 +310,7 @@ class SuperLaughingAttackingStrategy extends PieceAttackingStrategy {
     }
 }
 
+@TypeRegistry.register()
 export class SuperLaughingActionCard extends SelectorActionCard {
     constructor() {
         super("忍俊不禁", "superLaughing", "持续 2 回合 - 棋子不能主动移动和攻击。");
@@ -326,6 +329,7 @@ export class SuperLaughingActionCard extends SelectorActionCard {
     }
 }
 
+@TypeRegistry.register()
 export class WithBellAndTripodActionCard extends SelectorActionCard {
     constructor() {
         super("戴钟之鼎", "withBellAndTripod", "持续 3 回合 - 选中棋子重量提升 6000%。");
@@ -343,6 +347,7 @@ export class WithBellAndTripodActionCard extends SelectorActionCard {
     }
 }
 
+@TypeRegistry.register()
 export class DeterminedResistanceActionCard extends SelectorActionCard {
     constructor() {
         super("决意流搏", "determinedResistance", "持续 3 回合 - 选中棋子暴击率提升 12%。")
@@ -410,6 +415,7 @@ class AreaGunActionStrategy extends PieceActionStrategy {
     }
 }
 
+@TypeRegistry.register()
 export class AreaGunActionCard extends SelectorActionCard {
     constructor() {
         super("威震四方", "areaGun", "一次性 - 选中的「炮」下次攻击造成范围伤害。");

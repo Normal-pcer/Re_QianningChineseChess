@@ -1,16 +1,26 @@
 import { registerAnonymous } from "./callbackRegister.js";
 import { round } from "./round.js";
+import { Serializable, TypeRegistry } from "./serialize.js";
 
 let attributeModifierId = 0;
 
-export const operaPlus = registerAnonymous(
-    (arg1: number, arg2: number) => arg1 + arg2,
-    "ModifierOperaPlus"
-);
-export const operaOverride = registerAnonymous(
-    (arg1: any, arg2: any) => arg2,
-    "ModifierOperaOverride"
-);
+abstract class MergeStrategy<T> extends Serializable {
+    abstract merge(arg1: T, arg2: T): T;
+}
+
+@TypeRegistry.register()
+class PlusMergeStategy extends MergeStrategy<number> {
+    merge(arg1: number, arg2: number) {
+        return arg1 + arg2;
+    }
+}
+
+@TypeRegistry.register()
+class OverrideMergeStategy extends MergeStrategy<any> {
+    merge(arg1: any, arg2: any) {
+        return arg2;
+    }
+}
 
 export const modifiers: { [key: number]: AttributeModifier<any> } = {};
 
@@ -33,7 +43,7 @@ export class AttributeProvider<T> {
 
 /**
  * 属性提供器
- * 如果T不是数字，则只有首个乘区会生效
+ * 如果 T 不是数字，则只有首个乘区会生效
  */
 export class NumberAttributeProvider extends AttributeProvider<number> {
     constructor(base: number) {
@@ -106,7 +116,7 @@ class MultiplicationArea<T> {
                 if (modifier.clearOnExpire)
                     this.modifiers.splice(this.modifiers.indexOf(modifier), 1);
             } else {
-                result = modifier.operation(result, modifier.amount);
+                result = modifier.operation.merge(result, modifier.amount);
             }
         }
         return result;
@@ -116,7 +126,7 @@ class MultiplicationArea<T> {
 export class AttributeModifier<T> {
     amount: T;
     expire: number = Infinity;
-    operation: (arg1: any, arg2: any) => T;
+    operation: MergeStrategy<T>;
     enabled: boolean = true;
     clearOnExpire: boolean = true;
     clearOnDisable: boolean = true;
@@ -135,17 +145,17 @@ export class AttributeModifier<T> {
         amount: T,
         expire: number = Infinity,
         expireOffset: number | null = -1,
-        operation: null | ((arg1: any, arg2: any) => T) = null,
+        operation: null | MergeStrategy<T> = null,
         numberModifier: boolean = true,
         clearOnExpire: boolean = true,
         clearOnDisable: boolean = true
     ) {
         this.amount = amount;
         if (operation === null) {
-            if (typeof amount == "number" && numberModifier) {
-                this.operation = operaPlus as any;
+            if (typeof amount === "number" && numberModifier) {
+                this.operation = new PlusMergeStategy() as any;
             } else {
-                this.operation = operaOverride;
+                this.operation = new OverrideMergeStategy();
             }
         } else {
             this.operation = operation;

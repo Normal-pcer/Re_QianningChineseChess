@@ -13,6 +13,7 @@ import { schedule } from "./schedule.js";
 import { fixedRandom } from "./random.js";
 import { round } from "./round.js";
 import { PieceMovingStrategy, DefaultPieceMovingStrategy, PieceAttackingStrategy, DefaultPieceAttackingStrategy, PieceActionStrategy, DefaultPieceActionStrategy } from "./pieceStrategy.js";
+import { Serializable, TypeRegistry } from "./serialize.js";
 
 /**
  * 伤害浮动范围。伤害浮动在暴击之后结算，会影响Damage对象的amount属性。
@@ -31,6 +32,13 @@ export var pieces: Piece[] = [];
 
 export function modifyPieces(newList: Piece[]) {
     pieces = newList;
+}
+
+/**
+ * 用来确定棋子被点击时应该执行什么动作。
+ */
+abstract class ClickListenerStrategy extends Serializable {
+    abstract onClick(piece: Piece, ev: MouseEvent): void;
 }
 
 class Piece {
@@ -123,7 +131,7 @@ class Piece {
     /**
      * 棋子的点击事件监听器，为回调函数，可以为空。
      */
-    clickListener: null | ((ev: MouseEvent) => void) = null;
+    clickListener: null | ClickListenerStrategy = null;
     /**
      * 棋子的状态效果列表。
      */
@@ -194,11 +202,8 @@ class Piece {
             this.htmlElement = document.getElementById(this.htmlElementId);
             if (!this.htmlElement) return;
         }
-        let listener = (event: MouseEvent) => {
-            if (onPieceClick(this)) event.stopPropagation();
-        };
-        this.htmlElement.addEventListener("click", listener);
-        this.clickListener = listener;
+        this.clickListener = new DefaultClickListenerStrategy();
+        this.htmlElement.addEventListener("click", (ev) => this.clickListener?.onClick?.(this, ev));
 
         // 创建血条（如果没有）
         if (!this.htmlElement.querySelector(".health-bar")) {
@@ -468,4 +473,14 @@ export { Piece, PieceType };
  */
 export function getTeamMaster(team: Team) {
     return pieces.find((piece) => piece.team === team && piece.type === PieceType.Master) ?? null;
+}
+
+/**
+ * 默认的点击监听器。
+ */
+@TypeRegistry.register()
+class DefaultClickListenerStrategy extends ClickListenerStrategy {
+    onClick(piece: Piece, event: MouseEvent): void {
+        if (onPieceClick(piece)) event.stopPropagation();
+    };
 }
