@@ -31,11 +31,11 @@ export class DefaultPieceAttackingStrategy extends PieceAttackingStrategy {
     }
 }
 
-export interface PieceActionStrategy {
-    attack(a: Piece, b: Piece): boolean;
+export abstract class PieceActionStrategy extends Serializable{
+    abstract attack(a: Piece, b: Piece): boolean;
 }
 
-export class DefaultPieceActionStrategy implements PieceActionStrategy {
+export class DefaultPieceActionStrategy extends PieceActionStrategy {
     attack(piece: Piece, target: Piece): boolean {
         if (target.team === piece.team) return false; // 不能攻击友军
         let damageObject = piece.SimulateAttack(target);

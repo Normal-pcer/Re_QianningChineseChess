@@ -8,6 +8,8 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 import { AttributeModifier } from "./attributeProvider.js";
+import { Damage } from "./damage.js";
+import { DamageType } from "./damageType.js";
 import { StatusEffect, TickActionStrategy } from "./effect.js";
 import { round } from "./round.js";
 import { TypeRegistry } from "./serialize.js";
@@ -25,10 +27,6 @@ export class StatusEffectTemplate {
     constructor(name, id) {
         this.name = name;
         this.id = id;
-    }
-    setAsNegative() {
-        this.negative = true;
-        return this;
     }
     isNegative() {
         return this.negative;
@@ -69,6 +67,7 @@ export class StrengthEffectTemplate extends StatusEffectTemplate {
     }
 }
 export class WeaknessEffectTemplate extends StatusEffectTemplate {
+    negative = true;
     constructor() {
         super("虚弱", "weakness");
     }
@@ -102,15 +101,47 @@ export class RegenerationEffectTemplate extends StatusEffectTemplate {
         super("生命恢复", "regeneration");
     }
     getDescription(level) {
-        return `攻击力降低 ${Math.round(10 + level * 10)}`;
+        return `每回合回复生命值，相当于 ${3 + level * 3}% 生命值上限。`;
     }
     onApply(target, level, expire) {
-        let modifier = new AttributeModifier((10 + level * 10) / 100, expire, null);
-        target.attackDamage.area(1).modify(modifier);
-        return [modifier];
+        return [];
     }
     createTickAction(level) {
         return new RegenerationTickAction(level);
+    }
+}
+let PotionTickAction = class PotionTickAction extends TickActionStrategy {
+    level;
+    constructor(level) {
+        super();
+        this.level = level;
+    }
+    action(target) {
+        let limit = target.maxHealth.result;
+        if (target.health <= 0)
+            return;
+        let damageAmount = (2 * this.level + 1) / 100 * limit + 40 * this.level;
+        let damageObject = new Damage(DamageType.Magic, damageAmount, null, target);
+        target.damaged(damageObject);
+    }
+};
+PotionTickAction = __decorate([
+    TypeRegistry.register(),
+    __metadata("design:paramtypes", [Number])
+], PotionTickAction);
+export class PotionEffectTemplate extends StatusEffectTemplate {
+    negative = true;
+    constructor() {
+        super("剧毒", "potion");
+    }
+    getDescription(level) {
+        return `每轮造成 ${2 * level + 1}% 生命值上限 + ${40 * level} 的魔法伤害。至多使生命值降低到 5%。`;
+    }
+    onApply(target, level, expire) {
+        return [];
+    }
+    createTickAction(level) {
+        return new PotionTickAction(level);
     }
 }
 //# sourceMappingURL=effectTemplate.js.map

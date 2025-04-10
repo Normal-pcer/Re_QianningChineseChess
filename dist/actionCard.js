@@ -8,12 +8,14 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 import { AttributeModifier } from "./attributeProvider.js";
+import { registerAnonymous } from "./callbackRegister.js";
 import { returnCardById } from "./cardLooting.js";
+import { DamageType } from "./damageType.js";
 import { filterGrids, ray } from "./defaultMovingBehaviors.js";
 import { StatusEffect } from "./effect.js";
-import { RegenerationEffectTemplate, StrengthEffectTemplate, WeaknessEffectTemplate } from "./effectTemplate.js";
+import { PotionEffectTemplate, RegenerationEffectTemplate, StrengthEffectTemplate, WeaknessEffectTemplate, } from "./effectTemplate.js";
 import { Piece, PieceType } from "./piece.js";
-import { PieceAttackingStrategy, PieceMovingStrategy } from "./pieceStrategy.js";
+import { PieceActionStrategy, PieceAttackingStrategy, PieceMovingStrategy } from "./pieceStrategy.js";
 import { getCurrentSelection, ItemType, SelectionManager, setCurrentSelection, SingleSelection, } from "./selection.js";
 import { Serializable, TypeRegistry } from "./serialize.js";
 import { TriggerManager, DamageTrigger } from "./trigger.js";
@@ -202,4 +204,173 @@ RegenerationPotionActionCard = __decorate([
     __metadata("design:paramtypes", [])
 ], RegenerationPotionActionCard);
 export { RegenerationPotionActionCard };
+let PotionPotionActionCard = class PotionPotionActionCard extends SelectorActionCard {
+    constructor() {
+        super("剧毒药水", "potionPotion", "持续 3 回合 - 每轮造成 3% 生命值上限 + 40 的魔法伤害。至多使生命值降低到 5%。");
+    }
+    final(target) {
+        new PotionEffectTemplate().apply(target, 1, 3 * 2);
+    }
+};
+PotionPotionActionCard = __decorate([
+    TypeRegistry.register(),
+    __metadata("design:paramtypes", [])
+], PotionPotionActionCard);
+export { PotionPotionActionCard };
+let PotionPotionEnhancedActionCard = class PotionPotionEnhancedActionCard extends SelectorActionCard {
+    constructor() {
+        super("剧毒药水（加强）", "potionPotionEnhanced", "持续 2 回合 - 每轮造成 5% 生命值上限 + 80 的魔法伤害。至多使生命值降低到 5%。");
+    }
+    final(target) {
+        new PotionEffectTemplate().apply(target, 2, 2 * 2);
+    }
+};
+PotionPotionEnhancedActionCard = __decorate([
+    TypeRegistry.register(),
+    __metadata("design:paramtypes", [])
+], PotionPotionEnhancedActionCard);
+export { PotionPotionEnhancedActionCard };
+let StrengthPotionEnhancedActionCard = class StrengthPotionEnhancedActionCard extends SelectorActionCard {
+    constructor() {
+        super("力量药水（加强）", "strengthPotionEnhanced", "持续 2 回合 - 选中棋子的攻击力提升 25%");
+    }
+    final(target) {
+        new StrengthEffectTemplate().apply(target, 2, 2 * 2);
+    }
+};
+StrengthPotionEnhancedActionCard = __decorate([
+    TypeRegistry.register(),
+    __metadata("design:paramtypes", [])
+], StrengthPotionEnhancedActionCard);
+export { StrengthPotionEnhancedActionCard };
+let StrengthPotionExtendedActionCard = class StrengthPotionExtendedActionCard extends SelectorActionCard {
+    constructor() {
+        super("力量药水（延长）", "strengthPotionExtended", "持续 5 回合 - 选中棋子的攻击力提升 15%");
+    }
+    final(target) {
+        new StrengthEffectTemplate().apply(target, 1, 5 * 2);
+    }
+};
+StrengthPotionExtendedActionCard = __decorate([
+    TypeRegistry.register(),
+    __metadata("design:paramtypes", [])
+], StrengthPotionExtendedActionCard);
+export { StrengthPotionExtendedActionCard };
+let SuperLaughingMovingStrategy = class SuperLaughingMovingStrategy extends PieceMovingStrategy {
+    getPosition(piece) {
+        return [];
+    }
+};
+SuperLaughingMovingStrategy = __decorate([
+    TypeRegistry.register()
+], SuperLaughingMovingStrategy);
+let SuperLaughingAttackingStrategy = class SuperLaughingAttackingStrategy extends PieceAttackingStrategy {
+    getPosition(piece) {
+        return [];
+    }
+};
+SuperLaughingAttackingStrategy = __decorate([
+    TypeRegistry.register()
+], SuperLaughingAttackingStrategy);
+export class SuperLaughingActionCard extends SelectorActionCard {
+    constructor() {
+        super("忍俊不禁", "superLaughing", "持续 2 回合 - 棋子不能主动移动和攻击。");
+    }
+    final(piece) {
+        let movingModifier = new AttributeModifier(new SuperLaughingMovingStrategy(), 2 * 2);
+        let attackingModifier = new AttributeModifier(new SuperLaughingAttackingStrategy(), 2 * 2);
+        let effect = new StatusEffect("忍俊不禁", "superLaughing", "棋子不能主动移动和攻击。", [
+            movingModifier,
+            attackingModifier,
+        ]).setAsNegative();
+        piece.pushEffects(effect);
+        piece.movingDestinationsCallbackProvider.area(0).modify(movingModifier);
+        piece.attackingTargetsCallback.area(0).modify(attackingModifier);
+    }
+}
+export class WithBellAndTripodActionCard extends SelectorActionCard {
+    constructor() {
+        super("戴钟之鼎", "withBellAndTripod", "持续 3 回合 - 选中棋子重量提升 6000%。");
+    }
+    final(piece) {
+        let modifier = new AttributeModifier(60, 3 * 2);
+        let effect = new StatusEffect("戴钟之鼎", "withBellAndTripod", "重量提升 6000%。", [modifier]);
+        piece.weight.area(1).modify(modifier);
+        piece.pushEffects(effect);
+    }
+}
+export class DeterminedResistanceActionCard extends SelectorActionCard {
+    constructor() {
+        super("决意流搏", "determinedResistance", "持续 3 回合 - 选中棋子暴击率提升 12%。");
+    }
+    final(piece) {
+        let modifier = new AttributeModifier(0.12, 3 * 2);
+        let effect = new StatusEffect("决意流搏", "determinedResistance", "暴击率提升 12%。", [modifier]);
+        piece.criticalRate.area(0).modify(modifier);
+        piece.pushEffects(effect);
+    }
+}
+const areaGunAttackActionCallback = registerAnonymous((thisPiece, targetCenter) => {
+    const applyDamageToEnemyOnly = (damageObject) => {
+        if (damageObject.target.team === damageObject.source?.team)
+            return false;
+        else {
+            damageObject.apply();
+            return true;
+        }
+    };
+    const spreadDamageScale = 0.4;
+    const spreadDamageType = DamageType.Ranged;
+    let centerPosition = targetCenter.position;
+    let nearbyPositions = [
+        centerPosition.add(new Vector2(0, 1)),
+        centerPosition.add(new Vector2(0, -1)),
+        centerPosition.add(new Vector2(1, 0)),
+        centerPosition.add(new Vector2(-1, 0)),
+    ];
+    let targets = nearbyPositions
+        .map((pos) => {
+        return pos.owner;
+    })
+        .filter((piece) => piece != null);
+    let centerDamageObject = thisPiece.SimulateAttack(targetCenter);
+    // 模拟一个与中心棋子重合的虚拟棋子，直接使用中心棋子作为攻击源会识别成攻击队友
+    let explosionCenter = Piece.virtualPiece(centerPosition);
+    explosionCenter.team = thisPiece.team; // 正确标识队伍，而不是None
+    let spreadDamageObjects = targets.map((target) => {
+        let object = thisPiece.SimulateAttack(target);
+        object.amount *= spreadDamageScale;
+        object.type = spreadDamageType;
+        object.source = explosionCenter;
+        return object;
+    });
+    // 先攻击外围，为击退腾出空间
+    spreadDamageObjects.forEach(applyDamageToEnemyOnly);
+    return applyDamageToEnemyOnly(centerDamageObject);
+}, "areaGunAttackActionCallback");
+let AreaGunActionStrategy = class AreaGunActionStrategy extends PieceActionStrategy {
+    attack(a, b) {
+        return areaGunAttackActionCallback(a, b);
+    }
+};
+AreaGunActionStrategy = __decorate([
+    TypeRegistry.register()
+], AreaGunActionStrategy);
+export class AreaGunActionCard extends SelectorActionCard {
+    constructor() {
+        super("威震四方", "areaGun", "一次性 - 选中的「炮」下次攻击造成范围伤害。");
+    }
+    final(piece) {
+        let modifier = new AttributeModifier(new AreaGunActionStrategy());
+        piece.attackActionCallbackProvider.area(0).modify(modifier);
+        let effect = new StatusEffect("威震四方", "areaGun", "下一次攻击造成范围伤害", [modifier]);
+        piece.pushEffects(effect);
+        // 添加触发器，在主动攻击后移除效果，达到一次性使用。
+        TriggerManager.addTrigger(new DamageTrigger((damage) => {
+            if (damage.source === piece) {
+                effect.disable(); // 禁用效果
+            }
+        }));
+    }
+}
 //# sourceMappingURL=actionCard.js.map

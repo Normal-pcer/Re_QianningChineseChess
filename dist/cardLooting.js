@@ -1,4 +1,4 @@
-import { HighGunActionCard, LimitlessHorseActionCard, RegenerationPotionActionCard, StrengthPotionActionCard, WeaknessPotionActionCard } from "./actionCard.js";
+import { HighGunActionCard, LimitlessHorseActionCard, RegenerationPotionActionCard, StrengthPotionActionCard, WeaknessPotionActionCard, InstantHealthPotionActionCard, StrengthPotionEnhancedActionCard, StrengthPotionExtendedActionCard, SuperLaughingActionCard, WithBellAndTripodActionCard, DeterminedResistanceActionCard, AreaGunActionCard, PotionPotionActionCard, PotionPotionEnhancedActionCard, } from "./actionCard.js";
 import { fixedRandom } from "./random.js";
 import { getCurrentTeam, nextRound, round } from "./round.js";
 import { getPlayerFromTeam } from "./team.js";
@@ -13,12 +13,20 @@ class poolItem {
     }
 }
 let pool = [
-    new poolItem(new StrengthPotionActionCard()),
     new poolItem(new HighGunActionCard()),
     new poolItem(new LimitlessHorseActionCard()),
     new poolItem(new StrengthPotionActionCard()),
     new poolItem(new WeaknessPotionActionCard()),
-    new poolItem(new RegenerationPotionActionCard())
+    new poolItem(new InstantHealthPotionActionCard()),
+    new poolItem(new RegenerationPotionActionCard()),
+    new poolItem(new StrengthPotionEnhancedActionCard(), 0.5),
+    new poolItem(new StrengthPotionExtendedActionCard(), 0.5),
+    new poolItem(new SuperLaughingActionCard(), 0.5),
+    new poolItem(new WithBellAndTripodActionCard()),
+    new poolItem(new DeterminedResistanceActionCard()),
+    new poolItem(new AreaGunActionCard()),
+    new poolItem(new PotionPotionActionCard()),
+    new poolItem(new PotionPotionEnhancedActionCard(), 0.5),
 ];
 export function initCardLooting() {
 }

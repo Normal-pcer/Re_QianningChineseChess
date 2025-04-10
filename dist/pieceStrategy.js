@@ -21,7 +21,9 @@ export class DefaultPieceAttackingStrategy extends PieceAttackingStrategy {
         return DefaultMovingBehaviors.auto(piece, true)(piece);
     }
 }
-export class DefaultPieceActionStrategy {
+export class PieceActionStrategy extends Serializable {
+}
+export class DefaultPieceActionStrategy extends PieceActionStrategy {
     attack(piece, target) {
         if (target.team === piece.team)
             return false; // 不能攻击友军
