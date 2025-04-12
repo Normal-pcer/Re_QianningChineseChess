@@ -15,7 +15,7 @@ import { filterGrids, ray } from "./defaultMovingBehaviors.js";
 import { StatusEffect } from "./effect.js";
 import { PotionEffectTemplate, RegenerationEffectTemplate, StrengthEffectTemplate, WeaknessEffectTemplate, } from "./effectTemplate.js";
 import { Piece, PieceType } from "./piece.js";
-import { PieceActionStrategy, PieceAttackingStrategy, PieceMovingStrategy } from "./pieceStrategy.js";
+import { PieceActionStrategy, PieceAttackingStrategy, PieceMovingStrategy, } from "./pieceStrategy.js";
 import { getCurrentSelection, ItemType, SelectionManager, setCurrentSelection, SingleSelection, } from "./selection.js";
 import { Serializable, TypeRegistry } from "./serialize.js";
 import { TriggerManager, DamageTrigger } from "./trigger.js";
@@ -108,6 +108,26 @@ let HighGunAttackingStrategy = class HighGunAttackingStrategy extends PieceAttac
 HighGunAttackingStrategy = __decorate([
     TypeRegistry.register()
 ], HighGunAttackingStrategy);
+// ? 为什么要这么实现
+let HighGunActionCardEndTrigger = class HighGunActionCardEndTrigger extends DamageTrigger {
+    pieceElement;
+    effect;
+    constructor(pieceElement, effect) {
+        super();
+        this.pieceElement = pieceElement;
+        this.effect = effect;
+    }
+    action(damage) {
+        if (damage.source?.htmlElement === this.pieceElement && this.pieceElement !== null) {
+            this.effect.disable();
+        }
+    }
+};
+HighGunActionCardEndTrigger = __decorate([
+    TypeRegistry.register(),
+    __metadata("design:paramtypes", [Object, StatusEffect])
+], HighGunActionCardEndTrigger);
+export { HighGunActionCardEndTrigger };
 /**
  * 高射炮。
  */
@@ -123,11 +143,7 @@ let HighGunActionCard = class HighGunActionCard extends SelectorActionCard {
         ]);
         piece.pushEffects(effect);
         let pieceElement = piece.htmlElement;
-        TriggerManager.addTrigger(new DamageTrigger((damage) => {
-            if (damage.source?.htmlElement === pieceElement && pieceElement !== null) {
-                effect.disable();
-            }
-        }));
+        TriggerManager.addTrigger(new HighGunActionCardEndTrigger(pieceElement, effect));
     }
 };
 HighGunActionCard = __decorate([
@@ -309,7 +325,9 @@ let WithBellAndTripodActionCard = class WithBellAndTripodActionCard extends Sele
     }
     final(piece) {
         let modifier = new AttributeModifier(60, 3 * 2);
-        let effect = new StatusEffect("戴钟之鼎", "withBellAndTripod", "重量提升 6000%。", [modifier]);
+        let effect = new StatusEffect("戴钟之鼎", "withBellAndTripod", "重量提升 6000%。", [
+            modifier,
+        ]);
         piece.weight.area(1).modify(modifier);
         piece.pushEffects(effect);
     }
@@ -325,7 +343,9 @@ let DeterminedResistanceActionCard = class DeterminedResistanceActionCard extend
     }
     final(piece) {
         let modifier = new AttributeModifier(0.12, 3 * 2);
-        let effect = new StatusEffect("决意流搏", "determinedResistance", "暴击率提升 12%。", [modifier]);
+        let effect = new StatusEffect("决意流搏", "determinedResistance", "暴击率提升 12%。", [
+            modifier,
+        ]);
         piece.criticalRate.area(0).modify(modifier);
         piece.pushEffects(effect);
     }
@@ -381,6 +401,24 @@ let AreaGunActionStrategy = class AreaGunActionStrategy extends PieceActionStrat
 AreaGunActionStrategy = __decorate([
     TypeRegistry.register()
 ], AreaGunActionStrategy);
+let AreaGunActionCardEndTrigger = class AreaGunActionCardEndTrigger extends DamageTrigger {
+    piece;
+    effect;
+    constructor(piece, effect) {
+        super();
+        this.piece = piece;
+        this.effect = effect;
+    }
+    action(damage) {
+        if (damage.source === this.piece) {
+            this.effect.disable(); // 禁用效果
+        }
+    }
+};
+AreaGunActionCardEndTrigger = __decorate([
+    TypeRegistry.register(),
+    __metadata("design:paramtypes", [Object, StatusEffect])
+], AreaGunActionCardEndTrigger);
 let AreaGunActionCard = class AreaGunActionCard extends SelectorActionCard {
     constructor() {
         super("威震四方", "areaGun", "一次性 - 选中的「炮」下次攻击造成范围伤害。");
@@ -391,11 +429,7 @@ let AreaGunActionCard = class AreaGunActionCard extends SelectorActionCard {
         let effect = new StatusEffect("威震四方", "areaGun", "下一次攻击造成范围伤害", [modifier]);
         piece.pushEffects(effect);
         // 添加触发器，在主动攻击后移除效果，达到一次性使用。
-        TriggerManager.addTrigger(new DamageTrigger((damage) => {
-            if (damage.source === piece) {
-                effect.disable(); // 禁用效果
-            }
-        }));
+        TriggerManager.addTrigger(new AreaGunActionCardEndTrigger(piece, effect));
     }
 };
 AreaGunActionCard = __decorate([

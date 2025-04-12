@@ -1,3 +1,9 @@
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
 import { Position } from "./position.js";
 import { Piece, PieceType, pieces } from "./piece.js";
 import * as Selection from "./selection.js";
@@ -11,6 +17,7 @@ import { showDefaultPiece } from "./pieceFrame.js";
 import { StatusEffect } from "./effect.js";
 import { DamageTrigger, TriggerManager } from "./trigger.js";
 import { seed } from "./random.js";
+import { TypeRegistry } from "./serialize.js";
 // 初始化模块
 seed();
 initDefaultMovingBehaviors();
@@ -24,28 +31,9 @@ export function stop(victor) {
     if (victor_tip_bar !== null)
         victor_tip_bar.innerHTML = victor + "赢了";
 }
-window.onload = () => {
-    // 显示游戏界面
-    let container = document.getElementById("game-container");
-    if (container !== null)
-        container.style.display = "block";
-    putPieces(); // 放置棋子
-    Selection.setCurrentSelection(Selection.MainSelection);
-    Position._calculateGameboardSize();
-    // 注册棋盘点击事件
-    let gameboard = document.getElementById("gameboard");
-    if (gameboard instanceof HTMLElement)
-        gameboard.onclick = (event) => {
-            let pos = new Position(event.clientX, event.clientY, false);
-            return Selection.onGameboardClick(pos);
-        };
-    // 初始化棋子
-    pieces.forEach((piece) => {
-        piece.init();
-    });
-    TriggerManager.addTrigger(
-    // 注册触发器，用于触发御守三晖状态效果
-    new DamageTrigger((damage) => {
+// 触发器，用于触发御守三晖状态效果
+let MasterSelfDefenseTrigger = class MasterSelfDefenseTrigger extends DamageTrigger {
+    action(damage) {
         // 如果「将」被攻击
         if (damage.target?.type === PieceType.Master) {
             /**
@@ -79,7 +67,31 @@ window.onload = () => {
             // console.log(damage.target);
             // console.log("对其应用了御守三晖")
         }
-    }));
+    }
+};
+MasterSelfDefenseTrigger = __decorate([
+    TypeRegistry.register()
+], MasterSelfDefenseTrigger);
+window.onload = () => {
+    // 显示游戏界面
+    let container = document.getElementById("game-container");
+    if (container !== null)
+        container.style.display = "block";
+    putPieces(); // 放置棋子
+    Selection.setCurrentSelection(Selection.MainSelection);
+    Position._calculateGameboardSize();
+    // 注册棋盘点击事件
+    let gameboard = document.getElementById("gameboard");
+    if (gameboard instanceof HTMLElement)
+        gameboard.onclick = (event) => {
+            let pos = new Position(event.clientX, event.clientY, false);
+            return Selection.onGameboardClick(pos);
+        };
+    // 初始化棋子
+    pieces.forEach((piece) => {
+        piece.init();
+    });
+    TriggerManager.addTrigger(new MasterSelfDefenseTrigger());
     // 作弊框相关内容
     let submit_cheating = document.getElementById("submit-cheating");
     if (submit_cheating instanceof HTMLElement)

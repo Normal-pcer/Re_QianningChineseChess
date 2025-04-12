@@ -8,7 +8,7 @@ import { getCallback, getCallbackRegistryKey } from "./callbackRegister.js";
 import { Trigger, TriggerManager } from "./trigger.js";
 import { _schedules, Schedule } from "./schedule.js";
 import { StatusEffect } from "./effect.js";
-import { Serializable } from "./serialize.js";
+import { Serializable, TypeRegistry } from "./serialize.js";
 
 const saves: Save[] = [];
 
@@ -65,19 +65,21 @@ export class Save {
         return json;
     }
     static parse(str: string) {
-        let saveObj = JSON.parse(str, (key, value) => {
-            if (typeof value === "string" && value.startsWith("<STRINGIFIED FUNCTION>")) {
-                let text = ";return " + value.slice(22);
-                return generateSafeFunction(text);
-            }
-            if (typeof value === "string" && value.startsWith("<REGISTERED FUNCTION>")) {
-                let registryKey = value.slice(21);
-                if (getCallback(registryKey)) {
-                    return getCallback(registryKey);
+        let saveObj = TypeRegistry.revive(
+            JSON.parse(str, (key, value) => {
+                if (typeof value === "string" && value.startsWith("<STRINGIFIED FUNCTION>")) {
+                    let text = ";return " + value.slice(22);
+                    return generateSafeFunction(text);
                 }
-            }
-            return value;
-        }) as Object;
+                if (typeof value === "string" && value.startsWith("<REGISTERED FUNCTION>")) {
+                    let registryKey = value.slice(21);
+                    if (getCallback(registryKey)) {
+                        return getCallback(registryKey);
+                    }
+                }
+                return value;
+            })
+        );
         let saveTemplate = deepCopy(saves[saves.length - 1]);
 
         function deepAssign(target: any, source: any) {
@@ -92,7 +94,11 @@ export class Save {
                 for (let key in source) {
                     if (source[key] && typeof source[key] === "object") {
                         if (!target[key]) {
-                            target[key] = {};
+                            if (Array.isArray(source[key])) {
+                                target[key] = [];
+                            } else {
+                                target[key] = {};
+                            }
                         }
                         deepAssign(target[key], source[key]);
                     } else {

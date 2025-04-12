@@ -1,10 +1,12 @@
 import { Damage } from "./damage.js";
+import { Serializable } from "./serialize.js";
 
-export class Trigger {
-    action: Function;
-    event: string;
-    constructor(action: Function, event: string) {
-        this.action = action;
+export abstract class Trigger extends Serializable {
+    public event: string;
+    abstract action(...args: any[]): void;
+
+    constructor(event: string) {
+        super();
         this.event = event;
     }
 }
@@ -16,7 +18,7 @@ export class TriggerManager {
     }
     static trigger(event: string, ...args: any[]) {
         for (let trigger of this.triggers) {
-            if (trigger.event == event) {
+            if (trigger.event === event) {
                 console.log(`Trigger: `, trigger);
                 trigger.action(...args);
             }
@@ -27,9 +29,10 @@ export class TriggerManager {
     }
 }
 
-export class DamageTrigger extends Trigger {
-    static event = "DamageTrigger";
-    constructor(action: (damage: Damage) => void) {
-        super(action, "DamageTrigger");
+export abstract class DamageTrigger extends Trigger {
+    public static event: string = "DamageTrigger";
+    constructor() {
+        super("DamageTrigger");
     }
 }
+

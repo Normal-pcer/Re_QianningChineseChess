@@ -12,6 +12,8 @@ import { showDefaultPiece } from "./pieceFrame.js";
 import { StatusEffect } from "./effect.js";
 import { DamageTrigger, TriggerManager } from "./trigger.js";
 import { random, seed } from "./random.js";
+import { TypeRegistry } from "./serialize.js";
+import { Damage } from "./damage.js";
 
 // 初始化模块
 seed();
@@ -25,6 +27,51 @@ export function stop(victor: string) {
     Selection.setCurrentSelection(null);
     let victor_tip_bar = document.querySelector("#victor-tip span");
     if (victor_tip_bar !== null) victor_tip_bar.innerHTML = victor + "赢了";
+}
+
+// 触发器，用于触发御守三晖状态效果
+@TypeRegistry.register()
+class MasterSelfDefenseTrigger extends DamageTrigger {
+    action(damage: Damage): void {
+        // 如果「将」被攻击
+        if (damage.target?.type === PieceType.Master) {
+            /**
+             * x从0到3141.6，防御力增量从0到300%；x足够大时，防御力增量固定为300%。
+             * 前半段曲线为余弦函数，后半段曲线为直线。
+             */
+            const defenseImproveCalculation = (x: number) => {
+                return x >= 1000 * Math.PI ? 3 : -1.5 * Math.cos(x / 1000) + 1.5;
+            };
+            // x从0到3000，防御力增量次数从0到3；x足够大时，防御力增量次数固定为3。
+            const defenseLastCalculation = (x: number) => {
+                return x >= 3000 ? 3 : Math.ceil(x / 1000);
+            };
+
+            let defense = defenseImproveCalculation(damage.amount);
+            let last = defenseLastCalculation(damage.amount);
+            console.log("defense: ", defense);
+
+            if (last === 0) return; // 伤害过低（<0.5）无需触发御守三晖
+
+            // let effect = new StatusEffect(
+            //     "御守三晖",
+            //     "masterSelfDefense",
+            //     `防御力提升${Math.round(defense * 100)}%`,
+            //     [
+            //         damage.target.defense
+            //             .area(1)
+            //             .modify(new AttributeModifier(defense, last)),
+            //     ],
+            //     Math.round(defense)
+            // ).hideLevel()
+            // damage.target.pushEffects(effect);
+
+            // console.log(damage.target);
+            // console.log("对其应用了御守三晖")
+
+
+        }
+    }
 }
 
 window.onload = () => {
@@ -50,49 +97,7 @@ window.onload = () => {
         piece.init();
     });
 
-    TriggerManager.addTrigger(
-        // 注册触发器，用于触发御守三晖状态效果
-        new DamageTrigger((damage) => {
-            // 如果「将」被攻击
-            if (damage.target?.type === PieceType.Master) {
-                /**
-                 * x从0到3141.6，防御力增量从0到300%；x足够大时，防御力增量固定为300%。
-                 * 前半段曲线为余弦函数，后半段曲线为直线。
-                 */
-                const defenseImproveCalculation = (x: number) => {
-                    return x >= 1000 * Math.PI ? 3 : -1.5 * Math.cos(x / 1000) + 1.5;
-                };
-                // x从0到3000，防御力增量次数从0到3；x足够大时，防御力增量次数固定为3。
-                const defenseLastCalculation = (x: number) => {
-                    return x >= 3000 ? 3 : Math.ceil(x / 1000);
-                };
-
-                let defense = defenseImproveCalculation(damage.amount);
-                let last = defenseLastCalculation(damage.amount);
-                console.log("defense: ", defense);
-
-                if (last === 0) return; // 伤害过低（<0.5）无需触发御守三晖
-
-                // let effect = new StatusEffect(
-                //     "御守三晖",
-                //     "masterSelfDefense",
-                //     `防御力提升${Math.round(defense * 100)}%`,
-                //     [
-                //         damage.target.defense
-                //             .area(1)
-                //             .modify(new AttributeModifier(defense, last)),
-                //     ],
-                //     Math.round(defense)
-                // ).hideLevel()
-                // damage.target.pushEffects(effect);
-
-                // console.log(damage.target);
-                // console.log("对其应用了御守三晖")
-
-
-            }
-        })
-    );
+    TriggerManager.addTrigger(new MasterSelfDefenseTrigger());
     // 作弊框相关内容
     let submit_cheating = document.getElementById("submit-cheating");
     if (submit_cheating instanceof HTMLElement)
