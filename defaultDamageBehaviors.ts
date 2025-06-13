@@ -24,10 +24,10 @@ export const defaultQuasiMoveTargets: {
         let position = target.position;
         /*prettier-ignore*/
         while (steps --> 0) {
-                let integer_position = position.integerGrid(-0.05, -0.05, true);
-                if (integer_position.owner === null) return integer_position;
-                position = Position.of(Vector2.of(position).sub(step));
-            }
+            let integer_position = position.integerGrid(-0.05, -0.05, true);
+            if (integer_position.owner === null) return integer_position;
+            position = Position.of(Vector2.of(position).sub(step));
+        }
 
         return piece.position;
     },
