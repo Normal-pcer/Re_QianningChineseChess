@@ -48,7 +48,7 @@ export function showPiece(piece) {
                 index--;
                 continue;
             }
-            effectElement.innerHTML = `<span style="color: ${effect.negative ? "darkred" : "black"}">${effect.displayName}</span>(${effect.expire === Infinity
+            effectElement.innerHTML = `<span style="color: ${effect.isNegative() ? "darkred" : "black"}">${effect.displayName()}</span>(${effect.expire === Infinity
                 ? "持久"
                 : "剩余" + (effect.expire - round + 1).toString() + "轮"}): <span class="description-text">${effect.description}</span>`;
             effectsListElement.appendChild(effectElement);

@@ -1,8 +1,8 @@
-export class Trigger {
-    action;
+import { Serializable } from "./serialize.js";
+export class Trigger extends Serializable {
     event;
-    constructor(action, event) {
-        this.action = action;
+    constructor(event) {
+        super();
         this.event = event;
     }
 }
@@ -13,7 +13,7 @@ export class TriggerManager {
     }
     static trigger(event, ...args) {
         for (let trigger of this.triggers) {
-            if (trigger.event == event) {
+            if (trigger.event === event) {
                 console.log(`Trigger: `, trigger);
                 trigger.action(...args);
             }
@@ -25,8 +25,8 @@ export class TriggerManager {
 }
 export class DamageTrigger extends Trigger {
     static event = "DamageTrigger";
-    constructor(action) {
-        super(action, "DamageTrigger");
+    constructor() {
+        super("DamageTrigger");
     }
 }
 //# sourceMappingURL=trigger.js.map

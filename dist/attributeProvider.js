@@ -1,8 +1,30 @@
-import { registerAnonymous } from "./callbackRegister.js";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
 import { round } from "./round.js";
+import { Serializable, TypeRegistry } from "./serialize.js";
 let attributeModifierId = 0;
-export const operaPlus = registerAnonymous((arg1, arg2) => arg1 + arg2, "ModifierOperaPlus");
-export const operaOverride = registerAnonymous((arg1, arg2) => arg2, "ModifierOperaOverride");
+class MergeStrategy extends Serializable {
+}
+let PlusMergeStategy = class PlusMergeStategy extends MergeStrategy {
+    merge(arg1, arg2) {
+        return arg1 + arg2;
+    }
+};
+PlusMergeStategy = __decorate([
+    TypeRegistry.register()
+], PlusMergeStategy);
+let OverrideMergeStategy = class OverrideMergeStategy extends MergeStrategy {
+    merge(arg1, arg2) {
+        return arg2;
+    }
+};
+OverrideMergeStategy = __decorate([
+    TypeRegistry.register()
+], OverrideMergeStategy);
 export const modifiers = {};
 export class AttributeProvider {
     multiplicationAreas;
@@ -19,7 +41,7 @@ export class AttributeProvider {
 }
 /**
  * 属性提供器
- * 如果T不是数字，则只有首个乘区会生效
+ * 如果 T 不是数字，则只有首个乘区会生效
  */
 export class NumberAttributeProvider extends AttributeProvider {
     constructor(base) {
@@ -88,7 +110,7 @@ class MultiplicationArea {
                     this.modifiers.splice(this.modifiers.indexOf(modifier), 1);
             }
             else {
-                result = modifier.operation(result, modifier.amount);
+                result = modifier.operation.merge(result, modifier.amount);
             }
         }
         return result;
@@ -114,11 +136,11 @@ export class AttributeModifier {
     constructor(amount, expire = Infinity, expireOffset = -1, operation = null, numberModifier = true, clearOnExpire = true, clearOnDisable = true) {
         this.amount = amount;
         if (operation === null) {
-            if (typeof amount == "number" && numberModifier) {
-                this.operation = operaPlus;
+            if (typeof amount === "number" && numberModifier) {
+                this.operation = new PlusMergeStategy();
             }
             else {
-                this.operation = operaOverride;
+                this.operation = new OverrideMergeStategy();
             }
         }
         else {

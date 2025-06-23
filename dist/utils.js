@@ -1,71 +1,62 @@
 function isObject(obj) {
     return typeof obj === "object" && obj !== null;
 }
-export function deepCopy(target) {
-    const map = new WeakMap();
-    const stack = new Set();
-    function cloneData(data) {
-        if (!isObject(data))
-            return data;
-        if (data instanceof Date)
-            return new Date(data);
-        if (data instanceof RegExp)
-            return new RegExp(data.source, data.flags);
-        if (data instanceof Array) {
-            const result = [];
-            for (let i = 0; i < data.length; i++) {
-                result.push(cloneData(data[i]));
-            }
-            return result;
-        }
-        if (typeof data === "function")
-            return data;
-        if (stack.has(data)) {
-            throw new Error("Cannot clone object with circular reference");
-        }
-        stack.add(data);
-        const exist = map.get(data);
-        if (exist)
-            return exist;
-        // if (data instanceof HTMLElement) return data.cloneNode(true);
-        if (data instanceof HTMLElement)
-            return data;
-        if (data instanceof Map) {
-            const result = new Map();
-            map.set(data, result);
-            data.forEach((value, key) => {
-                result.set(key, cloneData(value));
-            });
-            return result;
-        }
-        if (data instanceof Set) {
-            const result = new Set();
-            map.set(data, result);
-            data.forEach((value) => {
-                result.add(cloneData(value));
-            });
-            return result;
-        }
-        const keys = Reflect.ownKeys(data);
-        const allDesc = Object.getOwnPropertyDescriptors(data);
-        const result = Object.create(Object.getPrototypeOf(data), allDesc);
-        map.set(data, result);
-        keys.forEach((key) => {
-            const value = data[key];
-            result[key] = isObject(value) ? cloneData(value) : value;
-        });
-        stack.delete(data);
-        return result;
+/**
+ * 深拷贝一个对象
+ * @param value 原始值
+ * @param seen 用于存储中间状态
+ * @returns 生成的副本
+ */
+export function deepCopy(value, seen = new WeakMap()) {
+    // 处理基本类型和函数
+    if (typeof value !== "object" || value === null) {
+        return value;
     }
-    function generateSafeFunction(fn) {
-        const code = fn.toString();
-        const bodyStart = code.indexOf("{") + 1;
-        const bodyEnd = code.lastIndexOf("}");
-        const fnBody = code.slice(bodyStart, bodyEnd);
-        const newFnCode = `return function ${fn.name ?? "anonymous"}() { ${fnBody} }`;
-        return new Function(newFnCode)();
+    // 处理循环引用
+    if (seen.has(value)) {
+        return seen.get(value);
     }
-    return cloneData(target);
+    // 处理 Date 对象
+    if (value instanceof Date) {
+        const copy = new Date(value);
+        seen.set(value, copy);
+        return copy;
+    }
+    // 处理 RegExp 对象
+    if (value instanceof RegExp) {
+        const copy = new RegExp(value.source, value.flags);
+        seen.set(value, copy);
+        return copy;
+    }
+    // 处理 Set
+    if (value instanceof Set) {
+        const copy = new Set();
+        seen.set(value, copy);
+        value.forEach((v) => copy.add(deepCopy(v, seen)));
+        return copy;
+    }
+    // 处理 Map
+    if (value instanceof Map) {
+        const copy = new Map();
+        seen.set(value, copy);
+        value.forEach((v, k) => copy.set(deepCopy(k, seen), deepCopy(v, seen)));
+        return copy;
+    }
+    // 处理 Array
+    if (Array.isArray(value)) {
+        const copy = [];
+        seen.set(value, copy);
+        value.forEach((v, i) => (copy[i] = deepCopy(v, seen)));
+        return copy;
+    }
+    // 处理普通对象
+    const copy = Object.create(Object.getPrototypeOf(value));
+    seen.set(value, copy);
+    // 复制所有属性（包括 Symbol 属性）
+    Reflect.ownKeys(value).forEach((key) => {
+        copy[key] = deepCopy(value[key], seen);
+    });
+    return copy;
 }
 export function notNull(value) {
     return value !== null && value !== undefined;

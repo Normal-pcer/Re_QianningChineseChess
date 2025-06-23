@@ -1,3 +1,9 @@
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
 import { Position } from "./position.js";
 import { onPieceClick } from "./selection.js";
 import { stop } from "./multiplayer.js";
@@ -11,6 +17,7 @@ import { schedule } from "./schedule.js";
 import { fixedRandom } from "./random.js";
 import { round } from "./round.js";
 import { DefaultPieceMovingStrategy, DefaultPieceAttackingStrategy, DefaultPieceActionStrategy } from "./pieceStrategy.js";
+import { Serializable, TypeRegistry } from "./serialize.js";
 /**
  * 伤害浮动范围。伤害浮动在暴击之后结算，会影响Damage对象的amount属性。
  * 0.02表示伤害浮动会造成原始伤害的98%到102%。
@@ -26,6 +33,11 @@ const defaultAttackActionCallback = registerAnonymous((piece, target) => {
 export var pieces = [];
 export function modifyPieces(newList) {
     pieces = newList;
+}
+/**
+ * 用来确定棋子被点击时应该执行什么动作。
+ */
+class ClickListenerStrategy extends Serializable {
 }
 class Piece {
     /**
@@ -171,12 +183,8 @@ class Piece {
             if (!this.htmlElement)
                 return;
         }
-        let listener = (event) => {
-            if (onPieceClick(this))
-                event.stopPropagation();
-        };
-        this.htmlElement.addEventListener("click", listener);
-        this.clickListener = listener;
+        this.clickListener = new DefaultClickListenerStrategy();
+        this.htmlElement.addEventListener("click", (ev) => this.clickListener?.onClick?.(this, ev));
         // 创建血条（如果没有）
         if (!this.htmlElement.querySelector(".health-bar")) {
             this.htmlElement.innerHTML += `<svg viewBox="0 0 200 200" width="100%" height="100%">
@@ -227,7 +235,7 @@ class Piece {
         // 检查是否有有效的状态效果
         this.statusEffects = this.statusEffects.filter((effect) => effect.available);
         let hasEffect = this.statusEffects.some((effect) => effect.available);
-        let allNegative = hasEffect && this.statusEffects.every((effect) => effect.negative);
+        let allNegative = hasEffect && this.statusEffects.every((effect) => effect.isNegative());
         if (allNegative) {
             this.htmlElement.classList.remove("has-effect");
             this.htmlElement.classList.add("has-negative-effect");
@@ -427,4 +435,17 @@ export { Piece, PieceType };
 export function getTeamMaster(team) {
     return pieces.find((piece) => piece.team === team && piece.type === PieceType.Master) ?? null;
 }
+/**
+ * 默认的点击监听器。
+ */
+let DefaultClickListenerStrategy = class DefaultClickListenerStrategy extends ClickListenerStrategy {
+    onClick(piece, event) {
+        if (onPieceClick(piece))
+            event.stopPropagation();
+    }
+    ;
+};
+DefaultClickListenerStrategy = __decorate([
+    TypeRegistry.register()
+], DefaultClickListenerStrategy);
 //# sourceMappingURL=piece.js.map

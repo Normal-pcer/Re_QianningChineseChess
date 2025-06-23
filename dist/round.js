@@ -3,11 +3,17 @@ import { showDefaultPiece } from "./pieceFrame.js";
 import { saveCurrent } from "./save.js";
 import { runAllSchedules } from "./schedule.js";
 import { getPlayerFromTeam, Team } from "./team.js";
-export var round = 0;
+export let round = 0;
 export const roundMap = [Team.Red, Team.Black];
 export function nextRound() {
     saveCurrent();
     round++;
+    newRound();
+}
+/**
+ * 新的一轮次开始时，执行部分初始操作
+ */
+export function newRound() {
     console.log(`Round ${round}`);
     runAllSchedules();
     // 展示技能卡
@@ -21,8 +27,7 @@ export function nextRound() {
     pieces.forEach((p) => {
         // 执行状态效果持续动作
         p.statusEffects.forEach((eff) => {
-            if (eff.continuedAction)
-                eff.continuedAction(p);
+            eff.runContinuedAction(p);
         });
         // 重绘棋子
         p.draw();

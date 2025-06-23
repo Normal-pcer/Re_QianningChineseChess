@@ -1,19 +1,19 @@
 import {
     ActionCard,
-    areaGunActionCard,
-    determinedResistanceActionCard,
-    healthInstantPotionActionCard,
-    highGunActionCard,
-    limitlessHorseActionCard,
-    regenerationPotionActionCard,
-    strengthPotionActionCard,
-    strengthPotionEnhancedActionCard,
-    strengthPotionExtendedActionCard,
-    superLaughingActionCard,
-    weaknessPotionActionCard,
-    withBellAndTripodActionCard,
-    potionPotionActionCard,
-    potionPotionEnhancedActionCard
+    HighGunActionCard,
+    LimitlessHorseActionCard,
+    RegenerationPotionActionCard,
+    StrengthPotionActionCard,
+    WeaknessPotionActionCard,
+    InstantHealthPotionActionCard,
+    StrengthPotionEnhancedActionCard,
+    StrengthPotionExtendedActionCard,
+    SuperLaughingActionCard,
+    WithBellAndTripodActionCard,
+    DeterminedResistanceActionCard,
+    AreaGunActionCard,
+    PotionPotionActionCard,
+    PotionPotionEnhancedActionCard,
 } from "./actionCard.js";
 import { Player } from "./player.js";
 import { fixedRandom } from "./random.js";
@@ -33,25 +33,24 @@ class poolItem {
     }
 }
 
-let pool: poolItem[] = [];
+let pool: poolItem[] = [
+    new poolItem(new HighGunActionCard()),
+    new poolItem(new LimitlessHorseActionCard()),
+    new poolItem(new StrengthPotionActionCard()),
+    new poolItem(new WeaknessPotionActionCard()),
+    new poolItem(new InstantHealthPotionActionCard()),
+    new poolItem(new RegenerationPotionActionCard()),
+    new poolItem(new StrengthPotionEnhancedActionCard(), 0.5),
+    new poolItem(new StrengthPotionExtendedActionCard(), 0.5),
+    new poolItem(new SuperLaughingActionCard(), 0.5),
+    new poolItem(new WithBellAndTripodActionCard()),
+    new poolItem(new DeterminedResistanceActionCard()),
+    new poolItem(new AreaGunActionCard()),
+    new poolItem(new PotionPotionActionCard()),
+    new poolItem(new PotionPotionEnhancedActionCard(), 0.5),
+];
 
 export function initCardLooting() {
-    pool.push(
-        new poolItem(highGunActionCard),
-        new poolItem(limitlessHorseActionCard),
-        new poolItem(strengthPotionActionCard),
-        new poolItem(weaknessPotionActionCard),
-        new poolItem(healthInstantPotionActionCard),
-        new poolItem(regenerationPotionActionCard),
-        new poolItem(strengthPotionEnhancedActionCard, 0.5),
-        new poolItem(strengthPotionExtendedActionCard, 0.5),
-        new poolItem(superLaughingActionCard, 0.5),
-        new poolItem(withBellAndTripodActionCard),
-        new poolItem(determinedResistanceActionCard),
-        new poolItem(areaGunActionCard),
-        new poolItem(potionPotionActionCard),
-        new poolItem(potionPotionEnhancedActionCard, 0.5),
-    );
 }
 
 function giveCard(card: ActionCard, to: Player) {

@@ -1,6 +1,6 @@
 import * as round from "./round.js";
 
-export var _schedules: Schedule[] = [];
+export var schedules: Schedule[] = [];
 
 export class Schedule {
     time: number;
@@ -13,7 +13,7 @@ export class Schedule {
 }
 
 export function schedule(action: () => void, time: number, timeOffset: number | null = null) {
-    _schedules.push(new Schedule(time + (timeOffset ? timeOffset + round.round : 0), action));
+    schedules.push(new Schedule(time + (timeOffset ? timeOffset + round.round : 0), action));
 }
 
 export function scheduleTimeout(action: () => void, time: number, timeOffset: number | null = -1) {
@@ -22,15 +22,15 @@ export function scheduleTimeout(action: () => void, time: number, timeOffset: nu
 
 export function runAllSchedules() {
     // 执行所有计划
-    for (const schedule of _schedules) {
+    for (const schedule of schedules) {
         if (schedule.time <= round.round) {
             schedule.action();
             //remove
-            _schedules.splice(_schedules.indexOf(schedule), 1);
+            schedules.splice(schedules.indexOf(schedule), 1);
         }
     }
 }
 
-export function setSchedules(schedules: Schedule[]) {
-    _schedules = schedules;
+export function setSchedules(schedules_: Schedule[]) {
+    schedules = schedules_;
 }
