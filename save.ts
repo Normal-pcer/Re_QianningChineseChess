@@ -73,6 +73,7 @@ export class Save extends Serializable {
                     return new Function(code);
                 }
             }
+            return value;
         });
         let result = TypeRegistry.revive(obj);
 
