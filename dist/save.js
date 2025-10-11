@@ -69,6 +69,7 @@ let Save = Save_1 = class Save extends Serializable {
                     return new Function(code);
                 }
             }
+            return value;
         });
         let result = TypeRegistry.revive(obj);
         if (result instanceof Save_1) {
