@@ -308,7 +308,7 @@ let SuperLaughingActionCard = class SuperLaughingActionCard extends SelectorActi
         let effect = new StatusEffect("忍俊不禁", "superLaughing", "棋子不能主动移动和攻击。", [
             movingModifier,
             attackingModifier,
-        ]).setAsNegative();
+        ]).setNegative();
         piece.pushEffects(effect);
         piece.movingDestinationsCallbackProvider.area(0).modify(movingModifier);
         piece.attackingTargetsCallback.area(0).modify(attackingModifier);

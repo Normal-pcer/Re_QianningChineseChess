@@ -48,7 +48,7 @@ export class StatusEffectTemplate {
             effect.setTickAction(tickAction);
         }
         if (this.isNegative()) {
-            effect.setAsNegative();
+            effect.setNegative();
         }
         target.pushEffects(effect);
     }

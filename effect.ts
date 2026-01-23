@@ -184,7 +184,7 @@ export class StatusEffect {
      * 将一个状态效果设置为负面。
      * 将会影响渲染方式。
      */
-    setAsNegative() {
+    setNegative() {
         this.negative = true;
         return this;
     }
@@ -195,6 +195,14 @@ export class StatusEffect {
 
     setTickAction(strategy: TickActionStrategy): void {
         this.tickAction = strategy;
+    }
+
+    /**
+     * 设置状态效果，不渲染它的等级信息。
+     */
+    setHideLevel(): StatusEffect {
+        this.showLevel = false;
+        return this;
     }
 
     runContinuedAction(target: Piece) {

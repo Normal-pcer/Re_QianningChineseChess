@@ -61,7 +61,7 @@ export abstract class StatusEffectTemplate {
         }
 
         if (this.isNegative()) {
-            effect.setAsNegative();
+            effect.setNegative();
         }
         target.pushEffects(effect);
     }
