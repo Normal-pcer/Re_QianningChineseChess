@@ -1,10 +1,10 @@
 import { HighGunActionCard, LimitlessHorseActionCard, RegenerationPotionActionCard, StrengthPotionActionCard, WeaknessPotionActionCard, InstantHealthPotionActionCard, StrengthPotionEnhancedActionCard, StrengthPotionExtendedActionCard, SuperLaughingActionCard, WithBellAndTripodActionCard, DeterminedResistanceActionCard, AreaGunActionCard, PotionPotionActionCard, PotionPotionEnhancedActionCard, } from "./actionCard.js";
 import { fixedRandom } from "./random.js";
 import { getCurrentTeam, nextRound, round } from "./round.js";
-import { getCurrentSelection, MainSelection } from "./selection.js";
+import { getCurrentSelection, mainSelection } from "./selection.js";
 import { getPlayerFromTeam } from "./team.js";
 import { deepCopy } from "./utils.js";
-const playerCardCountMax = 7;
+const playerCardCountLimit = 6;
 class poolItem {
     card;
     weight;
@@ -37,11 +37,11 @@ function giveCard(card, to) {
 }
 export function lootCard() {
     // 取消当前选择
-    if (MainSelection !== getCurrentSelection()) {
+    if (mainSelection !== getCurrentSelection()) {
         getCurrentSelection()?.stop();
     }
     let player = getPlayerFromTeam(getCurrentTeam());
-    if (player.actionCards.length >= playerCardCountMax)
+    if (player.actionCards.length >= playerCardCountLimit)
         return;
     let weightSum = pool.reduce((sum, item) => sum + item.weight, 0);
     let random = fixedRandom("cardLooting", round) * weightSum;

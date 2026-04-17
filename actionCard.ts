@@ -227,7 +227,7 @@ export class WeaknessPotionActionCard extends SelectorActionCard {
     }
 
     final(target: Piece): void {
-        new WeaknessEffectTemplate().apply(target, 1);
+        new WeaknessEffectTemplate().apply(target, 1, 3 * 2);
     }
 }
 
@@ -332,7 +332,7 @@ export class SuperLaughingActionCard extends SelectorActionCard {
         let effect = new StatusEffect("忍俊不禁", "superLaughing", "棋子不能主动移动和攻击。", [
             movingModifier,
             attackingModifier,
-        ]).setAsNegative();
+        ]).setNegative();
 
         piece.pushEffects(effect);
         piece.movingDestinationsCallbackProvider.area(0).modify(movingModifier);

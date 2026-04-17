@@ -3,24 +3,37 @@ body {
 }
 
 #center-column {
-    width: 47vw;
+    width: 52vw;
     margin: 0 auto;
     border: 2px black solid;
-    height: 95vh;
+    height: 98vh;
+    position: fixed;
+    left: 26vw;
 }
 
 #left-column {
     width: 24vw;
     margin: 0 auto;
     border: 2px black solid;
-    height: 95vh;
+    height: 98vh;
     position: fixed;
-    left: 2vw;
+    left: 1vw;
     /* overflow-y: scroll; */
 }
 
+#right-column {
+    width: 20vw;
+    margin: 0 auto;
+    border: 2px black solid;
+    height: 98vh;
+    position: fixed;
+    right: 1vw;
+    /* overflow-y: scroll; */
+}
+
+
 #action-cards ul {
-    padding-left: 1vw;
+    padding-left: 0.5vw;
 }
 
 #action-cards ul li {
@@ -62,7 +75,7 @@ body {
 }
 
 #gameboard {
-    width: 80%;
+    width: 90%;
     margin: auto;
 }
 
@@ -129,8 +142,8 @@ body {
     font-weight: bold;
     color: white;
     background-color: gray;
-    margin-top: 10px;
     text-align: center;
+    transform: translate(0, -2vh);
 }
 
 #buttons span {
@@ -183,6 +196,20 @@ body {
     }
 }
 
+/* 血条闪烁动画 */
+@keyframes blink {
+    25% {
+        opacity: 1;
+    }
+    75% {
+        opacity: 0.3;
+    }
+}
+
+.blink {
+    animation: blink 1s infinite;
+}
+
 #buttons span {
     margin: 0 20px;
     display: inline-block;
@@ -227,7 +254,6 @@ body {
     margin: 5px;
     display: block;
     white-space: normal;
-    position: relative;
 
     /* 展示框之间横向排列 */
     display: inline-block;
@@ -236,8 +262,6 @@ body {
 
 .action-cards-list li {
     display: inline-block;
-    position: absolute;
-    transform: translate(0, 64%);
 }
 
 .action-card-title {
@@ -263,16 +287,16 @@ body {
     text-align: center;
 }
 
-/* 卡牌槽允许横向滚动 */
 .action-cards-list {
-    height: 25vh;
+    height: 30vh;
     width: 23vw;
-    overflow-x: scroll;
-    white-space: nowrap;
-    position: relative;
-    top: 3vw;
-    /* overflow-y: visible; */
-    transform: translateY(-60%);
-    /* border-top: 2px solid #000; */
-    /* border-bottom: 2px solid #000; */
+}
+
+.highlight-position {
+    position: absolute;
+    width: 1vw;
+    height: 1vw;
+    background-color: rgba(255, 255, 0, 0.5);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
 }

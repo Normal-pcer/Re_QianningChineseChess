@@ -195,7 +195,7 @@ let WeaknessPotionActionCard = class WeaknessPotionActionCard extends SelectorAc
         super("虚弱药水", "weaknessPotion", "持续 3 回合 - 选中棋子的攻击力降低 20%");
     }
     final(target) {
-        new WeaknessEffectTemplate().apply(target, 1);
+        new WeaknessEffectTemplate().apply(target, 1, 3 * 2);
     }
 };
 WeaknessPotionActionCard = __decorate([
@@ -308,7 +308,7 @@ let SuperLaughingActionCard = class SuperLaughingActionCard extends SelectorActi
         let effect = new StatusEffect("忍俊不禁", "superLaughing", "棋子不能主动移动和攻击。", [
             movingModifier,
             attackingModifier,
-        ]).setAsNegative();
+        ]).setNegative();
         piece.pushEffects(effect);
         piece.movingDestinationsCallbackProvider.area(0).modify(movingModifier);
         piece.attackingTargetsCallback.area(0).modify(attackingModifier);

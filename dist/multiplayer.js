@@ -18,6 +18,8 @@ import { StatusEffect } from "./effect.js";
 import { DamageTrigger, TriggerManager } from "./trigger.js";
 import { seed } from "./random.js";
 import { TypeRegistry } from "./serialize.js";
+import { Damage } from "./damage.js";
+import { DamageType } from "./damageType.js";
 // 初始化模块
 seed();
 initDefaultMovingBehaviors();
@@ -52,18 +54,12 @@ let MasterSelfDefenseTrigger = class MasterSelfDefenseTrigger extends DamageTrig
             console.log("defense: ", defense);
             if (last === 0)
                 return; // 伤害过低（<0.5）无需触发御守三晖
-            // let effect = new StatusEffect(
-            //     "御守三晖",
-            //     "masterSelfDefense",
-            //     `防御力提升${Math.round(defense * 100)}%`,
-            //     [
-            //         damage.target.defense
-            //             .area(1)
-            //             .modify(new AttributeModifier(defense, last)),
-            //     ],
-            //     Math.round(defense)
-            // ).hideLevel()
-            // damage.target.pushEffects(effect);
+            let effect = new StatusEffect("御守三晖", "masterSelfDefense", `防御力提升${Math.round(defense * 100)}%`, [
+                damage.target.defense
+                    .area(1)
+                    .modify(new AttributeModifier(defense, last)),
+            ], Math.round(defense)).setHideLevel();
+            damage.target.pushEffects(effect);
             // console.log(damage.target);
             // console.log("对其应用了御守三晖")
         }
@@ -78,14 +74,21 @@ window.onload = () => {
     if (container !== null)
         container.style.display = "block";
     putPieces(); // 放置棋子
-    Selection.setCurrentSelection(Selection.MainSelection);
+    Selection.setCurrentSelection(Selection.mainSelection);
     Position._calculateGameboardSize();
     // 注册棋盘点击事件
     let gameboard = document.getElementById("gameboard");
     if (gameboard instanceof HTMLElement)
         gameboard.onclick = (event) => {
-            let pos = new Position(event.clientX, event.clientY, false);
-            return Selection.onGameboardClick(pos);
+            const rect = document.getElementById("gameboard")?.offsetParent?.getBoundingClientRect();
+            if (!rect)
+                return;
+            const x = event.clientX - rect.left;
+            const y = event.clientY - rect.top;
+            if (0 <= x && x <= rect.width && 0 <= y && y <= rect.height) {
+                const pos = new Position(x, y, false);
+                return Selection.onGameboardClick(pos);
+            }
         };
     // 初始化棋子
     pieces.forEach((piece) => {
@@ -158,6 +161,22 @@ window.onload = () => {
     // 第零轮开始
     saveCurrent();
     showDefaultPiece();
+    // 调试用：按下alt+k调用以下调试函数
+    const ActivatedDebug = () => {
+        console.log("Debug!");
+        pieces.forEach((piece) => {
+            const damage = new Damage(DamageType.Magic, 1000, null, piece);
+            piece.damageFrame(damage);
+            setTimeout(() => {
+                piece.exitDamageFrame();
+            }, 10000);
+        });
+    };
+    document.addEventListener("keydown", (event) => {
+        if (event.altKey && event.key === "k") {
+            ActivatedDebug();
+        }
+    });
 };
 // 当页面大小改变
 window.onresize = () => {

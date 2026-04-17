@@ -33,7 +33,7 @@ export class DefaultPieceAttackingStrategy extends PieceAttackingStrategy {
     }
 }
 
-export abstract class PieceActionStrategy extends Serializable{
+export abstract class PieceActionStrategy extends Serializable {
     abstract attack(a: Piece, b: Piece): boolean;
 }
 

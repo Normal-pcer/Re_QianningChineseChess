@@ -37,14 +37,7 @@
                         <ul id="effect-list"></ul>
                     </div>
                 </div>
-                <div id="player-assets">
-                    <div id="action-cards">
-                        <p>红方技能卡</p>
-                        <ul id="red-action-cards-list" class="action-cards-list"></ul>
-                        <p>黑方技能卡</p>
-                        <ul id="black-action-cards-list" class="action-cards-list"></ul>
-                    </div>
-                </div>
+                
             </div>
             <div id="center-column">
                 <div id="gameboard">
@@ -154,36 +147,54 @@
                         </div>
                     </div>
 
-                    <div id="cheating">
+                    <div id="cheating" style="display: none">
                         <form action="">
                             <input type="text" placeholder="command" />
                             <input type="button" id="submit-cheating" value="LOL" />
                         </form>
                     </div>
-                </div>
-                <div id="tip-bars">
-                    <div id="round-tip">
-                        <span>red</span>
-                    </div>
-                    <div id="victor-tip" style="font-size: 3em">
-                        <span></span>
-                    </div>
-                    <div id="action-bar" style="display: none">
-                        <span>请选择一个棋子</span>
+
+                    <div id="tip-bars">
+                        <div id="victor-tip" style="font-size: 3em">
+                            <span></span>
+                        </div>
+                        <div id="action-bar" style="display: none">
+                            <span>请选择一个棋子</span>
+                        </div>
                     </div>
                 </div>
+                
                 <div id="effects">
                     <!--特效-->
 
                     <div id="damage-numbers">
                         <!--伤害数字特效-->
                     </div>
+
+                    <div id="highlight-positions">
+                        <!--高亮位置特效-->
+                    </div>
                 </div>
+                
+            </div>
+            <div id="right-column">
+                <!--右侧列-->
                 <div id="buttons">
                     <span id="loot-card-button">抽卡</span>
                     <span id="recall-button">悔棋</span>
                     <span id="store-button">存档<span style="color: gray">(测试功能)</span></span>
                     <span id="load-button">读档<span style="color: gray">(测试功能)</span></span>
+                </div>
+                <div id="round-tip" style="display: none">
+                    <span>red</span> 正在行动
+                </div>
+                <div id="player-assets">
+                    <div id="action-cards">
+                        <p>红方技能卡</p>
+                        <ul id="red-action-cards-list" class="action-cards-list"></ul>
+                        <p>黑方技能卡</p>
+                        <ul id="black-action-cards-list" class="action-cards-list"></ul>
+                    </div>
                 </div>
             </div>
         </div>
