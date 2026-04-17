@@ -195,7 +195,7 @@ let WeaknessPotionActionCard = class WeaknessPotionActionCard extends SelectorAc
         super("虚弱药水", "weaknessPotion", "持续 3 回合 - 选中棋子的攻击力降低 20%");
     }
     final(target) {
-        new WeaknessEffectTemplate().apply(target, 1);
+        new WeaknessEffectTemplate().apply(target, 1, 3 * 2);
     }
 };
 WeaknessPotionActionCard = __decorate([

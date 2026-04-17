@@ -78,8 +78,15 @@ window.onload = () => {
     let gameboard = document.getElementById("gameboard");
     if (gameboard instanceof HTMLElement)
         gameboard.onclick = (event) => {
-            let pos = new Position(event.clientX, event.clientY, false);
-            return Selection.onGameboardClick(pos);
+            const rect = document.getElementById("gameboard")?.offsetParent?.getBoundingClientRect();
+            if (!rect)
+                return;
+            const x = event.clientX - rect.left;
+            const y = event.clientY - rect.top;
+            if (0 <= x && x <= rect.width && 0 <= y && y <= rect.height) {
+                const pos = new Position(x, y, false);
+                return Selection.onGameboardClick(pos);
+            }
         };
     // 初始化棋子
     pieces.forEach((piece) => {

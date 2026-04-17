@@ -4,7 +4,7 @@ import { getCurrentTeam, nextRound, round } from "./round.js";
 import { getCurrentSelection, MainSelection } from "./selection.js";
 import { getPlayerFromTeam } from "./team.js";
 import { deepCopy } from "./utils.js";
-const playerCardCountMax = 7;
+const playerCardCountLimit = 6;
 class poolItem {
     card;
     weight;
@@ -41,7 +41,7 @@ export function lootCard() {
         getCurrentSelection()?.stop();
     }
     let player = getPlayerFromTeam(getCurrentTeam());
-    if (player.actionCards.length >= playerCardCountMax)
+    if (player.actionCards.length >= playerCardCountLimit)
         return;
     let weightSum = pool.reduce((sum, item) => sum + item.weight, 0);
     let random = fixedRandom("cardLooting", round) * weightSum;

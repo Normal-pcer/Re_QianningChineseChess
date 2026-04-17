@@ -227,7 +227,7 @@ export class WeaknessPotionActionCard extends SelectorActionCard {
     }
 
     final(target: Piece): void {
-        new WeaknessEffectTemplate().apply(target, 1);
+        new WeaknessEffectTemplate().apply(target, 1, 3 * 2);
     }
 }
 

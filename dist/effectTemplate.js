@@ -72,10 +72,10 @@ export class WeaknessEffectTemplate extends StatusEffectTemplate {
         super("虚弱", "weakness");
     }
     getDescription(level) {
-        return `攻击力降低 ${Math.round(10 + level * 10)}`;
+        return `攻击力降低 ${Math.round(10 + level * 10)}%`;
     }
     onApply(target, level, expire) {
-        let modifier = new AttributeModifier((10 + level * 10) / 100, expire, null);
+        let modifier = new AttributeModifier(-(10 + level * 10) / 100, expire, null);
         target.attackDamage.area(1).modify(modifier);
         return [modifier];
     }
