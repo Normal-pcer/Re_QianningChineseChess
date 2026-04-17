@@ -58,7 +58,7 @@ export class Position extends PositionedItem {
         gameboardImageHeight = gameboardImage.height;
         // 不计图片边距的大小
         gameboardRealWidth = gameboardImageWidth * (1 - gameboardImageMarginLeft - gameboardImageMarginRight);
-        gameboardRealHeight = gameboardImageHeight * (1 - gameboardImageMarginTop * 2);
+        gameboardRealHeight = gameboardImageHeight * (1 - gameboardImageMarginTop - gameboardImageMarginBottom);
         // 获取棋盘左上角格点实际位置（像素）
         gameboardLeftTopX = gameboardImage.offsetLeft + gameboardImageMarginLeft * gameboardImageWidth;
         gameboardLeftTopY = gameboardImage.offsetTop + gameboardImageMarginTop * gameboardImageHeight;
@@ -147,9 +147,6 @@ export class Position extends PositionedItem {
     add(other) {
         return new Position(this.x + other.x, this.y + other.y, true);
     }
-    /**
-     * @returns {Piece?}
-     */
     get owner() {
         for (let piece of pieces) {
             if (piece.position.x == this.x && piece.position.y == this.y) {

@@ -371,14 +371,23 @@ export function getCurrentSelection() {
 export function cancelCurrentSelection(continueMainSelection = true) {
     currentSelection?.stop(false);
     if (continueMainSelection) {
-        setCurrentSelection(MainSelection);
+        setCurrentSelection(mainSelection);
+    }
+}
+
+const cleanMainSelection = () => {
+    showDefaultPiece();
+    pieces.forEach((piece) => piece.exitDamageFrame());
+    const hiPos = document.getElementById("highlight-positions");
+    if (hiPos instanceof HTMLElement) {
+        hiPos.innerHTML = "";
     }
 }
 
 /**
  * @description 主要选择器，在几乎整个游戏周期内使用，用于移动棋子和控制攻击
  */
-export const MainSelection = new SelectionManager(
+export const mainSelection = new SelectionManager(
     new SingleSelection([], ItemType.Piece, "请选择要移动的棋子", (piece) => true)
 )
     .then((past) => {
@@ -388,8 +397,34 @@ export const MainSelection = new SelectionManager(
             return new SingleSelection([], ItemType.Piece, "查看棋子信息", (grid) => false).setTemp();
         }
         let validMove = selectedPiece.destinations;
-        let validTarget = selectedPiece.attackTargets;
+        let validTarget = selectedPiece.attackTargets.filter((pos) => {
+            const piece = pos.integerGrid().owner;
+            return piece !== null && piece.team !== selectedPiece.team;
+        });
         showPiece(selectedPiece);
+
+        for (const pos of validTarget) {
+            const piece = pos.integerGrid().owner;
+            if (piece === null) continue;
+            const damage = selectedPiece.SimulateAttack(piece);
+            piece.damageFrame(damage);
+        }
+
+        const highlightPosition = (pos: Position) => {
+            const element = document.createElement("div");
+            element.classList.add("highlight-position", "blink");
+
+            const x = pos.screenX;
+            const y = pos.screenY;
+
+            element.style.left = `${x}px`;
+            element.style.top = `${y}px`;
+            document.getElementById("highlight-positions")?.appendChild(element);
+        };
+
+        validMove.forEach(highlightPosition);
+        validTarget.forEach(highlightPosition);
+
         return new SingleSelection(
             validMove.concat(validTarget),
             ItemType.Grid,
@@ -421,10 +456,7 @@ export const MainSelection = new SelectionManager(
             nextRound();
             runAllSchedules();
         }
-
-        showDefaultPiece();
+        cleanMainSelection();
     })
-    .oncancel(() => {
-        showDefaultPiece();
-    })
+    .oncancel(cleanMainSelection)
     .cycle();

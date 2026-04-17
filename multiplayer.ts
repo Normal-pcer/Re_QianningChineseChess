@@ -14,6 +14,7 @@ import { DamageTrigger, TriggerManager } from "./trigger.js";
 import { random, seed } from "./random.js";
 import { TypeRegistry } from "./serialize.js";
 import { Damage } from "./damage.js";
+import { DamageType } from "./damageType.js";
 
 // 初始化模块
 seed();
@@ -80,7 +81,7 @@ window.onload = () => {
     if (container !== null) container.style.display = "block";
     putPieces(); // 放置棋子
 
-    Selection.setCurrentSelection(Selection.MainSelection);
+    Selection.setCurrentSelection(Selection.mainSelection);
 
     Position._calculateGameboardSize();
 
@@ -177,6 +178,24 @@ window.onload = () => {
     // 第零轮开始
     saveCurrent();
     showDefaultPiece();
+    // 调试用：按下alt+k调用以下调试函数
+    const ActivatedDebug = () => {
+        console.log("Debug!");
+
+        pieces.forEach((piece) => {
+            const damage = new Damage(DamageType.Magic, 1000, null, piece);
+            piece.damageFrame(damage);
+
+            setTimeout(() => {
+                piece.exitDamageFrame();
+            }, 10000);
+        });
+    };
+    document.addEventListener("keydown", (event) => {
+        if (event.altKey && event.key === "k") {
+            ActivatedDebug();
+        }
+    });
 };
 
 // 当页面大小改变

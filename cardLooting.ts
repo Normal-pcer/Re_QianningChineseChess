@@ -18,7 +18,7 @@ import {
 import { Player } from "./player.js";
 import { fixedRandom } from "./random.js";
 import { getCurrentTeam, nextRound, round } from "./round.js";
-import { getCurrentSelection, MainSelection } from "./selection.js";
+import { getCurrentSelection, mainSelection } from "./selection.js";
 import { getPlayerFromTeam } from "./team.js";
 import { deepCopy } from "./utils.js";
 
@@ -60,7 +60,7 @@ function giveCard(card: ActionCard, to: Player) {
 
 export function lootCard() {
     // 取消当前选择
-    if (MainSelection !== getCurrentSelection()) {
+    if (mainSelection !== getCurrentSelection()) {
         getCurrentSelection()?.stop();
     }
     let player = getPlayerFromTeam(getCurrentTeam());

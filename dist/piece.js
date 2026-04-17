@@ -26,7 +26,7 @@ const damageFloatLimit = 0.02;
 const defaultAttackActionCallback = registerAnonymous((piece, target) => {
     if (target.team === piece.team)
         return false; // 不能攻击友军
-    let damageObject = piece.SimulateAttack(target);
+    const damageObject = piece.SimulateAttack(target);
     damageObject.apply();
     return true;
 });
@@ -164,7 +164,7 @@ class Piece {
             this.htmlElement.classList.remove("selected-piece");
         }
         else {
-            let selected = document.getElementsByClassName("selected-piece");
+            const selected = document.getElementsByClassName("selected-piece");
             if (selected != undefined)
                 for (let index = 0; index < selected.length; index++) {
                     selected[index].classList.remove("selected-piece");
@@ -195,11 +195,58 @@ class Piece {
             stroke-width="4"
             class="health-bar"
         />
+        <path
+            class="decreasing-bar",
+            fill="none"
+            stroke="black"
+            stroke-width="4"
+            d=""
+        >
         </svg>`;
-            let healthBar = this.htmlElement.querySelector(".health-bar");
-            healthBar.setAttribute("stroke", this.team);
+            this.htmlElement.querySelector(".health-bar")?.setAttribute("stroke", this.team);
+            this.htmlElement.querySelector(".decreasing-bar")?.setAttribute("stroke", this.team);
         }
         this.draw();
+    }
+    /**
+     * 绘制棋子的生命值部分。
+     * 正常绘制模式和“伤害展现模式”共用逻辑。
+     *
+     * @param health 棋子扣除之后的生命值。
+     * @param decreasing 本次扣除的生命值大小。
+     */
+    drawHealthBar(health, decreasing) {
+        if (!this.htmlElement)
+            return;
+        let healthProp = health / this.maxHealth.result;
+        if (healthProp >= 1)
+            healthProp = 0.99999; // 防止血条消失
+        const arc = healthProp * 2 * Math.PI;
+        const sin = Math.sin(arc);
+        const cos = Math.cos(arc);
+        const y = 100 - 90 * cos;
+        const x = 100 + 90 * sin;
+        const largeArcFlag = arc > Math.PI ? 1 : 0;
+        const d = `M 100,10 A 90,90 0 ${largeArcFlag},1 ${x},${y}`;
+        this.htmlElement.querySelector(".health-bar")?.setAttribute("d", d);
+        // 在原位置接续上新的弧
+        if (decreasing === 0) {
+            const decreasingBar = this.htmlElement.querySelector(".decreasing-bar");
+            decreasingBar?.setAttribute("d", "");
+            decreasingBar?.classList.remove("blink");
+            return;
+        }
+        const decProp = decreasing / this.maxHealth.result;
+        const arc2 = decProp * 2 * Math.PI;
+        const sin2 = Math.sin(arc + arc2);
+        const cos2 = Math.cos(arc + arc2);
+        const y2 = 100 - 90 * cos2;
+        const x2 = 100 + 90 * sin2;
+        const largeArcFlag2 = arc2 > Math.PI ? 1 : 0;
+        const d2 = `M ${x},${y} A 90,90 0 ${largeArcFlag2},1 ${x2},${y2}`;
+        const decreasingBar = this.htmlElement.querySelector(".decreasing-bar");
+        decreasingBar?.setAttribute("d", d2);
+        decreasingBar?.classList.add("blink");
     }
     /**
      * 绘制棋子。将会更新棋子html元素的位置和一些状态。
@@ -221,21 +268,11 @@ class Piece {
         this.htmlElement.style.left = this.position.getScreenPos()[0] + "px";
         this.htmlElement.style.top = this.position.getScreenPos()[1] + "px";
         // 计算、刷新血条
-        let healthProportion = this.health / this.maxHealth.result;
-        if (healthProportion >= 1)
-            healthProportion = 0.99999; // 防止血条消失
-        let arc = healthProportion * 2 * Math.PI;
-        let sin = Math.sin(arc);
-        let cos = Math.cos(arc);
-        let y = 100 - 90 * cos;
-        let x = 100 + 90 * sin;
-        let largeArcFlag = arc > Math.PI ? 1 : 0;
-        let d = `M 100,10 A 90,90 0 ${largeArcFlag},1 ${x},${y}`;
-        this.htmlElement.querySelector(".health-bar")?.setAttribute("d", d);
+        this.drawHealthBar(this.health, 0);
         // 检查是否有有效的状态效果
         this.statusEffects = this.statusEffects.filter((effect) => effect.available);
-        let hasEffect = this.statusEffects.some((effect) => effect.available);
-        let allNegative = hasEffect && this.statusEffects.every((effect) => effect.isNegative());
+        const hasEffect = this.statusEffects.some((effect) => effect.available);
+        const allNegative = hasEffect && this.statusEffects.every((effect) => effect.isNegative());
         if (allNegative) {
             this.htmlElement.classList.remove("has-effect");
             this.htmlElement.classList.add("has-negative-effect");
@@ -259,10 +296,10 @@ class Piece {
      */
     pushEffects(...effects) {
         for (let i = 0; i < effects.length; i++) {
-            let effect = effects[i];
+            const effect = effects[i];
             if (!effect.available)
                 return; // 忽略不可用效果
-            let exist = this.statusEffects.find((e) => e.id == effect.id);
+            const exist = this.statusEffects.find((e) => e.id == effect.id);
             if (!exist) {
                 this.statusEffects.push(effect);
             }
@@ -272,8 +309,8 @@ class Piece {
                     effect.disable();
                 }
                 else {
-                    let higherLevel = exist.level > effect.level ? exist : effect;
-                    let lowerLevel = exist.level > effect.level ? effect : exist;
+                    const higherLevel = exist.level > effect.level ? exist : effect;
+                    const lowerLevel = exist.level > effect.level ? effect : exist;
                     lowerLevel.disable(); // 临时禁用已经存在的效果
                     this.statusEffects.splice(this.statusEffects.indexOf(exist), 1);
                     this.statusEffects.push(higherLevel);
@@ -311,15 +348,39 @@ class Piece {
      */
     SimulateAttack(targetPiece) {
         let damageAmount = this.attackDamage.result;
-        let isCritical = fixedRandom("criticalCheck", round, this.position.toString(), targetPiece.position.toString()) < this.criticalRate.result;
+        const isCritical = fixedRandom("criticalCheck", round, this.position.toString(), targetPiece.position.toString()) < this.criticalRate.result;
         if (isCritical)
             damageAmount *= this.criticalDamage.result + 1;
-        let float = fixedRandom("damageFloat", round, this.position.toString(), targetPiece.position.toString()) *
+        const float = fixedRandom("damageFloat", round, this.position.toString(), targetPiece.position.toString()) *
             damageFloatLimit *
             2 +
             (1 - damageFloatLimit);
-        let damageObject = new Damage(this.damageType, damageAmount * float, this, targetPiece, isCritical);
+        const damageObject = new Damage(this.damageType, damageAmount * float, this, targetPiece, isCritical);
         return damageObject;
+    }
+    /**
+     * 转化为伤害展现模式。
+     * 在选中棋子、即将攻击时，将可攻击的棋子切换为此模式，向玩家可视化地展示伤害大小。
+     * 即显示这个棋子经过攻击后的生命值。
+     *
+     * 具体地，将会计算出棋子经过攻击后的生命值，然后进行以下渲染：
+     * - 将生命条减损为新的生命值。
+     * - 使用透明度较低的弧闪烁效果，来展示扣除的生命值部分。
+     */
+    damageFrame(damage) {
+        let amount = damage.realAmount;
+        let newHealth = this.health - amount;
+        if (newHealth <= 0) {
+            amount = -newHealth;
+            newHealth = 0;
+        }
+        this.drawHealthBar(newHealth, amount);
+    }
+    /**
+     * 退出伤害展现模式。
+     */
+    exitDamageFrame() {
+        this.drawHealthBar(this.health, 0);
     }
     /**
      * 攻击一个目标棋子。
@@ -351,7 +412,7 @@ class Piece {
     damaged(damage = null) {
         if (damage === null)
             return;
-        let realAmount = damage.realAmount; // 1000 防御伤害减半
+        const realAmount = damage.realAmount; // 1000 防御伤害减半
         this.health -= realAmount;
         if (this.health <= 0)
             this.destroyed();
