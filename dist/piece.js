@@ -371,7 +371,7 @@ class Piece {
         let amount = damage.realAmount;
         let newHealth = this.health - amount;
         if (newHealth <= 0) {
-            amount = -newHealth;
+            amount = this.health;
             newHealth = 0;
         }
         this.drawHealthBar(newHealth, amount);
