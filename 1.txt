@@ -1,0 +1,4860 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+    <meta charset="UTF-8">
+    <title>千宁中国象棋</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div id="game-container">
+        <div id="title">
+            <h1>千宁中国象棋 <sup>抽卡版</sup> </h1>
+        </div>
+        <div id="menu">
+            <ul>
+                <li>
+                    <div id="multiplayer" class="entry">
+                        <a href="multiplayer.html">多人游戏</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <footer>
+        <span id="version-info">Latest built at: 2026-04-18 14:00:07</span>
+    </footer>
+    <script>
+        window.onload = function () {
+            document.getElementById("game-container").style.display = "block";
+        }
+    </script>
+</body>
+
+</html><!DOCTYPE html>
+<html lang="zh-cn">
+    <head>
+        <meta charset="UTF-8" />
+        <title>千宁中国象棋 - 多人游戏</title>
+        <link rel="stylesheet" href="style.css" />
+        <style>
+            .piece svg {
+                position: absolute;
+                top: 0;
+                left: 0;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div id="game-container">
+            <div id="left-column">
+                <div id="piece-info">
+                    <div id="piece-frame" class="piece">
+                        <span class="piece-name"></span>
+                    </div>
+                    <div id="data-list-container">
+                        <ul id="data-list">
+                            <li>位置: <span id="frame-position"></span></li>
+                            <li>生命值: <span id="frame-health"></span></li>
+                            <li>生命值上限: <span id="frame-health-max"></span></li>
+                            <li>攻击力: <span id="frame-attack"></span></li>
+                            <li>防御力: <span id="frame-defense"></span></li>
+                            <li>暴击率: <span id="frame-critical"></span>%</li>
+                            <li>暴击伤害: <span id="frame-critical-damage"></span>%</li>
+                            <li>重量: <span id="frame-weight"></span></li>
+                        </ul>
+                    </div>
+                    <div id="effect-list-container">
+                        <span>状态效果:</span>
+                        <ul id="effect-list"></ul>
+                    </div>
+                </div>
+                
+            </div>
+            <div id="center-column">
+                <div id="gameboard">
+                    <div class="background">
+                        <img src="gameboard.png" alt="棋盘" />
+                    </div>
+                    <div id="pieces">
+                        <div id="black-pieces">
+                            <div id="black-master1" class="black-piece black-master piece">
+                                <span class="piece-name">将</span>
+                            </div>
+                            <div id="black-guard1" class="black-piece black-guard piece">
+                                <span class="piece-name">士</span>
+                            </div>
+                            <div id="black-guard2" class="black-piece black-guard piece">
+                                <span class="piece-name">士</span>
+                            </div>
+                            <div id="black-elephant1" class="black-piece black-elephant piece">
+                                <span class="piece-name">象</span>
+                            </div>
+                            <div id="black-elephant2" class="black-piece black-elephant piece">
+                                <span class="piece-name">象</span>
+                            </div>
+                            <div id="black-horse1" class="black-piece black-horse piece">
+                                <span class="piece-name">馬</span>
+                            </div>
+                            <div id="black-horse2" class="black-piece black-horse piece">
+                                <span class="piece-name">馬</span>
+                            </div>
+                            <div id="black-chariot1" class="black-piece black-chariot piece">
+                                <span class="piece-name">車</span>
+                            </div>
+                            <div id="black-chariot2" class="black-piece black-chariot piece">
+                                <span class="piece-name">車</span>
+                            </div>
+                            <div id="black-gun1" class="black-piece black-gun piece">
+                                <span class="piece-name">炮</span>
+                            </div>
+                            <div id="black-gun2" class="black-piece black-gun piece">
+                                <span class="piece-name">炮</span>
+                            </div>
+                            <div id="black-pawn1" class="black-piece black-pawn piece">
+                                <span class="piece-name">卒</span>
+                            </div>
+                            <div id="black-pawn2" class="black-piece black-pawn piece">
+                                <span class="piece-name">卒</span>
+                            </div>
+                            <div id="black-pawn3" class="black-piece black-pawn piece">
+                                <span class="piece-name">卒</span>
+                            </div>
+                            <div id="black-pawn4" class="black-piece black-pawn piece">
+                                <span class="piece-name">卒</span>
+                            </div>
+                            <div id="black-pawn5" class="black-piece black-pawn piece">
+                                <span class="piece-name">卒</span>
+                            </div>
+                        </div>
+                        <div id="red-pieces">
+                            <div id="red-master1" class="red-piece red-master piece">
+                                <span class="piece-name">帥</span>
+                            </div>
+                            <div id="red-guard1" class="red-piece red-guard piece">
+                                <span class="piece-name">仕</span>
+                            </div>
+                            <div id="red-guard2" class="red-piece red-guard piece">
+                                <span class="piece-name">仕</span>
+                            </div>
+                            <div id="red-elephant1" class="red-piece red-elephant piece">
+                                <span class="piece-name">相</span>
+                            </div>
+                            <div id="red-elephant2" class="red-piece red-elephant piece">
+                                <span class="piece-name">相</span>
+                            </div>
+                            <div id="red-horse1" class="red-piece red-horse piece">
+                                <span class="piece-name">馬</span>
+                            </div>
+                            <div id="red-horse2" class="red-piece red-horse piece">
+                                <span class="piece-name">馬</span>
+                            </div>
+                            <div id="red-chariot1" class="red-piece red-chariot piece">
+                                <span class="piece-name">車</span>
+                            </div>
+                            <div id="red-chariot2" class="red-piece red-chariot piece">
+                                <span class="piece-name">車</span>
+                            </div>
+                            <div id="red-gun1" class="red-piece red-gun piece">
+                                <span class="piece-name">砲</span>
+                            </div>
+                            <div id="red-gun2" class="red-piece red-gun piece">
+                                <span class="piece-name">砲</span>
+                            </div>
+                            <div id="red-pawn1" class="red-piece red-pawn piece">
+                                <span class="piece-name">兵</span>
+                            </div>
+                            <div id="red-pawn2" class="red-piece red-pawn piece">
+                                <span class="piece-name">兵</span>
+                            </div>
+                            <div id="red-pawn3" class="red-piece red-pawn piece">
+                                <span class="piece-name">兵</span>
+                            </div>
+                            <div id="red-pawn4" class="red-piece red-pawn piece">
+                                <span class="piece-name">兵</span>
+                            </div>
+                            <div id="red-pawn5" class="red-piece red-pawn piece">
+                                <span class="piece-name">兵</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="cheating" style="display: none">
+                        <form action="">
+                            <input type="text" placeholder="command" />
+                            <input type="button" id="submit-cheating" value="LOL" />
+                        </form>
+                    </div>
+
+                    <div id="tip-bars">
+                        <div id="victor-tip" style="font-size: 3em">
+                            <span></span>
+                        </div>
+                        <div id="action-bar" style="display: none">
+                            <span>请选择一个棋子</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="effects">
+                    <!--特效-->
+
+                    <div id="damage-numbers">
+                        <!--伤害数字特效-->
+                    </div>
+
+                    <div id="highlight-positions">
+                        <!--高亮位置特效-->
+                    </div>
+                </div>
+                
+            </div>
+            <div id="right-column">
+                <!--右侧列-->
+                <div id="buttons">
+                    <span id="loot-card-button">抽卡</span>
+                    <span id="recall-button">悔棋</span>
+                    <span id="store-button">存档<span style="color: gray">(测试功能)</span></span>
+                    <span id="load-button">读档<span style="color: gray">(测试功能)</span></span>
+                </div>
+                <div id="round-tip" style="display: none">
+                    <span>red</span> 正在行动
+                </div>
+                <div id="player-assets">
+                    <div id="action-cards">
+                        <p>红方技能卡</p>
+                        <ul id="red-action-cards-list" class="action-cards-list"></ul>
+                        <p>黑方技能卡</p>
+                        <ul id="black-action-cards-list" class="action-cards-list"></ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script src="./dist/multiplayer.js" type="module"></script>
+
+        <script></script>
+    </body>
+</html>
+<html>
+    <head></head>
+    <body>
+        
+        <script src="./dist/test.js" type="module"></script>
+    </body>
+</html>body {
+    background-color: #faead4;
+}
+
+#center-column {
+    width: 52vw;
+    margin: 0 auto;
+    border: 2px black solid;
+    height: 98vh;
+    position: fixed;
+    left: 26vw;
+}
+
+#left-column {
+    width: 24vw;
+    margin: 0 auto;
+    border: 2px black solid;
+    height: 98vh;
+    position: fixed;
+    left: 1vw;
+    /* overflow-y: scroll; */
+}
+
+#right-column {
+    width: 20vw;
+    margin: 0 auto;
+    border: 2px black solid;
+    height: 98vh;
+    position: fixed;
+    right: 1vw;
+    /* overflow-y: scroll; */
+}
+
+
+#action-cards ul {
+    padding-left: 0.5vw;
+}
+
+#action-cards ul li {
+    list-style-type: none;
+    vertical-align: bottom;
+}
+
+#game-container {
+    display: none;
+}
+
+#title h1 {
+    text-align: center;
+}
+
+#menu ul {
+    list-style-type: none;
+    margin: 0;
+    padding-left: 0px;
+}
+
+#menu .entry {
+    display: block;
+    margin: auto auto;
+    height: auto;
+    background-color: darkgoldenrod;
+}
+
+#menu .entry > a {
+    display: block;
+    color: white;
+    text-decoration: none;
+    font-size: 2em;
+    height: 3em;
+    width: 600px;
+    text-align: center;
+    margin: 0 auto;
+    line-height: 3em;
+}
+
+#gameboard {
+    width: 90%;
+    margin: auto;
+}
+
+#gameboard .background {
+    width: 100%;
+}
+
+#gameboard .background img {
+    width: 100%;
+}
+
+.piece {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    /* Circle background */
+    cursor: pointer;
+    transition: 0.3s;
+    background-color: #f3b655;
+    border-radius: 50%;
+    max-width: 5vh;
+    width: 3vw;
+    height: 3vw;
+    max-height: 5vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5vw;
+    font-weight: bold;
+    /* Black border */
+    color: white;
+    border: 2px solid #000000;
+}
+
+.selected-piece {
+    transform: translate(-50%, -50%) scale(1.1);
+    box-shadow: 0 0 15px #00000080 !important;
+}
+.piece:hover {
+    transform: translate(-50%, -50%) scale(1.1);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+.piece.has-effect {
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.5) !important;
+}
+.piece.has-negative-effect {
+    box-shadow: 0 0 15px rgba(255, 10, 0, 0.5) !important;
+}
+
+.black-piece span {
+    color: black;
+}
+
+.red-piece span {
+    color: red;
+}
+
+#action-bar {
+    width: 100%;
+    height: 5vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5em;
+    font-weight: bold;
+    color: white;
+    background-color: gray;
+    text-align: center;
+    transform: translate(0, -2vh);
+}
+
+#buttons span {
+    user-select: none;
+}
+
+#effects {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+}
+
+#damage-numbers {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 10;
+    pointer-events: none;
+}
+
+#damage-numbers div {
+    position: absolute;
+    font-size: 1.6em;
+    animation: damage-number 750ms ease-out;
+    text-shadow: #000000ff 2px;
+}
+
+.critical-damage-effect {
+    font-weight: bold;
+    font-size: 2em;
+}
+
+@keyframes damage-number {
+    0% {
+        opacity: 0;
+    }
+    25% {
+        opacity: 1;
+    }
+    75% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
+/* 血条闪烁动画 */
+@keyframes blink {
+    25% {
+        opacity: 1;
+    }
+    75% {
+        opacity: 0.3;
+    }
+}
+
+.blink {
+    animation: blink 1s infinite;
+}
+
+#buttons span {
+    margin: 0 20px;
+    display: inline-block;
+}
+
+#action-cards-list {
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    list-style: none;
+}
+
+#action-cards-list .card {
+    width: 100px;
+    height: 150px;
+    margin: 10px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#piece-frame {
+    left: 50px;
+    top: 50px;
+    position: relative;
+    margin-bottom: 30px;
+}
+
+.description-text {
+    color: gray;
+    font-size: 0.8em;
+}
+
+.action-card-frame {
+    width: 9vh;
+    height: 12vh;
+    border: 2px solid #000;
+    border-radius: 1vh;
+    background-color: hsl(30, 75%, 85%);
+    padding: 5px;
+    margin: 5px;
+    display: block;
+    white-space: normal;
+
+    /* 展示框之间横向排列 */
+    display: inline-block;
+}
+
+
+.action-cards-list li {
+    display: inline-block;
+}
+
+.action-card-title {
+    width: 100%;
+    font-size: 2vh;
+    font-weight: bold;
+    text-align: center;
+}
+
+.action-card-description {
+    width: 100%;
+    font-size: 1vh;
+    color: gray;
+}
+
+.action-card-footer {
+    width: 100%;
+    font-size: 1.3vh;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    text-align: center;
+}
+
+.action-cards-list {
+    height: 30vh;
+    width: 23vw;
+}
+
+.highlight-position {
+    position: absolute;
+    width: 1vw;
+    height: 1vw;
+    background-color: rgba(255, 255, 0, 0.5);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+}
+import { AttributeModifier } from "./attributeProvider.js";
+import { registerAnonymous, registerCallback } from "./callbackRegister.js";
+import { returnCardById } from "./cardLooting.js";
+import { Damage } from "./damage.js";
+import { DamageType } from "./damageType.js";
+import { filterGrids, ray } from "./defaultMovingBehaviors.js";
+import { StatusEffect } from "./effect.js";
+import {
+    PotionEffectTemplate,
+    RegenerationEffectTemplate,
+    StrengthEffectTemplate,
+    WeaknessEffectTemplate,
+} from "./effectTemplate.js";
+import { Piece, PieceType } from "./piece.js";
+import {
+    PieceActionStrategy,
+    PieceAttackingStrategy,
+    PieceMovingStrategy,
+} from "./pieceStrategy.js";
+import { Position } from "./position.js";
+import {
+    getCurrentSelection,
+    ItemType,
+    SelectionManager,
+    setCurrentSelection,
+    SingleSelection,
+} from "./selection.js";
+import { Serializable, TypeRegistry } from "./serialize.js";
+import { TriggerManager, DamageTrigger, Trigger } from "./trigger.js";
+import { Vector2 } from "./vector.js";
+
+/**
+ * 行为卡。
+ * 在使用时调用 onApply() 方法。
+ */
+export abstract class ActionCard extends Serializable {
+    readonly name: string;
+    readonly id: string;
+    readonly description: string;
+    private enabled: boolean = true;
+
+    abstract onApply(): void;
+    constructor(name: string, id: string, description: string) {
+        super();
+        this.name = name;
+        this.id = id;
+        this.description = description;
+    }
+
+    apply() {
+        this.onApply();
+    }
+}
+
+@TypeRegistry.register()
+export class TestActionCard extends ActionCard {
+    constructor() {
+        super("测试卡牌", "test", "这是一个测试卡牌");
+    }
+    onApply(): void {
+        console.log("使用测试卡牌");
+    }
+}
+
+/**
+ * 进行一次单选棋子，然后进行接下来的操作。
+ * pieceType 成员指定棋子类型，null 表示没有限制
+ */
+export abstract class SelectorActionCard extends ActionCard {
+    readonly pieceType: string;
+    constructor(name: string, id: string, description: string, pieceType: string = PieceType.None) {
+        super(name, id, description);
+        this.pieceType = pieceType;
+    }
+
+    onApply(): void {
+        // 进行一次选择
+        let currentSelection = getCurrentSelection();
+        // 新的选择
+        let targetSelection = new SelectionManager(
+            new SingleSelection(
+                [],
+                ItemType.Piece,
+                `请选择要应用「${this.name}」的棋子`,
+                (item) => {
+                    if (item.data instanceof Piece) {
+                        return (
+                            item.data.type === this.pieceType || this.pieceType === PieceType.None
+                        );
+                    }
+                    return false;
+                }
+            )
+        )
+            .once() // 只能选择一次
+            .oncancel((_) => {
+                returnCardById(this.id);
+            })
+            .replaceWithFinally(currentSelection) // 回到当前选择
+            .final((result) => {
+                let target = result[0].data;
+                if (target instanceof Piece) {
+                    this.final(target);
+                }
+            });
+
+        setCurrentSelection(targetSelection);
+    }
+
+    abstract final(target: Piece): void;
+}
+
+@TypeRegistry.register()
+export class StrengthPotionActionCard extends SelectorActionCard {
+    constructor() {
+        super("力量药水", "streangthPotion", "持续 3 回合-选中棋子的攻击力提升 15%");
+    }
+
+    final(target: Piece): void {
+        let factory = new StrengthEffectTemplate();
+        factory.apply(target, 1, 3 * 2);
+    }
+}
+
+@TypeRegistry.register()
+class HighGunAttackingStrategy extends PieceAttackingStrategy {
+    getPosition(piece: Piece): Position[] {
+        return ray(piece.position, new Vector2(1, 0), 2, 1).concat(
+            ray(piece.position, new Vector2(-1, 0), 2, 1),
+            ray(piece.position, new Vector2(0, 1), 2, 1),
+            ray(piece.position, new Vector2(0, -1), 2, 1)
+        );
+    }
+}
+
+// ? 为什么要这么实现
+@TypeRegistry.register()
+export class HighGunActionCardEndTrigger extends DamageTrigger {
+    constructor(public pieceElement: HTMLElement | null, public effect: StatusEffect) {
+        super();
+    }
+    action(damage: Damage): void {
+        if (damage.source?.htmlElement === this.pieceElement && this.pieceElement !== null) {
+            this.effect.disable();
+        }
+    }
+}
+
+/**
+ * 高射炮。
+ */
+@TypeRegistry.register()
+export class HighGunActionCard extends SelectorActionCard {
+    constructor() {
+        super("高射炮", "highGun", "下一次攻击允许间隔至多两个棋子", PieceType.Gun);
+    }
+
+    final(piece: Piece): void {
+        let modifier = new AttributeModifier(new HighGunAttackingStrategy());
+        piece.attackingTargetsCallback.area(0).modify(modifier);
+
+        let effect = new StatusEffect("高射炮", "highGun", "下一次攻击允许间隔至多两个棋子", [
+            modifier,
+        ]);
+        piece.pushEffects(effect);
+
+        let pieceElement = piece.htmlElement;
+        TriggerManager.addTrigger(new HighGunActionCardEndTrigger(pieceElement, effect));
+    }
+}
+
+/**
+ * “一马平川”状态下的马的移动、攻击策略
+ */
+@TypeRegistry.register()
+class LimitlessHorseMovingStrategy extends PieceMovingStrategy {
+    getPosition(piece: Piece): Position[] {
+        return filterGrids(
+            (pos) =>
+                piece.position.manhattanDistance(pos) == 3 &&
+                piece.position.chebyshevDistance(pos) == 2
+        );
+    }
+}
+@TypeRegistry.register()
+class LimitlessHorseAttackingStrategy extends PieceAttackingStrategy {
+    getPosition(piece: Piece): Position[] {
+        return filterGrids(
+            (pos) =>
+                piece.position.manhattanDistance(pos) == 3 &&
+                piece.position.chebyshevDistance(pos) == 2
+        );
+    }
+}
+
+@TypeRegistry.register()
+export class LimitlessHorseActionCard extends SelectorActionCard {
+    constructor() {
+        super(
+            "一马平川",
+            "limitlessHorse",
+            "持续 3 回合 - 马的行动不再受「蹩马腿」限制",
+            PieceType.Horse
+        );
+    }
+
+    final(target: Piece): void {
+        let attackingModifier = new AttributeModifier(new LimitlessHorseAttackingStrategy(), 3 * 2);
+        let movingModifier = new AttributeModifier(new LimitlessHorseMovingStrategy(), 3 * 2);
+        let effect = new StatusEffect(
+            "一马平川",
+            "limitlessHorse",
+            "马的行动不再受「蹩马腿」限制",
+            [attackingModifier, movingModifier]
+        );
+
+        target.pushEffects(effect);
+        target.attackingTargetsCallback.area(0).modify(attackingModifier);
+        target.movingDestinationsCallbackProvider.area(0).modify(movingModifier);
+    }
+}
+
+@TypeRegistry.register()
+export class WeaknessPotionActionCard extends SelectorActionCard {
+    constructor() {
+        super("虚弱药水", "weaknessPotion", "持续 3 回合 - 选中棋子的攻击力降低 20%");
+    }
+
+    final(target: Piece): void {
+        new WeaknessEffectTemplate().apply(target, 1, 3 * 2);
+    }
+}
+
+@TypeRegistry.register()
+export class InstantHealthPotionActionCard extends SelectorActionCard {
+    constructor() {
+        super("治疗药水", "instantHealthPotion", "选中棋子回复 600 点生命值");
+    }
+    final(target: Piece): void {
+        target.health = Math.min(target.health + 600, target.maxHealth.result);
+        target.draw(); // 直接重绘棋子
+    }
+}
+
+@TypeRegistry.register()
+export class RegenerationPotionActionCard extends SelectorActionCard {
+    constructor() {
+        super("再生药水", "regenerationPotion", "持续 3 回合 - 选中棋子每回合回复 6% 生命值");
+    }
+    final(target: Piece): void {
+        new RegenerationEffectTemplate().apply(target, 1, 3 * 2);
+    }
+}
+
+@TypeRegistry.register()
+export class PotionPotionActionCard extends SelectorActionCard {
+    constructor() {
+        super(
+            "剧毒药水",
+            "potionPotion",
+            "持续 3 回合 - 每轮造成 3% 生命值上限 + 40 的魔法伤害。至多使生命值降低到 5%。"
+        );
+    }
+    final(target: Piece): void {
+        new PotionEffectTemplate().apply(target, 1, 3 * 2);
+    }
+}
+
+@TypeRegistry.register()
+export class PotionPotionEnhancedActionCard extends SelectorActionCard {
+    constructor() {
+        super(
+            "剧毒药水（加强）",
+            "potionPotionEnhanced",
+            "持续 2 回合 - 每轮造成 5% 生命值上限 + 80 的魔法伤害。至多使生命值降低到 5%。"
+        );
+    }
+    final(target: Piece): void {
+        new PotionEffectTemplate().apply(target, 2, 2 * 2);
+    }
+}
+
+@TypeRegistry.register()
+export class StrengthPotionEnhancedActionCard extends SelectorActionCard {
+    constructor() {
+        super(
+            "力量药水（加强）",
+            "strengthPotionEnhanced",
+            "持续 2 回合 - 选中棋子的攻击力提升 25%"
+        );
+    }
+    final(target: Piece): void {
+        new StrengthEffectTemplate().apply(target, 2, 2 * 2);
+    }
+}
+
+@TypeRegistry.register()
+export class StrengthPotionExtendedActionCard extends SelectorActionCard {
+    constructor() {
+        super(
+            "力量药水（延长）",
+            "strengthPotionExtended",
+            "持续 5 回合 - 选中棋子的攻击力提升 15%"
+        );
+    }
+    final(target: Piece): void {
+        new StrengthEffectTemplate().apply(target, 1, 5 * 2);
+    }
+}
+
+@TypeRegistry.register()
+class SuperLaughingMovingStrategy extends PieceMovingStrategy {
+    getPosition(piece: Piece): Position[] {
+        return [];
+    }
+}
+@TypeRegistry.register()
+class SuperLaughingAttackingStrategy extends PieceAttackingStrategy {
+    getPosition(piece: Piece): Position[] {
+        return [];
+    }
+}
+
+@TypeRegistry.register()
+export class SuperLaughingActionCard extends SelectorActionCard {
+    constructor() {
+        super("忍俊不禁", "superLaughing", "持续 2 回合 - 棋子不能主动移动和攻击。");
+    }
+    final(piece: Piece): void {
+        let movingModifier = new AttributeModifier(new SuperLaughingMovingStrategy(), 2 * 2);
+        let attackingModifier = new AttributeModifier(new SuperLaughingAttackingStrategy(), 2 * 2);
+        let effect = new StatusEffect("忍俊不禁", "superLaughing", "棋子不能主动移动和攻击。", [
+            movingModifier,
+            attackingModifier,
+        ]).setNegative();
+
+        piece.pushEffects(effect);
+        piece.movingDestinationsCallbackProvider.area(0).modify(movingModifier);
+        piece.attackingTargetsCallback.area(0).modify(attackingModifier);
+    }
+}
+
+@TypeRegistry.register()
+export class WithBellAndTripodActionCard extends SelectorActionCard {
+    constructor() {
+        super("戴钟之鼎", "withBellAndTripod", "持续 3 回合 - 选中棋子重量提升 6000%。");
+    }
+    final(piece: Piece): void {
+        let modifier = new AttributeModifier(60, 3 * 2);
+        let effect = new StatusEffect("戴钟之鼎", "withBellAndTripod", "重量提升 6000%。", [
+            modifier,
+        ]);
+        piece.weight.area(1).modify(modifier);
+        piece.pushEffects(effect);
+    }
+}
+
+@TypeRegistry.register()
+export class DeterminedResistanceActionCard extends SelectorActionCard {
+    constructor() {
+        super("决意流搏", "determinedResistance", "持续 3 回合 - 选中棋子暴击率提升 12%。");
+    }
+    final(piece: Piece): void {
+        let modifier = new AttributeModifier(0.12, 3 * 2);
+        let effect = new StatusEffect("决意流搏", "determinedResistance", "暴击率提升 12%。", [
+            modifier,
+        ]);
+        piece.criticalRate.area(0).modify(modifier);
+        piece.pushEffects(effect);
+    }
+}
+
+const areaGunAttackActionCallback = registerAnonymous((thisPiece: Piece, targetCenter: Piece) => {
+    const applyDamageToEnemyOnly = (damageObject: Damage) => {
+        if (damageObject.target.team === damageObject.source?.team) return false;
+        else {
+            damageObject.apply();
+            return true;
+        }
+    };
+
+    const spreadDamageScale = 0.4;
+    const spreadDamageType = DamageType.Ranged;
+
+    let centerPosition = targetCenter.position;
+    let nearbyPositions = [
+        centerPosition.add(new Vector2(0, 1)),
+        centerPosition.add(new Vector2(0, -1)),
+        centerPosition.add(new Vector2(1, 0)),
+        centerPosition.add(new Vector2(-1, 0)),
+    ];
+
+    let targets = nearbyPositions
+        .map((pos) => {
+            return pos.owner;
+        })
+        .filter((piece) => piece != null);
+
+    let centerDamageObject = thisPiece.SimulateAttack(targetCenter);
+    // 模拟一个与中心棋子重合的虚拟棋子，直接使用中心棋子作为攻击源会识别成攻击队友
+    let explosionCenter = Piece.virtualPiece(centerPosition);
+    explosionCenter.team = thisPiece.team; // 正确标识队伍，而不是None
+    let spreadDamageObjects = targets.map((target) => {
+        let object = thisPiece.SimulateAttack(target);
+        object.amount *= spreadDamageScale;
+        object.type = spreadDamageType;
+        object.source = explosionCenter;
+        return object;
+    });
+
+    // 先攻击外围，为击退腾出空间
+    spreadDamageObjects.forEach(applyDamageToEnemyOnly);
+    return applyDamageToEnemyOnly(centerDamageObject);
+}, "areaGunAttackActionCallback");
+
+@TypeRegistry.register()
+class AreaGunActionStrategy extends PieceActionStrategy {
+    attack(a: Piece, b: Piece): boolean {
+        return areaGunAttackActionCallback(a, b);
+    }
+}
+
+@TypeRegistry.register()
+class AreaGunActionCardEndTrigger extends DamageTrigger {
+    constructor(public piece: Piece | null, public effect: StatusEffect) {
+        super();
+    }
+    action(damage: Damage): void {
+        if (damage.source === this.piece) {
+            this.effect.disable(); // 禁用效果
+        }
+    }
+}
+@TypeRegistry.register()
+export class AreaGunActionCard extends SelectorActionCard {
+    constructor() {
+        super("威震四方", "areaGun", "一次性 - 选中的「炮」下次攻击造成范围伤害。");
+    }
+    final(piece: Piece): void {
+        let modifier = new AttributeModifier(new AreaGunActionStrategy());
+        piece.attackActionCallbackProvider.area(0).modify(modifier);
+        let effect = new StatusEffect("威震四方", "areaGun", "下一次攻击造成范围伤害", [modifier]);
+        piece.pushEffects(effect);
+
+        // 添加触发器，在主动攻击后移除效果，达到一次性使用。
+        TriggerManager.addTrigger(
+            new AreaGunActionCardEndTrigger(piece, effect)
+        );
+    }
+}
+import { registerAnonymous } from "./callbackRegister.js";
+import { round } from "./round.js";
+import { Serializable, TypeRegistry } from "./serialize.js";
+
+let attributeModifierId = 0;
+
+abstract class MergeStrategy<T> extends Serializable {
+    abstract merge(arg1: T, arg2: T): T;
+}
+
+@TypeRegistry.register()
+class PlusMergeStategy extends MergeStrategy<number> {
+    merge(arg1: number, arg2: number) {
+        return arg1 + arg2;
+    }
+}
+
+@TypeRegistry.register()
+class OverrideMergeStategy extends MergeStrategy<any> {
+    merge(arg1: any, arg2: any) {
+        return arg2;
+    }
+}
+
+export const modifiers: { [key: number]: AttributeModifier<any> } = {};
+
+export class AttributeProvider<T> {
+    multiplicationAreas: MultiplicationArea<T>[];
+
+    constructor(base: T) {
+        this.multiplicationAreas = [];
+        this.multiplicationAreas.push(new MultiplicationArea(base, "Base"));
+    }
+
+    get result() {
+        return this.multiplicationAreas[0].result;
+    }
+
+    area(index: number) {
+        return this.multiplicationAreas[0];
+    }
+}
+
+/**
+ * 属性提供器
+ * 如果 T 不是数字，则只有首个乘区会生效
+ */
+export class NumberAttributeProvider extends AttributeProvider<number> {
+    constructor(base: number) {
+        super(base);
+        this.multiplicationAreas.push(new MultiplicationArea(1, "Improve"));
+    }
+
+    get result() {
+        let result = 1;
+        for (let area of this.multiplicationAreas) {
+            result *= area.result;
+        }
+        return result;
+    }
+
+    area(index: number) {
+        while (index >= this.multiplicationAreas.length) {
+            let area = new MultiplicationArea<number>(1);
+            this.multiplicationAreas.push(area);
+        }
+        return this.multiplicationAreas[index];
+    }
+
+    toExpression(round = true) {
+        let base = this.area(0).result;
+        let total = this.result;
+        let improve = total - base;
+
+        if (round) {
+            base = Math.round(base);
+            improve = Math.round(improve);
+            total = Math.round(total);
+        }
+        if (improve == 0) return `${base}`;
+        else if (improve > 0) return `${base} + ${improve} = ${total}`;
+        else return `${base} - ${-improve} = ${total}`;
+    }
+}
+
+class MultiplicationArea<T> {
+    base: T;
+    modifiers: AttributeModifier<T>[] = [];
+    description: string = "";
+
+    constructor(base: T, description = "", modifiers: AttributeModifier<T>[] = []) {
+        this.base = base;
+        this.modifiers = modifiers;
+        this.description = description;
+    }
+
+    modify(attributeModifier: AttributeModifier<T>) {
+        this.modifiers.push(attributeModifier);
+        return attributeModifier;
+    }
+
+    modified(...attributeModifiers: AttributeModifier<T>[]) {
+        for (let modifier of attributeModifiers) {
+            this.modifiers.push(modifier);
+        }
+        return this;
+    }
+
+    get result() {
+        let result = this.base;
+        for (let modifier of this.modifiers) {
+            if (!modifier.enabled) {
+                if (modifier.clearOnDisable)
+                    this.modifiers.splice(this.modifiers.indexOf(modifier), 1);
+            } else if (modifier.expire < round) {
+                if (modifier.clearOnExpire)
+                    this.modifiers.splice(this.modifiers.indexOf(modifier), 1);
+            } else {
+                result = modifier.operation.merge(result, modifier.amount);
+            }
+        }
+        return result;
+    }
+}
+
+export class AttributeModifier<T> {
+    amount: T;
+    expire: number = Infinity;
+    operation: MergeStrategy<T>;
+    enabled: boolean = true;
+    clearOnExpire: boolean = true;
+    clearOnDisable: boolean = true;
+    id: number;
+
+    /**
+     * 如果operation为null，则会应用如下默认操作：
+     * 1. 如果T是数字，则使用加法
+     * 2. 如果T不是数字，则使用覆盖
+     *
+     * @param expireOffset -当为数字时，表示参数expire的偏移量，此时实际过期时间为当前时间之后再经过
+     * ($expire-$expireOffset)回合；当为null时，表示参数expire直接作为过期回合号
+     * @param numberModifier - 如果为true，则amount会被优先视为数字，否则视为普通值；如果amount不是数字，则该参数无效
+     */
+    constructor(
+        amount: T,
+        expire: number = Infinity,
+        expireOffset: number | null = -1,
+        operation: null | MergeStrategy<T> = null,
+        numberModifier: boolean = true,
+        clearOnExpire: boolean = true,
+        clearOnDisable: boolean = true
+    ) {
+        this.amount = amount;
+        if (operation === null) {
+            if (typeof amount === "number" && numberModifier) {
+                this.operation = new PlusMergeStategy() as any;
+            } else {
+                this.operation = new OverrideMergeStategy();
+            }
+        } else {
+            this.operation = operation;
+        }
+        if (expireOffset === null) this.expire = expire;
+        else this.expire = round + expire + expireOffset;
+        this.clearOnExpire = clearOnExpire;
+        this.clearOnDisable = clearOnDisable;
+
+        while (modifiers[attributeModifierId] !== undefined) {
+            attributeModifierId++;
+        }
+        this.id = attributeModifierId;
+        modifiers[attributeModifierId] = this;
+        attributeModifierId++;
+    }
+
+    enable() {
+        this.enabled = true;
+    }
+
+    disable() {
+        this.enabled = false;
+    }
+}
+
+export function getAttributeModifierById(id: number) {
+    return modifiers[id];
+}
+const registry: { [key: string]: Function } = {};
+
+/**
+ * @param callback 要注册的函数
+ * @param key 键名; 如果为null,则自动指派键名:
+ * - 如果callback的函数名未被注册过,则使用函数名
+ * - 如果函数名已被注册过,则使用函数名+使得新名没被注册的最小的正整数
+ * @return 键名
+ */
+export function registerCallback(callback: Function, key: string | null = null) {
+    if (key === null) {
+        key = callback.name;
+    }
+    let i = 1;
+    while (registry[key] != null) {
+        key = callback.name + i;
+        i++;
+    }
+    if (registry[key] == null) {
+        registry[key] = callback;
+    }
+    return key;
+}
+
+/**
+ * 用于匿名函数的快速注册
+ * @param callback 要注册的函数
+ * @param key 键名; 如果为null,则自动指派键名:
+ * - 如果callback的函数名未被注册过,则使用函数名
+ * - 如果函数名已被注册过,则使用函数名+使得新名没被注册的最小的正整数
+ * @return 函数本身
+ */
+export function registerAnonymous<T extends Function>(callback: T, key: string | null = null): T {
+    registerCallback(callback, key);
+    return callback;
+}
+
+export function getCallback(key: string) {
+    return registry[key];
+}
+
+export function removeCallback(key: string) {
+    delete registry[key];
+}
+
+export function getCallbackRegistryKey(callback: Function) {
+    if (registry[callback.name]) {
+        return callback.name;
+    } else {
+        for (const key in registry) {
+            if (registry[key] === callback) {
+                return key;
+            }
+        }
+        return null;
+    }
+}
+import {
+    ActionCard,
+    HighGunActionCard,
+    LimitlessHorseActionCard,
+    RegenerationPotionActionCard,
+    StrengthPotionActionCard,
+    WeaknessPotionActionCard,
+    InstantHealthPotionActionCard,
+    StrengthPotionEnhancedActionCard,
+    StrengthPotionExtendedActionCard,
+    SuperLaughingActionCard,
+    WithBellAndTripodActionCard,
+    DeterminedResistanceActionCard,
+    AreaGunActionCard,
+    PotionPotionActionCard,
+    PotionPotionEnhancedActionCard,
+} from "./actionCard.js";
+import { Player } from "./player.js";
+import { fixedRandom } from "./random.js";
+import { getCurrentTeam, nextRound, round } from "./round.js";
+import { getCurrentSelection, mainSelection } from "./selection.js";
+import { getPlayerFromTeam } from "./team.js";
+import { deepCopy } from "./utils.js";
+
+const playerCardCountLimit = 6;
+
+class poolItem {
+    card: ActionCard;
+    weight: number;
+    constructor(card: ActionCard, weight: number = 1) {
+        this.card = card;
+        this.weight = weight;
+    }
+}
+
+let pool: poolItem[] = [
+    new poolItem(new HighGunActionCard()),
+    new poolItem(new LimitlessHorseActionCard()),
+    new poolItem(new StrengthPotionActionCard()),
+    new poolItem(new WeaknessPotionActionCard()),
+    new poolItem(new InstantHealthPotionActionCard()),
+    new poolItem(new RegenerationPotionActionCard()),
+    new poolItem(new StrengthPotionEnhancedActionCard(), 0.5),
+    new poolItem(new StrengthPotionExtendedActionCard(), 0.5),
+    new poolItem(new SuperLaughingActionCard(), 0.5),
+    new poolItem(new WithBellAndTripodActionCard()),
+    new poolItem(new DeterminedResistanceActionCard()),
+    new poolItem(new AreaGunActionCard()),
+    new poolItem(new PotionPotionActionCard()),
+    new poolItem(new PotionPotionEnhancedActionCard(), 0.5),
+];
+
+export function initCardLooting() {
+}
+
+function giveCard(card: ActionCard, to: Player) {
+    to.actionCards.push(deepCopy(card));
+    to.showActionCards();
+}
+
+export function lootCard() {
+    // 取消当前选择
+    if (mainSelection !== getCurrentSelection()) {
+        getCurrentSelection()?.stop();
+    }
+    let player = getPlayerFromTeam(getCurrentTeam());
+    if (player.actionCards.length >= playerCardCountLimit) return;
+    let weightSum = pool.reduce((sum, item) => sum + item.weight, 0);
+    let random = fixedRandom("cardLooting", round) * weightSum;
+    let sum = 0;
+    for (let item of pool) {
+        sum += item.weight;
+        if (random < sum) {
+            giveCard(item.card, player);
+            break;
+        }
+    }
+    nextRound();
+}
+
+export function returnCardById(cardId: string) {
+    let player = getPlayerFromTeam(getCurrentTeam());
+    pool.forEach((item) => {
+        if (item.card.id === cardId) {
+            giveCard(item.card, player);
+        }
+    });
+}
+import { Piece } from "./piece.js";
+import { Team } from "./team.js";
+import { defaultQuasiMoveTargets, defaultRepelTargets } from "./defaultDamageBehaviors.js";
+import { Position } from "./position.js";
+import { DamageType } from "./damageType.js";
+import { DamageTrigger, TriggerManager } from "./trigger.js";
+
+/**
+ * @description 展示一个伤害数字特效
+ * @param lastTime 特效持续时间，单位毫秒
+ */
+function showEffect(damage: Damage, targetPosition: Position, lastTime: number = 750) {
+    let effectElement = document.createElement("div");
+    let parent = document.getElementById("damage-numbers") as HTMLElement;
+    effectElement.innerText = `${Math.round(damage.realAmount)}`;
+    effectElement.className = `damage-effect ${damage.isCritical ? "critical-damage-effect" : ""}`;
+    effectElement.style.animation = `damage-number ${lastTime}ms ease-out`;
+    if (damage.source?.team === Team.Red) {
+        effectElement.style.color = "red";
+        effectElement.style.textShadow = "0 0 3px aqua";
+    } else {
+        effectElement.style.color = "black";
+        effectElement.style.textShadow = "0 0 3px white";
+    }
+    setTimeout(() => {
+        parent.removeChild(effectElement);
+    }, lastTime - 20); // 提前20ms，防止来不及删
+
+    parent.appendChild(effectElement);
+    let realWidth = effectElement.offsetWidth;
+    let realHeight = effectElement.offsetHeight;
+    effectElement.style.left = `${targetPosition.screenX - realWidth / 2}px`;
+    effectElement.style.top = `${targetPosition.screenY - realHeight / 2}px`;
+}
+
+export class Damage {
+    type: DamageType = DamageType.None;
+    amount: number = 0;
+    source: Piece | null = null;
+    target: Piece;
+    isCritical: boolean = false;
+    quasiMoveTarget: (piece: Piece, target: Piece) => Position;
+    repelTarget: (piece: Piece, target: Piece) => Position;
+
+    constructor(
+        type: DamageType,
+        amount: number,
+        source: Piece | null,
+        target: Piece,
+        isCritical: boolean = false,
+        quasiMoveTarget: ((piece: Piece, target: Piece) => Position) | null = null,
+        repelTarget: ((piece: Piece, target: Piece) => Position) | null = null
+    ) {
+        this.type = type;
+        this.amount = amount;
+        this.source = source;
+        this.target = target;
+        this.isCritical = isCritical;
+        this.quasiMoveTarget = quasiMoveTarget ?? defaultQuasiMoveTargets[type];
+        this.repelTarget = repelTarget ?? defaultRepelTargets[type];
+    }
+
+    /**
+     * 获取计算目标防御力的实际伤害值，即目标扣血量。
+     * 计算公式：实际伤害 = 伤害值 * (1/2)^(目标防御力/1000)
+     */
+    get realAmount() {
+        let defense = this.target.defense.result;
+        if (this.type == DamageType.Magic)  defense /= 2;
+        return this.amount * Math.pow(2, -defense / 1000);
+    }
+
+    public apply() {
+        if (this.target === null) return;
+        let position = this.target.position;
+        showEffect(this, this.target.position);
+        if (this.target.damaged(this) === true) {
+            this.source?.move(position);
+        } else {
+            let virtualMarker = Piece.virtualPiece(this.target.position);
+            this.source ? this.target.move(this.repelTarget(this.source, this.target)) : null;
+            this.source?.move(this.quasiMoveTarget(this.source, virtualMarker));
+        }
+        TriggerManager.trigger(DamageTrigger.event, this);
+        this.target?.draw();
+    }
+}
+export enum DamageType {
+    None,
+    MeleeLow,
+    MeleeMedium,
+    MeleeHigh,
+    Ranged,
+    Magic,
+}
+import { Piece } from "./piece.js";
+import { DamageType } from "./damageType.js";
+import { Vector2 } from "./vector.js";
+import { Position } from "./position.js";
+import { fixedRandom, random } from "./random.js";
+import { getCurrentTeam, round } from "./round.js";
+
+export const defaultQuasiMoveTargets: {
+    [key in DamageType]: (piece: Piece, target: Piece) => Position;
+} = {
+    [DamageType.None]: (piece, target) => {
+        return piece.position;
+    },
+    [DamageType.Magic]: (piece, target) => {
+        return piece.position;
+    },
+    [DamageType.MeleeLow]: (piece, target) => {
+        return piece.position;
+    },
+    [DamageType.MeleeMedium]: (piece, target) => {
+        let pointer = Vector2.point(piece.position, target.position);
+        let steps = piece.position.chebyshevDistance(target.position);
+        let step = pointer.div(steps);
+        let position = target.position;
+        /*prettier-ignore*/
+        while (steps --> 0) {
+            let integer_position = position.integerGrid(-0.05, -0.05, true);
+            if (integer_position.owner === null) return integer_position;
+            position = Position.of(Vector2.of(position).sub(step));
+        }
+
+        return piece.position;
+    },
+    [DamageType.MeleeHigh]: (piece, target) => {
+        return defaultQuasiMoveTargets[DamageType.MeleeMedium](piece, target);
+    },
+    [DamageType.Ranged]: (piece, target) => {
+        return piece.position;
+    },
+};
+
+const positionAvailable = (position: Position) => {
+    return (
+        0 <= position.x &&
+        position.x < 9 &&
+        0 <= position.y &&
+        position.y < 10 &&
+        position.owner === null
+    );
+};
+
+function repelForward(origin: Position, direction: Vector2, distance_limit = 1) {
+    let direction_step = direction;
+    direction_step = Vector2.of(
+        Position.of(
+            direction_step.div(Math.max(Math.abs(direction_step.x), Math.abs(direction_step.y)))
+        ).integerGrid(-0.05, -0.05, true)
+    );
+    let position = origin;
+
+    while (positionAvailable(position.add(direction_step)) && distance_limit-- > 0) {
+        position = position.add(direction_step);
+    }
+
+    return positionAvailable(position) ? position : origin;
+}
+
+/**
+ * @param weight 不低于1000的weight会被视为无穷大
+ */
+function correctDistanceByWeight(distance: number, weight: number) {
+    const infinityWeight = 1000; // 高于这个值的weight会被视为无穷大
+    const constanceK = 90; // 可以适当调整；constanceK越小越不容易被击退
+    let reduceProbability = 1 - Math.pow(constanceK / (constanceK + weight), 2);
+    if (weight >= infinityWeight) {
+        reduceProbability = 1;
+    }
+    console.log("reduceProbability: " + reduceProbability);
+    let result = 0;
+    for (let i = 1; i <= distance; i++) {
+        if (fixedRandom(`correctDistanceByWeight round ${round} team ${getCurrentTeam()}`) > reduceProbability) {
+            result++;
+        }
+    }
+    return result;
+}
+
+export const defaultRepelTargets: {
+    [key in DamageType]: (piece: Piece, target: Piece) => Position;
+} = {
+    [DamageType.None]: (piece, target) => {
+        return piece.position;
+    },
+    [DamageType.Magic]: (piece, target) => {
+        return piece.position;
+    },
+    [DamageType.MeleeLow]: (piece, target) => {
+        return piece.position;
+    },
+    [DamageType.MeleeMedium]: (piece, target) => {
+        return repelForward(
+            target.position,
+            Vector2.point(piece.position, target.position),
+            correctDistanceByWeight(1, target.weight.result)
+        );
+    },
+    [DamageType.MeleeHigh]: (piece, target) => {
+        return repelForward(
+            target.position,
+            Vector2.point(piece.position, target.position),
+            correctDistanceByWeight(2, target.weight.result)
+        );
+    },
+    [DamageType.Ranged]: (piece, target) => {
+        return defaultRepelTargets[DamageType.MeleeMedium](piece, target);
+    },
+};
+import { Piece, PieceType } from "./piece.js";
+import { Team } from "./team.js";
+import { Position } from "./position.js";
+import { Vector2 } from "./vector.js";
+import { registerCallback } from "./callbackRegister.js";
+
+const BOARD = [0, 8, 0, 9];
+const RED_BASE = [3, 5, 0, 2];
+const BLACK_BASE = [3, 5, 7, 9];
+const RED_TERRITORY = [0, 8, 0, 4];
+const BLACK_TERRITORY = [0, 8, 5, 9];
+
+var mapping: { [key: string]: (piece: Piece) => Position[] } = {};
+var mappingAttack: { [key: string]: (piece: Piece) => Position[] } = {};
+
+export function initDefaultMovingBehaviors() {
+    mapping = {
+        [PieceType.Guard]: DefaultMovingBehaviors.guard,
+        [PieceType.Elephant]: DefaultMovingBehaviors.elephant,
+        [PieceType.Horse]: DefaultMovingBehaviors.horse,
+        [PieceType.Chariot]: DefaultMovingBehaviors.chariot,
+        [PieceType.Gun]: DefaultMovingBehaviors.gunMove,
+        [PieceType.Pawn]: DefaultMovingBehaviors.pawn,
+        [PieceType.Master]: DefaultMovingBehaviors.master,
+    };
+
+    mappingAttack = {
+        [PieceType.Gun]: DefaultMovingBehaviors.gunAttack,
+        [PieceType.Master]: DefaultMovingBehaviors.masterAttack,
+        [PieceType.Chariot]: DefaultMovingBehaviors.chariot,
+        [PieceType.Horse]: DefaultMovingBehaviors.horse,
+        [PieceType.Elephant]: DefaultMovingBehaviors.elephant,
+        [PieceType.Guard]: DefaultMovingBehaviors.guard,
+        [PieceType.Pawn]: DefaultMovingBehaviors.pawn,
+    };
+
+    // 注册所有函数
+    for (let key in mapping) {
+        registerCallback(mapping[key]);
+    }
+    for (let key in mappingAttack) {
+        registerCallback(mappingAttack[key]);
+    }
+    registerCallback(DefaultMovingBehaviors.auto, "auto");
+}
+
+function GridAvailable(pos: Position, config = BOARD) {
+    return config[0] <= pos.x && pos.x <= config[1] && config[2] <= pos.y && pos.y <= config[3];
+}
+
+export function filterGrids(condition: (pos: Position) => boolean, config = BOARD) {
+    let grids = [];
+    for (let i = config[0]; i <= config[1]; i++) {
+        for (let j = config[2]; j <= config[3]; j++) {
+            let pos = new Position(i, j, true);
+            if (condition(pos)) {
+                grids.push(pos);
+            }
+        }
+    }
+    return grids;
+}
+
+/**
+ * @param barriers_min 默认值-1表示限制为和barriers_max相同
+ * @returns
+ */
+export function ray(origin: Position, direction: Vector2, barriers_max = 0, barriers_min = -1) {
+    let grids = [];
+    let pos = origin.add(direction);
+    let barriersCount = 0;
+    if (barriers_min == -1) barriers_min = barriers_max;
+    while (GridAvailable(pos)) {
+        if (barriersCount >= barriers_min && barriersCount <= barriers_max) grids.push(pos);
+        if (pos.owner != null) {
+            barriersCount++;
+            if (barriersCount > barriers_max) {
+                break;
+            }
+        }
+        pos = pos.add(direction);
+    }
+    return grids;
+}
+
+export class DefaultMovingBehaviors {
+    static master = (piece: Piece) => {
+        const RED_ORIGIN = new Position(4, 0, true);
+        const BLACK_ORIGIN = new Position(4, 9, true);
+        console.log(piece);
+        let team = piece.team;
+        let config = team === Team.Red ? RED_BASE : BLACK_BASE;
+        let origin = team === Team.Red ? RED_ORIGIN : BLACK_ORIGIN;
+        if (
+            piece.position.x >= config[0] &&
+            piece.position.x <= config[1] &&
+            piece.position.y >= config[2] &&
+            piece.position.y <= config[3]
+        ) {
+            // 位于九宫格
+            return filterGrids((pos) => piece.position.manhattanDistance(pos) == 1, config);
+        } else
+            return filterGrids(
+                (pos) =>
+                    piece.position.manhattanDistance(origin) > pos.manhattanDistance(origin) &&
+                    piece.position.manhattanDistance(pos) == 1,
+                BOARD
+            ); // 被击出九宫格，可以向靠近九宫格的方向移动
+    };
+
+    static masterAttack = (piece: Piece) => {
+        console.log(piece);
+        return DefaultMovingBehaviors.master(piece).concat(
+            ray(piece.position, new Vector2(0, 1))
+                .concat(ray(piece.position, new Vector2(0, -1)))
+                .filter((pos) => pos.owner != null && pos.owner.type === PieceType.Master)
+        );
+    };
+
+    static guard = (piece: Piece) => {
+        let team = piece.team;
+        let config = team === Team.Red ? RED_BASE : BLACK_BASE;
+        return filterGrids(
+            (pos) =>
+                piece.position.manhattanDistance(pos) == 2 &&
+                piece.position.chebyshevDistance(pos) == 1,
+            config
+        );
+    };
+
+    static elephant = (piece: Piece) => {
+        let team = piece.team;
+        let config = team === Team.Red ? RED_TERRITORY : BLACK_TERRITORY;
+        return filterGrids((pos) => {
+            if (
+                piece.position.manhattanDistance(pos) == 4 &&
+                piece.position.chebyshevDistance(pos) == 2
+            ) {
+                let pointer = Vector2.point(piece.position, pos);
+                let check = piece.position.add(pointer.div(2));
+                return check.owner === null;
+            }
+            return false;
+        }, config);
+    };
+
+    static horse = (piece: Piece) => {
+        return filterGrids((pos) => {
+            if (
+                piece.position.manhattanDistance(pos) != 3 ||
+                piece.position.chebyshevDistance(pos) != 2
+            )
+                return false;
+            let neighbors = filterGrids(
+                (pos) => piece.position.manhattanDistance(pos) == 1 && pos.owner !== null
+            );
+            let pointer = Vector2.point(piece.position, pos);
+            return !neighbors.some(
+                (neighbor) => pointer.dot(Vector2.point(piece.position, neighbor)) == 2
+            );
+        });
+    };
+
+    static chariot = (piece: Piece) => {
+        return ray(piece.position, new Vector2(1, 0)).concat(
+            ray(piece.position, new Vector2(-1, 0)),
+            ray(piece.position, new Vector2(0, 1)),
+            ray(piece.position, new Vector2(0, -1))
+        );
+    };
+
+    static gunMove = (piece: Piece) => {
+        return DefaultMovingBehaviors.chariot(piece).filter((pos) => pos.owner === null);
+    };
+
+    static gunAttack = (piece: Piece) => {
+        return ray(piece.position, new Vector2(1, 0), 1).concat(
+            ray(piece.position, new Vector2(-1, 0), 1),
+            ray(piece.position, new Vector2(0, 1), 1),
+            ray(piece.position, new Vector2(0, -1), 1)
+        );
+    };
+
+    static pawn = (piece: Piece) => {
+        let team = piece.team;
+        let baseY = team === Team.Red ? 0 : 9;
+        let passed = Math.abs(piece.position.y - baseY) > 4;
+        let directions = [team === Team.Red ? new Vector2(0, 1) : new Vector2(0, -1)];
+        if (passed) directions.push(...[new Vector2(1, 0), new Vector2(-1, 0)]);
+        return filterGrids((pos) => {
+            return directions.some((direction) =>
+                Vector2.point(piece.position, pos).equals(direction)
+            );
+        });
+    };
+
+    static auto(piece: Piece, attack = false) {
+        return attack ? mappingAttack[piece.type] : mapping[piece.type];
+    }
+}
+import { DamageType } from "./damageType.js";
+
+export class PieceConfig {
+    health: number = 0;
+    maxHealth: number = 0;
+    attackDamage: number = 0;
+    defense: number = 0;
+    criticalChance: number = 0;
+    criticalDamage: number = 0;
+    damageType: DamageType = DamageType.None;
+    weight: number = 0;
+
+    constructor(
+        maxHealth: number,
+        attackDamage: number,
+        defense: number,
+        damageType: DamageType = DamageType.MeleeLow,
+        weight: number = 0,
+        criticalChance: number = 0.1,
+        criticalDamage: number = 0.75,
+    ) {
+        this.health = maxHealth;
+        this.maxHealth = maxHealth;
+        this.attackDamage = attackDamage;
+        this.defense = defense;
+        this.criticalChance = criticalChance;
+        this.criticalDamage = criticalDamage;
+        this.damageType = damageType;
+        this.weight = weight;
+    }
+}
+
+export const defaultPieceConfigs: { [key: string]: PieceConfig } = {
+    master: new PieceConfig(7500, 1700, 500, DamageType.MeleeLow, 12),
+    guard: new PieceConfig(2500, 1500, 100, DamageType.MeleeLow, 8),
+    elephant: new PieceConfig(3500, 2000, 100, DamageType.MeleeMedium, 18),
+    horse: new PieceConfig(3000, 2750, 200, DamageType.MeleeMedium, 15),
+    chariot: new PieceConfig(4500, 2200, 200, DamageType.MeleeHigh, 20),
+    gun: new PieceConfig(4750, 2250, 150, DamageType.Ranged, 20),
+    pawn: new PieceConfig(2250, 1250, 100, DamageType.MeleeLow, 8),
+    none: new PieceConfig(1, 0, 0, DamageType.None),
+};
+import { AttributeModifier, getAttributeModifierById, modifiers } from "./attributeProvider.js";
+import { Piece } from "./piece.js";
+import { round } from "./round.js";
+import { Serializable } from "./serialize.js";
+
+const ROMAN_NUMBER_LIMIT = 25; // 小于等于此数值的等级将使用罗马数字表示
+const toRomanNumber = (number: number) => {
+    const HARD_LIMIT = 3999;
+    if (number > ROMAN_NUMBER_LIMIT || number > HARD_LIMIT) {
+        return number.toString();
+    }
+    const ones = ["", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX"];
+    const tens = ["", "X", "XX", "XXX", "XL", "L", "LX", "LXX", "LXXX", "XC"];
+    const hundreds = ["", "C", "CC", "CCC", "CD", "D", "DC", "DCC", "DCCC", "CM"];
+    const thousands = ["", "M", "MM", "MMM"];
+    return (
+        thousands[Math.floor(number / 1000)] +
+        hundreds[Math.floor((number % 1000) / 100)] +
+        tens[Math.floor((number % 100) / 10)] +
+        ones[Math.floor(number % 10)]
+    );
+};
+
+/**
+ * 策略类，用于指定状态效果在每一轮进行后都需要进行的操作。
+ */
+export abstract class TickActionStrategy extends Serializable {
+    /**
+     * 对持有该效果的棋子执行操作。将会在每一轮之后被调用。
+     * @param piece 目标棋子。
+     */
+    abstract action(piece: Piece): void;
+}
+
+export class StatusEffect {
+    readonly name: string = "";
+    readonly id: string = "";
+    readonly description: string = "";
+
+    /**
+     * 状态效果的等级。
+     * 如果为空，表示不应用等级机制。
+     */
+    readonly level: number | null = null;
+    /**
+     * 所有相关属性修改器的 ID。
+     */
+    private relatedModifierIds: number[] = [];
+    /**
+     * 状态效果的过期时间。请使用 getter 和 setter 操作。
+     */
+    private expire_: number = Infinity;
+    /**
+     * 当前状态效果是否启用。
+     */
+    private enabled: boolean = true;
+    /**
+     * 是否为负面效果。
+     */
+    private negative: boolean = false;
+    /**
+     * 是否展示等级。
+     * 如果 level 为 null，忽略此字段。
+     */
+    private showLevel: boolean = true;
+    /**
+     * 每一轮结束后希望执行的动作。
+     * 将会调用 action 方法。
+     */
+    private tickAction: TickActionStrategy | null = null;
+
+    /**
+     * 构造一个状态效果（StatusEffect）。
+     *
+     * @param name - 状态效果的名称。
+     * @param id - 状态效果的标识符。
+     * @param description - 状态效果的描述。
+     * @param relatedModifiers - 与该状态效果相关的属性修改器。这些修改器将会根据状态效果本身的状态自动启用或禁用。
+     * @param level - 状态效果的等级。如果为 null，将不会应用等级机制。
+     * @param expire - 状态效果的到期时间。如果为 null，将会自动推断到期时间。即使用相关属性修改器的最小到期时间。
+     * @param expireOffset - 到期时间偏移量。如果为数字，将会在当前时间之后经过 expire - offset 回合后过期；如果为 null，expire 参数直接作为过期回合号，与当前时间无关。
+     */
+    constructor(
+        name: string,
+        id: string,
+        description: string = "",
+        relatedModifiers: AttributeModifier<any>[] = [],
+        level: number | null = null,
+        expire: number | null = null,
+        expireOffset: number | null = -1
+    ) {
+        this.name = name;
+        this.id = id;
+        this.description = description;
+        this.relatedModifierIds = relatedModifiers.map((modifier) => modifier.id);
+        if (expire === null) {
+            // 自动推断过期时间
+            let minExpire = Math.min(...relatedModifiers.map((modifier) => modifier.expire));
+            this.expire = minExpire;
+            relatedModifiers.forEach((modifier) => {
+                modifier.expire = this.expire;
+            });
+        } else {
+            if (expireOffset === null) this.expire = expire;
+            else this.expire = round + expire + expireOffset;
+        }
+        this.level = level;
+
+        if (this.expire !== Infinity) {
+            relatedModifiers.forEach((modifier) => {
+                modifier.expire = this.expire;
+            });
+        }
+    }
+
+    get expire(): number {
+        return this.expire_;
+    }
+
+    /**
+     * 设置过期时间。
+     * 将会改变所有相关属性修改器的过期时间。
+     */
+    set expire(value) {
+        this.expire_ = value;
+        this.relatedModifiers.forEach((modifier) => {
+            modifier.expire = value;
+        });
+    }
+
+    /**
+     * 获取所有相关的属性修改器。
+     */
+    get relatedModifiers(): AttributeModifier<any>[] {
+        return this.relatedModifierIds.map((id) => {
+            return getAttributeModifierById(id);
+        });
+    }
+
+    /**
+     * 获取效果的显示名称。
+     * @returns - 显示名称。类似 {name}{level} 的形式，其中 level 用罗马数字显示或为空。
+     */
+    displayName(): string {
+        if (this.level === null || !this.showLevel) {
+            return this.name; // 不展示等级
+        }
+        let roman = toRomanNumber(this.level);
+        return this.name + roman;
+    }
+
+    /**
+     * 获取效果是否可用。
+     */
+    get available(): boolean {
+        return this.enabled && round <= this.expire;
+    }
+
+    /**
+     * 启用一个状态效果。
+     * 将会一并启用关联的修改器。
+     */
+    enable(): StatusEffect {
+        this.enabled = true;
+        this.relatedModifiers.forEach((modifier) => {
+            modifier.enable();
+        });
+        return this;
+    }
+
+    /**
+     * 禁用一个状态效果。
+     * 将会禁用关联的修改器。
+     */
+    disable(): StatusEffect {
+        this.enabled = false;
+        this.relatedModifiers.forEach((modifier) => {
+            modifier.disable();
+        });
+        return this;
+    }
+
+    /**
+     * 将一个状态效果设置为负面。
+     * 将会影响渲染方式。
+     */
+    setNegative() {
+        this.negative = true;
+        return this;
+    }
+
+    isNegative(): boolean {
+        return this.negative;
+    }
+
+    setTickAction(strategy: TickActionStrategy): void {
+        this.tickAction = strategy;
+    }
+
+    /**
+     * 设置状态效果，不渲染它的等级信息。
+     */
+    setHideLevel(): StatusEffect {
+        this.showLevel = false;
+        return this;
+    }
+
+    runContinuedAction(target: Piece) {
+        if (!this.available) {
+            return; // 剔除不可用的效果
+        }
+        if (this.tickAction !== null) {
+            this.tickAction.action(target);
+        }
+    }
+}
+import { AttributeModifier } from "./attributeProvider.js";
+import { Damage } from "./damage.js";
+import { DamageType } from "./damageType.js";
+import { StatusEffect, TickActionStrategy } from "./effect.js";
+import { Piece } from "./piece.js";
+import { round } from "./round.js";
+import { TypeRegistry } from "./serialize.js";
+
+/**
+ * 一个便利基类，用于创建一些相似的状态效果。
+ * 可以看作工厂类。
+ */
+export abstract class StatusEffectTemplate {
+    readonly name: string;
+    readonly id: string;
+    protected negative: boolean = false;
+
+    abstract onApply(target: Piece, level: number, expire: number): AttributeModifier<any>[];
+    abstract getDescription(level: number): string;
+    createTickAction(level: number): TickActionStrategy | null {
+        return null;
+    }
+    constructor(name: string, id: string) {
+        this.name = name;
+        this.id = id;
+    }
+
+    isNegative(): boolean {
+        return this.negative;
+    }
+
+    /**
+     * 创建一个状态效果实例。
+     * @param level 状态效果等级。
+     * @param expire 状态效果过期时间。
+     * @param expireOffset 状态效果过期时间偏移量。
+     *
+     * expire 和 expireOffset 的具体含义，见 StatusEffect 类的文档。
+     */
+    apply(
+        target: Piece,
+        level: number,
+        expire: number = Infinity,
+        expireOffset: number | null = -1
+    ) {
+        let realExpire = expireOffset !== null ? expireOffset + round + expire : expire;
+
+        let modifiers = this.onApply(target, level, realExpire);
+        let effect = new StatusEffect(
+            this.name,
+            this.id,
+            this.getDescription(level),
+            modifiers,
+            level,
+            expire
+        );
+
+        let tickAction = this.createTickAction(level);
+        if (tickAction !== null) {
+            effect.setTickAction(tickAction);
+        }
+
+        if (this.isNegative()) {
+            effect.setNegative();
+        }
+        target.pushEffects(effect);
+    }
+}
+
+export class StrengthEffectTemplate extends StatusEffectTemplate {
+    constructor() {
+        super("力量", "strength");
+    }
+
+    getDescription(level: number): string {
+        return `攻击力提升 ${Math.round(5 + level * 10)}%`;
+    }
+
+    onApply(target: Piece, level: number, expire: number): AttributeModifier<any>[] {
+        let modifier = new AttributeModifier((5 + level * 10) / 100, expire, null);
+        target.attackDamage.area(1).modify(modifier);
+        return [modifier];
+    }
+}
+
+export class WeaknessEffectTemplate extends StatusEffectTemplate {
+    protected negative = true;
+    constructor() {
+        super("虚弱", "weakness");
+    }
+
+    getDescription(level: number): string {
+        return `攻击力降低 ${Math.round(10 + level * 10)}%`;
+    }
+
+    onApply(target: Piece, level: number, expire: number): AttributeModifier<any>[] {
+        let modifier = new AttributeModifier(-(10 + level * 10) / 100, expire, null);
+        target.attackDamage.area(1).modify(modifier);
+        return [modifier];
+    }
+}
+
+@TypeRegistry.register()
+class RegenerationTickAction extends TickActionStrategy {
+    readonly level: number;
+    constructor(level: number) {
+        super();
+        this.level = level;
+    }
+    action(target: Piece): void {
+        let limit = target.maxHealth.result;
+        let scale = 0.03 + this.level * 0.03;
+        target.health = Math.min(target.health + scale * limit, limit);
+    }
+}
+
+export class RegenerationEffectTemplate extends StatusEffectTemplate {
+    constructor() {
+        super("生命恢复", "regeneration");
+    }
+
+    getDescription(level: number): string {
+        return `每回合回复生命值，相当于 ${3 + level * 3}% 生命值上限。`;
+    }
+
+    onApply(target: Piece, level: number, expire: number): AttributeModifier<any>[] {
+        return [];
+    }
+
+    createTickAction(level: number): TickActionStrategy {
+        return new RegenerationTickAction(level);
+    }
+}
+
+@TypeRegistry.register()
+class PotionTickAction extends TickActionStrategy {
+    readonly level: number;
+    constructor(level: number) {
+        super();
+        this.level = level;
+    }
+    action(target: Piece): void {
+        let limit = target.maxHealth.result;
+        if (target.health <= 0) return;
+
+        let damageAmount = (2 * this.level + 1) / 100 * limit + 40 * this.level;
+        let damageObject = new Damage(DamageType.Magic, damageAmount, null, target);
+        target.damaged(damageObject);
+    }
+}
+
+export class PotionEffectTemplate extends StatusEffectTemplate {
+    protected negative = true;
+    constructor() {
+        super("剧毒", "potion");
+    }
+
+    getDescription(level: number): string {
+        return `每轮造成 ${2 * level + 1}% 生命值上限 + ${40 * level} 的魔法伤害。至多使生命值降低到 5%。`;
+    }
+
+    onApply(target: Piece, level: number, expire: number): AttributeModifier<any>[] {
+        return [];
+    }
+
+    createTickAction(level: number): TickActionStrategy {
+        return new PotionTickAction(level);
+    }
+}
+import { Position } from "./position.js";
+import { Piece, PieceType, pieces } from "./piece.js";
+import * as Selection from "./selection.js";
+import { initDefaultMovingBehaviors } from "./defaultMovingBehaviors.js";
+import { getPlayerFromTeam, Team } from "./team.js";
+import { getCurrentTeam } from "./round.js";
+import { AttributeModifier } from "./attributeProvider.js";
+import { initCardLooting, lootCard } from "./cardLooting.js";
+import { loadSave, recall, saveCurrent, storeSave } from "./save.js";
+import { registerCallback } from "./callbackRegister.js";
+import { showDefaultPiece } from "./pieceFrame.js";
+import { StatusEffect } from "./effect.js";
+import { DamageTrigger, TriggerManager } from "./trigger.js";
+import { random, seed } from "./random.js";
+import { TypeRegistry } from "./serialize.js";
+import { Damage } from "./damage.js";
+import { DamageType } from "./damageType.js";
+
+// 初始化模块
+seed();
+initDefaultMovingBehaviors();
+initCardLooting();
+
+/**
+ * 游戏结束,并显示胜利者
+ */
+export function stop(victor: string) {
+    Selection.setCurrentSelection(null);
+    let victor_tip_bar = document.querySelector("#victor-tip span");
+    if (victor_tip_bar !== null) victor_tip_bar.innerHTML = victor + "赢了";
+}
+
+// 触发器，用于触发御守三晖状态效果
+@TypeRegistry.register()
+class MasterSelfDefenseTrigger extends DamageTrigger {
+    action(damage: Damage): void {
+        // 如果「将」被攻击
+        if (damage.target?.type === PieceType.Master) {
+            /**
+             * x从0到3141.6，防御力增量从0到300%；x足够大时，防御力增量固定为300%。
+             * 前半段曲线为余弦函数，后半段曲线为直线。
+             */
+            const defenseImproveCalculation = (x: number) => {
+                return x >= 1000 * Math.PI ? 3 : -1.5 * Math.cos(x / 1000) + 1.5;
+            };
+            // x从0到3000，防御力增量次数从0到3；x足够大时，防御力增量次数固定为3。
+            const defenseLastCalculation = (x: number) => {
+                return x >= 3000 ? 3 : Math.ceil(x / 1000);
+            };
+
+            let defense = defenseImproveCalculation(damage.amount);
+            let last = defenseLastCalculation(damage.amount);
+            console.log("defense: ", defense);
+
+            if (last === 0) return; // 伤害过低（<0.5）无需触发御守三晖
+
+            let effect = new StatusEffect(
+                "御守三晖",
+                "masterSelfDefense",
+                `防御力提升${Math.round(defense * 100)}%`,
+                [
+                    damage.target.defense
+                        .area(1)
+                        .modify(new AttributeModifier(defense, last)),
+                ],
+                Math.round(defense)
+            ).setHideLevel()
+            damage.target.pushEffects(effect);
+
+            // console.log(damage.target);
+            // console.log("对其应用了御守三晖")
+
+
+        }
+    }
+}
+
+window.onload = () => {
+    // 显示游戏界面
+    let container = document.getElementById("game-container");
+    if (container !== null) container.style.display = "block";
+    putPieces(); // 放置棋子
+
+    Selection.setCurrentSelection(Selection.mainSelection);
+
+    Position._calculateGameboardSize();
+
+    // 注册棋盘点击事件
+    let gameboard = document.getElementById("gameboard");
+    if (gameboard instanceof HTMLElement)
+        gameboard.onclick = (event) => {
+            const rect = document.getElementById("gameboard")?.offsetParent?.getBoundingClientRect();
+            if (!rect) return;
+            const x = event.clientX - rect.left;
+            const y = event.clientY - rect.top;
+            if (0 <= x && x <= rect.width && 0 <= y && y <= rect.height) {
+                const pos = new Position(x, y, false);
+                return Selection.onGameboardClick(pos);
+            }
+        };
+
+    // 初始化棋子
+    pieces.forEach((piece) => {
+        piece.init();
+    });
+
+    TriggerManager.addTrigger(new MasterSelfDefenseTrigger());
+    // 作弊框相关内容
+    let submit_cheating = document.getElementById("submit-cheating");
+    if (submit_cheating instanceof HTMLElement)
+        submit_cheating.onclick = (event) => {
+            let input = document.querySelector("#cheating input");
+            let text = input instanceof HTMLInputElement ? input.value : "0";
+            if (text == Team.Red || text == Team.Black) {
+                pieces
+                    .filter((piece) => piece.type === PieceType.Master && piece.team != text)[0]
+                    .damaged();
+            }
+            // if (text === "/high") {
+            //     highGunActionCard.apply();
+            // }
+            // if (text === "/limitlessHorse") {
+            //     limitlessHorseActionCard.apply();
+            // }
+            if (text === "/recall") {
+                recall();
+            }
+            if (text === "/store") {
+                storeSave();
+            }
+            if (text === "/load") {
+                loadSave();
+            }
+        };
+    // 注册初始之护状态效果，用于防止开局打马
+    // 对于所有棋子，提升11000点防御力，持续3回合
+    let newDefenseModifiers: AttributeModifier<number>[] = [];
+    pieces.forEach((piece) => {
+        newDefenseModifiers.push(new AttributeModifier(11000, 3 * 2));
+        piece.defense.area(0).modify(newDefenseModifiers[newDefenseModifiers.length - 1]);
+    });
+    pieces.forEach((piece) => {
+        piece.pushEffects(
+            new StatusEffect(
+                "初始之护",
+                "initialProtection",
+                "提升11000点防御力",
+                newDefenseModifiers
+            )
+        );
+    });
+    // 注册按钮的点击事件
+    (document.getElementById("loot-card-button") as HTMLElement).onclick = () => {
+        lootCard();
+        getPlayerFromTeam(getCurrentTeam()).showActionCards();
+    };
+    (document.getElementById("recall-button") as HTMLElement).onclick = () => {
+        recall();
+        console.log("recall");
+    };
+    (document.getElementById("store-button") as HTMLElement).onclick = () => {
+        storeSave();
+        (document.getElementById("store-button") as HTMLElement).style.color = "gray";
+        setTimeout(() => {
+            (document.getElementById("store-button") as HTMLElement).style.color = "black";
+        }, 1000);
+    };
+    (document.getElementById("load-button") as HTMLElement).onclick = () => {
+        loadSave();
+        (document.getElementById("load-button") as HTMLElement).style.color = "gray";
+        setTimeout(() => {
+            (document.getElementById("load-button") as HTMLElement).style.color = "black";
+        }, 1000);
+    };
+    (document.getElementById("action-bar") as HTMLElement).onclick = (event) => {
+        Selection.cancelCurrentSelection();
+    };
+    // 第零轮开始
+    saveCurrent();
+    showDefaultPiece();
+    // 调试用：按下alt+k调用以下调试函数
+    const ActivatedDebug = () => {
+        console.log("Debug!");
+
+        pieces.forEach((piece) => {
+            const damage = new Damage(DamageType.Magic, 1000, null, piece);
+            piece.damageFrame(damage);
+
+            setTimeout(() => {
+                piece.exitDamageFrame();
+            }, 10000);
+        });
+    };
+    document.addEventListener("keydown", (event) => {
+        if (event.altKey && event.key === "k") {
+            ActivatedDebug();
+        }
+    });
+};
+
+// 当页面大小改变
+window.onresize = () => {
+    Position._calculateGameboardSize(); // 重新计算棋盘大小
+    pieces.forEach((piece) => {
+        piece.draw(); // 重新绘制棋子，移动到正确的位置
+    });
+};
+
+/* prettier-ignore */
+const putPieces = ()=>{
+pieces.push(new Piece(Team.Red, PieceType.Master, new Position(4, 0, true), document.getElementById("red-master1")));
+pieces.push(new Piece(Team.Red, PieceType.Guard, new Position(3, 0, true), document.getElementById("red-guard1")));
+pieces.push(new Piece(Team.Red, PieceType.Guard, new Position(5, 0, true), document.getElementById("red-guard2")));
+pieces.push(new Piece(Team.Red, PieceType.Elephant, new Position(2, 0, true), document.getElementById("red-elephant1")));
+pieces.push(new Piece(Team.Red, PieceType.Elephant, new Position(6, 0, true), document.getElementById("red-elephant2")));
+pieces.push(new Piece(Team.Red, PieceType.Horse, new Position(1, 0, true), document.getElementById("red-horse1")));
+pieces.push(new Piece(Team.Red, PieceType.Horse, new Position(7, 0, true), document.getElementById("red-horse2")));
+pieces.push(new Piece(Team.Red, PieceType.Chariot, new Position(0, 0, true), document.getElementById("red-chariot1")));
+pieces.push(new Piece(Team.Red, PieceType.Chariot, new Position(8, 0, true), document.getElementById("red-chariot2")));
+pieces.push(new Piece(Team.Red, PieceType.Gun, new Position(1, 2, true), document.getElementById("red-gun1")));
+pieces.push(new Piece(Team.Red, PieceType.Gun, new Position(7, 2, true), document.getElementById("red-gun2")));
+pieces.push(new Piece(Team.Red, PieceType.Pawn, new Position(0, 3, true), document.getElementById("red-pawn1")));
+pieces.push(new Piece(Team.Red, PieceType.Pawn, new Position(2, 3, true), document.getElementById("red-pawn2")));
+pieces.push(new Piece(Team.Red, PieceType.Pawn, new Position(4, 3, true), document.getElementById("red-pawn3")));
+pieces.push(new Piece(Team.Red, PieceType.Pawn, new Position(6, 3, true), document.getElementById("red-pawn4")));
+pieces.push(new Piece(Team.Red, PieceType.Pawn, new Position(8, 3, true), document.getElementById("red-pawn5")));
+
+pieces.push(new Piece(Team.Black, PieceType.Master, new Position(4, 9, true), document.getElementById("black-master1")));
+pieces.push(new Piece(Team.Black, PieceType.Guard, new Position(3, 9, true), document.getElementById("black-guard1")));
+pieces.push(new Piece(Team.Black, PieceType.Guard, new Position(5, 9, true), document.getElementById("black-guard2")));
+pieces.push(new Piece(Team.Black, PieceType.Elephant, new Position(2, 9, true), document.getElementById("black-elephant1")));
+pieces.push(new Piece(Team.Black, PieceType.Elephant, new Position(6, 9, true), document.getElementById("black-elephant2")));
+pieces.push(new Piece(Team.Black, PieceType.Horse, new Position(1, 9, true), document.getElementById("black-horse1")));
+pieces.push(new Piece(Team.Black, PieceType.Horse, new Position(7, 9, true), document.getElementById("black-horse2")));
+pieces.push(new Piece(Team.Black, PieceType.Chariot, new Position(0, 9, true), document.getElementById("black-chariot1")));
+pieces.push(new Piece(Team.Black, PieceType.Chariot, new Position(8, 9, true), document.getElementById("black-chariot2")));
+pieces.push(new Piece(Team.Black, PieceType.Gun, new Position(1, 7, true), document.getElementById("black-gun1")));
+pieces.push(new Piece(Team.Black, PieceType.Gun, new Position(7, 7, true), document.getElementById("black-gun2")));
+pieces.push(new Piece(Team.Black, PieceType.Pawn, new Position(0, 6, true), document.getElementById("black-pawn1")));
+pieces.push(new Piece(Team.Black, PieceType.Pawn, new Position(2, 6, true), document.getElementById("black-pawn2")));
+pieces.push(new Piece(Team.Black, PieceType.Pawn, new Position(4, 6, true), document.getElementById("black-pawn3")));
+pieces.push(new Piece(Team.Black, PieceType.Pawn, new Position(6, 6, true), document.getElementById("black-pawn4")));
+pieces.push(new Piece(Team.Black, PieceType.Pawn, new Position(8, 6, true), document.getElementById("black-pawn5")));
+}
+import { DefaultMovingBehaviors } from "./defaultMovingBehaviors.js";
+import { Position } from "./position.js";
+import { onPieceClick } from "./selection.js";
+import { stop } from "./multiplayer.js";
+import { defaultPieceConfigs, PieceConfig } from "./defaultPieceConfig.js";
+import { Damage } from "./damage.js";
+import { DamageType } from "./damageType.js";
+import { Team } from "./team.js";
+import { AttributeProvider, NumberAttributeProvider } from "./attributeProvider.js";
+import { registerAnonymous } from "./callbackRegister.js";
+import { StatusEffect } from "./effect.js";
+import { schedule } from "./schedule.js";
+import { fixedRandom } from "./random.js";
+import { round } from "./round.js";
+import { PieceMovingStrategy, DefaultPieceMovingStrategy, PieceAttackingStrategy, DefaultPieceAttackingStrategy, PieceActionStrategy, DefaultPieceActionStrategy } from "./pieceStrategy.js";
+import { Serializable, TypeRegistry } from "./serialize.js";
+
+/**
+ * 伤害浮动范围。伤害浮动在暴击之后结算，会影响Damage对象的amount属性。
+ * 0.02表示伤害浮动会造成原始伤害的98%到102%。
+ */
+const damageFloatLimit = 0.02;
+
+const defaultAttackActionCallback = registerAnonymous((piece: Piece, target: Piece) => {
+    if (target.team === piece.team) return false; // 不能攻击友军
+    const damageObject = piece.SimulateAttack(target);
+    damageObject.apply();
+    return true;
+});
+
+export var pieces: Piece[] = [];
+
+export function modifyPieces(newList: Piece[]) {
+    pieces = newList;
+}
+
+/**
+ * 用来确定棋子被点击时应该执行什么动作。
+ */
+abstract class ClickListenerStrategy extends Serializable {
+    abstract onClick(piece: Piece, ev: MouseEvent): void;
+}
+
+class Piece {
+    /**
+     * 棋子的阵营，为Team枚举值(team.ts)中的一个。
+     * Team.Red表示红方，Team.Black表示黑方，Team.None表示无阵营（仅用于特殊棋子）。
+     */
+    team: string;
+    /**
+     * 棋子的类型，为PieceType枚举值(当前文件下方)中的一个。
+     * 例如：PieceType.Horse表示「马」
+     */
+    type: string;
+    /**
+     * 棋子所处的位置，为Position对象(position.ts)。
+     */
+    position: Position;
+    /**
+     * 棋子的HTML元素，为HTMLElement对象，可以为空。
+     * 如果为空时，包括点击事件在内的一些交互功能将不可用。
+     */
+    htmlElement: HTMLElement | null;
+    /**
+     * 棋子的HTML元素的ID，为字符串，可以为空。
+     * 仅在一些不能存储HTMLElement对象的场合使用。
+     */
+    htmlElementId: string | null;
+
+    /**
+     * 棋子的生命值。
+     *
+     * TODO: 更改为Getter和Setter，用于防止溢出、增加生命值上限时自动提升等。
+     */
+    health: number = 0;
+    /**
+     * 棋子是否已经死亡
+     */
+    dead: boolean = false;
+
+    /**
+     * 棋子的最大生命值，为一个数值提供器(attributeProvider.ts)。
+     */
+    maxHealth: NumberAttributeProvider = new NumberAttributeProvider(0);
+    /**
+     * 棋子的攻击力，为一个数值提供器(attributeProvider.ts)。
+     */
+    attackDamage: NumberAttributeProvider = new NumberAttributeProvider(0);
+    /**
+     * 棋子的防御力，为一个数值提供器(attributeProvider.ts)。
+     * 防御力会降低棋子受到的伤害，计算方式见damage.ts。
+     */
+    defense: NumberAttributeProvider = new NumberAttributeProvider(0);
+    /**
+     * 棋子的暴击率，为一个数值提供器(attributeProvider.ts)。
+     * 暴击率表示棋子攻击时暴击的概率。1表示一定暴击，0表示不可能暴击。
+     */
+    criticalRate: NumberAttributeProvider = new NumberAttributeProvider(0);
+    /**
+     * 棋子的暴击伤害倍率，为一个数值提供器(attributeProvider.ts)。
+     * 暴击伤害倍率表示棋子暴击时伤害的加成。0表示暴击伤害等于普通伤害，1表示暴击伤害是普通伤害的两倍。
+     * 暴击增伤在攻击力之后结算。
+     */
+    criticalDamage: NumberAttributeProvider = new NumberAttributeProvider(0);
+    /**
+     * 棋子的重量，为一个数值提供器(attributeProvider.ts)。
+     * 重量会影响棋子被击退的行为。重量高的棋子有更高的概率减免击退，见defaultDamageBehavior.ts。
+     * 重量**不会**影响棋子的主动移动。
+     */
+    weight: NumberAttributeProvider = new NumberAttributeProvider(0);
+    /**
+     * 棋子的伤害类型，为DamageType枚举值(damageType.ts)中的一个。
+     * 伤害类型会影响棋子攻击时的自身移动和击退。
+     */
+    damageType: DamageType = DamageType.None;
+
+    /**
+     * 一个属性提供器，返回值为一个回调函数，用于获取棋子可能移动到的位置。
+     */
+    movingDestinationsCallbackProvider: AttributeProvider<PieceMovingStrategy>;
+    /**
+     * 一个属性提供器，返回值为一个回调函数，用于获取棋子可能攻击到的棋子。
+     */
+    attackingTargetsCallback: AttributeProvider<PieceAttackingStrategy>;
+    /**
+     * 一个属性提供器，返回值为一个回调函数，用于执行棋子的攻击动作。
+     * 回调函数的返回值表示攻击成功与否。攻击失败的原因可能是攻击目标不是敌方棋子等。
+     */
+    attackActionCallbackProvider: AttributeProvider<PieceActionStrategy>;
+
+    /**
+     * 棋子的点击事件监听器，为回调函数，可以为空。
+     */
+    clickListener: null | ClickListenerStrategy = null;
+    /**
+     * 棋子的状态效果列表。
+     */
+    statusEffects: StatusEffect[] = [];
+
+    constructor(
+        team: string,
+        type: string,
+        position: Position,
+        htmlElement: HTMLElement | null,
+        config: PieceConfig | null = null
+    ) {
+        this.team = team;
+        this.type = type;
+        this.position = position;
+        this.htmlElement = htmlElement;
+        this.htmlElementId = htmlElement?.id ?? null;
+
+        // 根据棋子类型获取默认初始数值
+        config = config ?? defaultPieceConfigs[this.type];
+        if (config) {
+            this.attackDamage = new NumberAttributeProvider(config.attackDamage);
+            this.defense = new NumberAttributeProvider(config.defense);
+            this.criticalRate = new NumberAttributeProvider(config.criticalChance);
+            this.criticalDamage = new NumberAttributeProvider(config.criticalDamage);
+            this.damageType = config.damageType;
+            this.maxHealth = new NumberAttributeProvider(config.maxHealth);
+            this.health = this.maxHealth.result;
+            this.weight = new NumberAttributeProvider(config.weight);
+        }
+
+        // 初始化回调函数提供器
+        this.movingDestinationsCallbackProvider = new AttributeProvider(
+            new DefaultPieceMovingStrategy()
+        );
+        this.attackingTargetsCallback = new AttributeProvider(
+            new DefaultPieceAttackingStrategy()
+        );
+        this.attackActionCallbackProvider = new AttributeProvider(
+            new DefaultPieceActionStrategy()
+        );
+    }
+
+    /**
+     * 选中或取消选中棋子。
+     * 如果棋子的htmlElement为空，则不执行任何操作。
+     */
+    toggleSelected() {
+        if (!this.htmlElement) return;
+        if (this.htmlElement.classList.contains("selected-piece")) {
+            this.htmlElement.classList.remove("selected-piece");
+        } else {
+            const selected = document.getElementsByClassName("selected-piece");
+            if (selected != undefined)
+                for (let index = 0; index < selected.length; index++) {
+                    selected[index].classList.remove("selected-piece");
+                }
+            this.htmlElement.classList.add("selected-piece");
+        }
+    }
+
+    /**
+     * 初始化棋子。会将棋子绑定到对应的html元素上，并添加点击事件监听器和血条。
+     */
+    init() {
+        if (!this.htmlElement) {
+            if (!this.htmlElementId) return;
+            this.htmlElement = document.getElementById(this.htmlElementId);
+            if (!this.htmlElement) return;
+        }
+        this.clickListener = new DefaultClickListenerStrategy();
+        this.htmlElement.addEventListener("click", (ev) => this.clickListener?.onClick?.(this, ev));
+
+        // 创建血条（如果没有）
+        if (!this.htmlElement.querySelector(".health-bar")) {
+            this.htmlElement.innerHTML += `<svg viewBox="0 0 200 200" width="100%" height="100%">
+        <path
+            d="M 100,10 A 90,90 0 1,1 10,100"
+            fill="none"
+            stroke="black"
+            stroke-width="4"
+            class="health-bar"
+        />
+        <path
+            class="decreasing-bar",
+            fill="none"
+            stroke="black"
+            stroke-width="4"
+            d=""
+        >
+        </svg>`;
+            this.htmlElement.querySelector(".health-bar")?.setAttribute("stroke", this.team);
+            this.htmlElement.querySelector(".decreasing-bar")?.setAttribute("stroke", this.team);
+        }
+        this.draw();
+    }
+
+    /**
+     * 绘制棋子的生命值部分。
+     * 正常绘制模式和“伤害展现模式”共用逻辑。
+     * 
+     * @param health 棋子扣除之后的生命值。
+     * @param decreasing 本次扣除的生命值大小。
+     */
+    drawHealthBar(health: number, decreasing: number) {
+        if (!this.htmlElement) return;
+
+        let healthProp = health / this.maxHealth.result;
+        if (healthProp >= 1) healthProp = 0.99999; // 防止血条消失
+        const arc = healthProp * 2 * Math.PI;
+        const sin = Math.sin(arc);
+        const cos = Math.cos(arc);
+        const y = 100 - 90 * cos;
+        const x = 100 + 90 * sin;
+        const largeArcFlag = arc > Math.PI ? 1 : 0;
+        const d = `M 100,10 A 90,90 0 ${largeArcFlag},1 ${x},${y}`;
+        this.htmlElement.querySelector(".health-bar")?.setAttribute("d", d);
+
+        // 在原位置接续上新的弧
+        if (decreasing === 0) {
+            const decreasingBar = this.htmlElement.querySelector(".decreasing-bar");
+            decreasingBar?.setAttribute("d", "");
+            decreasingBar?.classList.remove("blink");
+            return;
+        }
+        const decProp = decreasing / this.maxHealth.result;
+        const arc2 = decProp * 2 * Math.PI;
+        const sin2 = Math.sin(arc + arc2);
+        const cos2 = Math.cos(arc + arc2);
+        const y2 = 100 - 90 * cos2;
+        const x2 = 100 + 90 * sin2;
+        const largeArcFlag2 = arc2 > Math.PI ? 1 : 0;
+        const d2 = `M ${x},${y} A 90,90 0 ${largeArcFlag2},1 ${x2},${y2}`;
+        const decreasingBar = this.htmlElement.querySelector(".decreasing-bar");
+        decreasingBar?.setAttribute("d", d2);
+        decreasingBar?.classList.add("blink");
+    }
+
+    /**
+     * 绘制棋子。将会更新棋子html元素的位置和一些状态。
+     * 如果棋子死亡或者htmlElement为空，则不执行任何操作。
+     *
+     * 具体流程：
+     * - 移动到正确的位置。
+     * - 更新血条。将会用一个圆心角不等的圆弧来表示生命值的比例。
+     * - 检查是否有状态效果，并添加对应类名。
+     *
+     * TODO 拆分不同流程至不同函数
+     */
+    draw() {
+        if (this.dead || !this.htmlElement) return;
+        else this.htmlElement.style.display = "flex";
+        // 计算位置
+        this.htmlElement.style.left = this.position.getScreenPos()[0] + "px";
+        this.htmlElement.style.top = this.position.getScreenPos()[1] + "px";
+        // 计算、刷新血条
+        this.drawHealthBar(this.health, 0);
+        
+        // 检查是否有有效的状态效果
+        this.statusEffects = this.statusEffects.filter((effect) => effect.available);
+        const hasEffect = this.statusEffects.some((effect) => effect.available);
+        const allNegative = hasEffect && this.statusEffects.every((effect) => effect.isNegative());
+        if (allNegative) {
+            this.htmlElement.classList.remove("has-effect");
+            this.htmlElement.classList.add("has-negative-effect");
+        } else if (hasEffect) {
+            this.htmlElement.classList.add("has-effect");
+            this.htmlElement.classList.remove("has-negative-effect");
+        } else {
+            this.htmlElement.classList.remove("has-effect");
+            this.htmlElement.classList.remove("has-negative-effect");
+        }
+    }
+
+    /**
+     * 添加状态效果。
+     * 将会自动处理相同效果的覆盖问题。具体来讲，id相同的效果被视为相同效果，应用以下逻辑：
+     * - 如果效果等级相同，或不应用等级机制（即level为空），则效果过期时间取最大值，即刷新时间
+     * - 如果效果等级不同，则高等级效果会替代低等级。特别地，如果低等级效果更晚过期，则在高等级效果过期后重新应用。
+     * 同时，这种情况下，会自动禁用被替代效果及其关联的修饰符。
+     * 特别地，「不可用」的效果将被忽略。
+     */
+    pushEffects(...effects: StatusEffect[]) {
+        for (let i = 0; i < effects.length; i++) {
+            const effect = effects[i];
+            if (!effect.available) return; // 忽略不可用效果
+            const exist = this.statusEffects.find((e) => e.id == effect.id);
+            if (!exist) {
+                this.statusEffects.push(effect);
+            } else {
+                if (exist.level === effect.level || effect.level === null || exist.level === null) {
+                    exist.expire = Math.max(exist.expire, effect.expire);
+                    effect.disable();
+                } else {
+                    const higherLevel = exist.level > effect.level ? exist : effect;
+                    const lowerLevel = exist.level > effect.level ? effect : exist;
+                    lowerLevel.disable(); // 临时禁用已经存在的效果
+                    this.statusEffects.splice(this.statusEffects.indexOf(exist), 1);
+                    this.statusEffects.push(higherLevel);
+                    this.statusEffects[this.statusEffects.length - 1].enable(); // 启用新的效果
+                    // 解释上述操作的原因
+                    // 如果原先的效果更强，则会被移除、重新加入和启用，新效果则被禁用。
+                    // 如果新的效果更强，原效果被禁用和移除，新效果被加入和启用。
+                    // 如果不进行这样的操作，原效果关联的修饰符会持续启用，导致效果实际上会叠加
+
+                    if (lowerLevel.expire > higherLevel.expire) {  // 计划重新启用
+                        schedule(() => {
+                            this.pushEffects(lowerLevel);
+                        }, higherLevel.expire + 1);
+                    }
+                }
+            }
+        }
+        this.draw();
+    }
+
+    /**
+     * 移动到指定位置，并自动重绘以更新位置。
+     * @returns 是否移动成功。失败的原因可能为目标位置已经有棋子。
+     */
+    move(targetPosition: Position) {
+        if (targetPosition.integerGrid().owner !== null) return false;
+        this.position = targetPosition.integerGrid();
+        this.draw();
+        return true;
+    }
+
+    /**
+     * 「模拟」对一个棋子进行攻击，并返回伤害对象。
+     * 该操作仅有数值上的计算，不会造成实际影响。
+     * @param targetPiece 被攻击的棋子。必须提供，用于构造伤害对象，和用于生成随机值。
+     * @returns 本次攻击的伤害对象。
+     */
+    SimulateAttack(targetPiece: Piece) {
+        let damageAmount = this.attackDamage.result;
+        const isCritical =
+            fixedRandom(
+                "criticalCheck",
+                round,
+                this.position.toString(),
+                targetPiece.position.toString()
+            ) < this.criticalRate.result;
+        if (isCritical) damageAmount *= this.criticalDamage.result + 1;
+        const float =
+            fixedRandom(
+                "damageFloat",
+                round,
+                this.position.toString(),
+                targetPiece.position.toString()
+            ) *
+                damageFloatLimit *
+                2 +
+            (1 - damageFloatLimit);
+        const damageObject = new Damage(
+            this.damageType,
+            damageAmount * float,
+            this,
+            targetPiece,
+            isCritical
+        );
+        return damageObject;
+    }
+
+    /**
+     * 转化为伤害展现模式。
+     * 在选中棋子、即将攻击时，将可攻击的棋子切换为此模式，向玩家可视化地展示伤害大小。
+     * 即显示这个棋子经过攻击后的生命值。
+     * 
+     * 具体地，将会计算出棋子经过攻击后的生命值，然后进行以下渲染：
+     * - 将生命条减损为新的生命值。
+     * - 使用透明度较低的弧闪烁效果，来展示扣除的生命值部分。
+     */
+    damageFrame(damage: Damage) {
+        let amount = damage.realAmount;
+        let newHealth = this.health - amount;
+
+        if (newHealth <= 0) {
+            amount = this.health;
+            newHealth = 0;
+        }
+
+        this.drawHealthBar(newHealth, amount);
+    }
+
+    /**
+     * 退出伤害展现模式。
+     */
+    exitDamageFrame() {
+        this.drawHealthBar(this.health, 0);
+    }
+
+    /**
+     * 攻击一个目标棋子。
+     * 将会获取棋子的「攻击行为」回调参数并调用，并返回其返回值。
+     * @returns 回调参数的返回值。应当表示是否攻击成功。
+     */
+    attack(targetPiece: Piece) {
+        return this.attackActionCallbackProvider.result.attack(this, targetPiece);
+    }
+
+    /**
+     * 被摧毁/杀死。
+     * 这不会移除棋子，而是将其设为无效，移至无效位置，并隐藏其HTML元素。
+     */
+    destroyed() {
+        if (this.htmlElement) {
+            this.htmlElement.style.display = "none"; // 隐藏棋子
+        }
+        this.position = new Position(-10, -10, true);
+        this.dead = true;
+
+        if (this.type === PieceType.Master) stop(Team.enemy(this.team));
+    }
+
+    /**
+     * 受到一次伤害。
+     * 将会自动计算生命值，若生命值小于等于0，则自动调用死亡方法。
+     * @param damage 伤害对象。如果为null，则表示受到无伤害。
+     * @returns 伤害是否「致命」，即导致棋子死亡。
+     */
+    damaged(damage: Damage | null = null) {
+        if (damage === null) return;
+        const realAmount = damage.realAmount; // 1000 防御伤害减半
+        this.health -= realAmount;
+        if (this.health <= 0) this.destroyed();
+        return this.health <= 0;
+    }
+
+    /**
+     * 创建一个虚拟棋子。
+     * 虚拟棋子没有阵营、类型、HTML元素等属性，仅作占位用途。
+     * @param piecePosition
+     * @returns 新的棋子对象
+     */
+    static virtualPiece(piecePosition: Position) {
+        return new Piece(Team.None, PieceType.None, piecePosition, null);
+    }
+
+    /**
+     * 加入到棋子列表中。
+     * 如果棋子已经存在，则不会重复添加。
+     */
+    join() {
+        if (!pieces.includes(this)) pieces.push(this);
+    }
+
+    /**
+     * 是否被选中。
+     * 如果棋子没有HTML元素，则永远返回false。
+     */
+    get selected() {
+        if (!this.htmlElement) return false;
+        return this.htmlElement.classList.contains("selected-piece");
+    }
+
+    /**
+     * 设置是否被选中。
+     * 如果棋子没有HTML元素，则不会做任何操作。
+     */
+    set selected(value) {
+        if (!this.htmlElement) return;
+        if (value) {
+            this.htmlElement.classList.add("selected-piece");
+        } else {
+            this.htmlElement.classList.remove("selected-piece");
+        }
+    }
+
+    /**
+     * 获取棋子可能的移动目标位置。
+     * 将会获取棋子的「移动行为」回调参数并调用，并返回其返回值。
+     */
+    get destinations() {
+        return this.movingDestinationsCallbackProvider.result.getPosition(this);
+    }
+
+    /**
+     * 获取棋子可能的攻击目标位置。
+     * 将会获取棋子的「攻击行为」回调参数并调用，并返回其返回值。
+     */
+    get attackTargets() {
+        return this.attackingTargetsCallback.result.getPosition(this);
+    }
+}
+
+/**
+ * 棋子类型。
+ * TODO: 重构成typescript的enum类型
+ */
+class PieceType {
+    static Master = "master";
+    static Guard = "guard";
+    static Elephant = "elephant";
+    static Horse = "horse";
+    static Chariot = "chariot";
+    static Gun = "gun";
+    static Pawn = "pawn";
+    static None = "none";
+}
+
+export { Piece, PieceType };
+
+/**
+ * 获取指定阵营的将或者帅。
+ * @param team 阵营
+ * @returns 获取到的棋子。如果没有找到，则返回null。
+ */
+export function getTeamMaster(team: Team) {
+    return pieces.find((piece) => piece.team === team && piece.type === PieceType.Master) ?? null;
+}
+
+/**
+ * 默认的点击监听器。
+ */
+@TypeRegistry.register()
+class DefaultClickListenerStrategy extends ClickListenerStrategy {
+    onClick(piece: Piece, event: MouseEvent): void {
+        if (onPieceClick(piece)) event.stopPropagation();
+    };
+}import { getTeamMaster, Piece } from "./piece.js";
+import { Position } from "./position.js";
+import { getCurrentTeam, round } from "./round.js";
+import { Team } from "./team.js";
+
+export function showPiece(piece: Piece) {
+    if (!piece.htmlElement) return;
+    const pieceFrameElement = document.getElementById("piece-frame") as HTMLDivElement;
+    // let clonePiece = new Piece(
+    //     piece.team,
+    //     piece.type,
+    //     new Position(
+    //         pieceFrameElement.clientLeft + pieceFrameElement.clientWidth / 2,
+    //         pieceFrameElement.clientTop + pieceFrameElement.clientHeight / 2,
+    //         false
+    //     ),
+    //     pieceFrameElement
+    // );
+    pieceFrameElement.innerHTML = piece.htmlElement.innerHTML;
+    const positionElement = document.getElementById("frame-position") as HTMLSpanElement;
+    const healthElement = document.getElementById("frame-health") as HTMLSpanElement;
+    const healthMaxElement = document.getElementById("frame-health-max") as HTMLSpanElement;
+    const attackElement = document.getElementById("frame-attack") as HTMLSpanElement;
+    const defenseElement = document.getElementById("frame-defense") as HTMLSpanElement;
+    const criticalElement = document.getElementById("frame-critical") as HTMLSpanElement;
+    const criticalDamageElement = document.getElementById(
+        "frame-critical-damage"
+    ) as HTMLSpanElement;
+    const weight = document.getElementById("frame-weight") as HTMLSpanElement;
+
+    positionElement.innerText = piece.position.toString();
+    healthElement.innerText = Math.round(piece.health).toString();
+    healthMaxElement.innerText = piece.maxHealth.toExpression();
+    attackElement.innerText = piece.attackDamage.toExpression();
+    defenseElement.innerText = piece.defense.toExpression();
+    criticalElement.innerText = Math.round(piece.criticalRate.result * 100).toString();
+    criticalDamageElement.innerText = Math.round(piece.criticalDamage.result * 100).toString();
+    weight.innerText = piece.weight.toExpression();
+
+    pieceFrameElement.classList.add(piece.team + "-piece");
+    pieceFrameElement.classList.remove(Team.enemy(piece.team) + "-piece");
+
+    const effectsListElement = document.getElementById("effect-list") as HTMLUListElement;
+    effectsListElement.innerHTML = "";
+    if (piece.statusEffects.length === 0) effectsListElement.innerHTML = "暂无";
+    else
+        for (let index = 0; index < piece.statusEffects.length; index++) {
+            let effect = piece.statusEffects[index];
+            const effectElement = document.createElement("li");
+            if (!effect.available) {
+                // 直接删除
+                piece.statusEffects.splice(index, 1);
+                index--;
+                continue;
+            }
+            effectElement.innerHTML = `<span style="color: ${
+                effect.isNegative() ? "darkred" : "black"
+            }">${effect.displayName()}</span>(${
+                effect.expire === Infinity
+                    ? "持久"
+                    : "剩余" + (effect.expire - round + 1).toString() + "轮"
+            }): <span class="description-text">${effect.description}</span>`;
+            effectsListElement.appendChild(effectElement);
+        }
+}
+
+export function showDefaultPiece() {
+    const currentTeam = getCurrentTeam();
+    const master = getTeamMaster(currentTeam);
+    if (master) showPiece(master);
+}
+/**
+ * 维护棋子的相关策略。
+ */
+
+import { DefaultMovingBehaviors } from "./defaultMovingBehaviors.js";
+import { Piece } from "./piece.js";
+import { Position } from "./position.js";
+import { Serializable, TypeRegistry } from "./serialize.js";
+
+/**
+ * 棋子移动策略。
+ * 通过 getPosition 方法获取棋子可以移动到的全部位置。
+ */
+export abstract class PieceMovingStrategy extends Serializable {
+    abstract getPosition(piece: Piece): Position[];
+}
+
+@TypeRegistry.register()
+export class DefaultPieceMovingStrategy extends PieceMovingStrategy {
+    getPosition(piece: Piece): Position[] {
+        return DefaultMovingBehaviors.auto(piece, false)(piece);
+    }
+}
+
+export abstract class PieceAttackingStrategy extends Serializable {
+    abstract getPosition(piece: Piece): Position[];
+}
+
+@TypeRegistry.register()
+export class DefaultPieceAttackingStrategy extends PieceAttackingStrategy {
+    getPosition(piece: Piece): Position[] {
+        return DefaultMovingBehaviors.auto(piece, true)(piece);
+    }
+}
+
+export abstract class PieceActionStrategy extends Serializable {
+    abstract attack(a: Piece, b: Piece): boolean;
+}
+
+@TypeRegistry.register()
+export class DefaultPieceActionStrategy extends PieceActionStrategy {
+    attack(piece: Piece, target: Piece): boolean {
+        if (target.team === piece.team) return false; // 不能攻击友军
+        let damageObject = piece.SimulateAttack(target);
+        damageObject.apply();
+        return true;
+    }
+}import { ActionCard } from "./actionCard.js";
+import { getCurrentTeam } from "./round.js";
+
+export class Player {
+    actionCards: ActionCard[] = [];
+    team: string = "none";
+
+    constructor(team: string) {
+        this.team = team;
+    }
+
+    /**
+     * 展示当前玩家的行为卡
+     * @param usable 本轮是否可以使用展示的行为卡
+     * @returns
+     */
+    showActionCards(usable: boolean = true) {
+        let targetUlElement = document.getElementById(this.team + "-action-cards-list");
+        if (!targetUlElement) return;
+        targetUlElement.innerHTML = "";
+
+        /*
+        一个行为卡的 HTML 大致如下
+        <div class="action-card-frame">
+            <div class="action-card-title">名称</div>
+            <div class="action-card-description">描述</div>
+            <div class="action-card-footer">持续 ? 回合</div>
+        </div>
+        */
+
+        for (let i = 0; i < this.actionCards.length; i++) {
+            let targetLiElement = document.createElement("li");
+            targetLiElement.innerHTML = `<div class="action-card-frame">
+<div class="action-card-title">${this.actionCards[i].name}</div>
+<div class="action-card-description">${this.actionCards[i].description}</div>
+</div>`;
+            targetUlElement.appendChild(targetLiElement);
+
+            // const singleOffsetX = 15; // 单个卡牌的横向偏移量，单位：1%
+
+            // // 添加一定的偏移
+            // let offsetX = i * singleOffsetX; // 横向偏移量的绝对值
+            // targetLiElement.style.left = offsetX + "%";
+
+            // 点击后向上位移或移回原位；特别地，对于可用卡牌，选中后再次点击则会使用。
+            // 当选中了一个卡牌，则会复原当前所有的已选中卡牌
+            targetLiElement.addEventListener("click", () => {
+                const reset = (element: HTMLLIElement) => {
+                    element.style.transform = `translateY(0)`;
+                    element.setAttribute("selected", "false");
+                }
+                // 使用元素的 selected 属性标记是否不在原位
+                let selected = targetLiElement.getAttribute("selected") === "true"; // 为 false 或不存在，说明处于原位
+                if (selected) {
+                    if (usable) {
+                        this.actionCards[i].apply();
+                        this.actionCards.splice(i, 1);
+                        this.showActionCards();
+                    }
+                    reset(targetLiElement);
+                } else {
+                    // 复原无关卡牌
+                    document.querySelectorAll(".action-cards-list li").forEach((element) => {
+                        if (element.getAttribute("selected") === "true") {
+                            reset(element as HTMLLIElement);
+                        }
+                    })
+                    targetLiElement.style.transform = `translateY(-20%)`; // 选中
+                    targetLiElement.setAttribute("selected", "true");
+                }
+            });
+        }
+    }
+}
+import { pieces, Piece } from "./piece.js";
+import { PositionedItem } from "./positionedItem.js";
+
+// 用于计算屏幕坐标的量
+var gameboardRealWidth: number;
+var gameboardRealHeight: number;
+var gameboardLeftTopX: number;
+var gameboardLeftTopY: number;
+var gameboardGridWidthPx: number;
+var gameboardGridHeightPx: number;
+var gameboardImageWidth: number;
+var gameboardImageHeight: number;
+const gameboardGridWidth = 9;
+const gameboardGridHeight = 10;
+const gameboardImageMarginTop = 39 / 603;
+const gameboardImageMarginLeft = 39 / 545;
+const gameboardImageMarginRight = 35 / 545;
+const gameboardImageMarginBottom = 44 / 603;
+
+export class Position extends PositionedItem {
+    /**
+     * 屏幕坐标的X轴，单位为像素。
+     * 请不要直接访问这个值，而是通过screenX访问器访问，否则可能会获得未更新的坐标或NaN。
+     */
+    private _screenX: number = NaN;
+    /**
+     * 屏幕坐标的Y轴，单位为像素。
+     * 请不要直接访问这个值，而是通过screenY访问器访问，否则可能会获得未更新的坐标或NaN。
+     */
+    private _screenY: number = NaN;
+    /**
+     * 网格坐标的X轴，单位为格点。
+     * 网格坐标不会随着屏幕坐标的变化而变化。
+     * 构造函数会自动将屏幕坐标转换为网格坐标，所以该值实际上不会为NaN。
+     */
+    x: number = NaN;
+    /**
+     * 网格坐标的Y轴，单位为格点。
+     * 网格坐标不会随着屏幕坐标的变化而变化。
+     * 构造函数会自动将屏幕坐标转换为网格坐标，所以该值实际上不会为NaN。
+     */
+    y: number = NaN;
+
+    constructor(x: number, y: number, grid = true) {
+        super();
+        if (grid) {
+            this.fromGrid(x, y);
+        } else {
+            this.fromScreen(x, y);
+        }
+    }
+
+    /**
+     * 重新计算棋盘的大小，以进行正确的坐标转换。
+     * 该方法会在查询屏幕坐标时自动调用，无需手动调用。
+     */
+    static _calculateGameboardSize = () => {
+        // 读取棋盘图片实际显示大小
+        let gameboardImage = document.querySelector("#gameboard .background img") as HTMLImageElement;
+
+        gameboardImageWidth = gameboardImage.width;
+        gameboardImageHeight = gameboardImage.height;
+
+        // 不计图片边距的大小
+        gameboardRealWidth = gameboardImageWidth * (1 - gameboardImageMarginLeft - gameboardImageMarginRight);
+        gameboardRealHeight = gameboardImageHeight * (1 - gameboardImageMarginTop - gameboardImageMarginBottom);
+
+        // 获取棋盘左上角格点实际位置（像素）
+        gameboardLeftTopX = gameboardImage.offsetLeft + gameboardImageMarginLeft * gameboardImageWidth;
+        gameboardLeftTopY = gameboardImage.offsetTop + gameboardImageMarginTop * gameboardImageHeight;
+
+        // 获取棋盘格点实际大小（像素）
+        gameboardGridWidthPx = gameboardRealWidth / (gameboardGridWidth - 1);
+        gameboardGridHeightPx = gameboardRealHeight / (gameboardGridHeight - 1);
+    };
+
+    static of(source: PositionedItem) {
+        return new Position(source.x, source.y, true);
+    }
+
+    fromScreen(x: number, y: number) {
+        this._screenX = x;
+        this._screenY = y;
+        let leftClientDistance = this._screenX - gameboardLeftTopX;
+        let bottomClientDistance = this._screenY - gameboardLeftTopY;
+        let topClientDistance = gameboardRealHeight - bottomClientDistance;
+        this.x = leftClientDistance / gameboardGridWidthPx;
+        this.y = topClientDistance / gameboardGridHeightPx;
+    }
+
+    fromGrid(x: number, y: number) {
+        this.x = x;
+        this.y = y;
+    }
+
+    _calculateGridPos() {
+        // 根据实际坐标计算网格坐标
+        let leftClientDistance = this._screenX - gameboardLeftTopX;
+        let bottomClientDistance = this._screenY - gameboardLeftTopY;
+        let topClientDistance = gameboardRealHeight - bottomClientDistance;
+        this.x = leftClientDistance / gameboardGridWidthPx;
+        this.y = topClientDistance / gameboardGridHeightPx;
+    }
+
+    _calculateScreenPos() {
+        // 根据网格坐标计算实际坐标
+        let leftClientDistance = this.x * gameboardGridWidthPx;
+        let topClientDistance = gameboardRealHeight - this.y * gameboardGridHeightPx;
+        this._screenX = leftClientDistance + gameboardLeftTopX;
+        this._screenY = topClientDistance + gameboardLeftTopY;
+    }
+
+    getGridPos() {
+        return [this.x, this.y];
+    }
+
+    getScreenPos() {
+        this._calculateScreenPos();
+        return [this._screenX, this._screenY];
+    }
+
+    get screenX() {
+        this._calculateScreenPos();
+        return this._screenX;
+    }
+    get screenY() {
+        this._calculateScreenPos();
+        return this._screenY;
+    }
+
+    nearby(other: Position, distance = null) {
+        if (distance === null) return this.integerGrid().equals(other.integerGrid());
+        else return this.squareEuclideanDistance(other) < distance * distance;
+    }
+
+    manhattanDistance(other: Position) {
+        return Math.abs(this.x - other.x) + Math.abs(this.y - other.y);
+    }
+    squareEuclideanDistance(other: Position) {
+        return Math.pow(this.x - other.x, 2) + Math.pow(this.y - other.y, 2);
+    }
+    euclideanDistance(other: Position) {
+        return Math.sqrt(this.squareEuclideanDistance(other));
+    }
+    chebyshevDistance(other: Position) {
+        return Math.max(Math.abs(this.x - other.x), Math.abs(this.y - other.y));
+    }
+
+    /**
+     * @param toZero 为true时，正偏移将倾向于远离0，而非数值更大
+     * @returns
+     */
+    integerGrid(offsetX = 0, offsetY = 0, toZero = false) {
+        if (toZero) {
+            offsetX *= Math.sign(this.x);
+            offsetY *= Math.sign(this.y);
+        }
+        return new Position(Math.floor(this.x + 0.5 + offsetX), Math.floor(this.y + 0.5 + offsetY));
+    }
+
+    equals(other: Position) {
+        return this.x == other.x && this.y == other.y;
+    }
+
+    add(other: PositionedItem) {
+        return new Position(this.x + other.x, this.y + other.y, true);
+    }
+
+    get owner(): Piece | null {
+        for (let piece of pieces) {
+            if (piece.position.x == this.x && piece.position.y == this.y) {
+                return piece;
+            }
+        }
+        return null;
+    }
+
+    toString() {
+        if (0 <= this.x && this.x <= 8 && 0 <= this.y && this.y <= 9) {
+            let letterX = String.fromCharCode("A".charCodeAt(0) + this.x);
+            let numberY = this.y.toString();
+            return letterX + numberY;
+        }
+        return `(${this.x}, ${this.y})`;
+    }
+}
+export class PositionedItem {
+    x: number = 0;
+    y: number = 0;
+}
+let _seed = 0;
+
+const _int32 = (x: number) => x & 0xffffffff;
+
+class RandomGenerator {
+    seed: number;
+    mt: number[] = [];
+    mti: number = 0;
+
+    constructor(seed: number) {
+        this.seed = seed;
+        this.mt = new Array(624);
+
+        this.mt[0] = seed;
+        for (let i = 1; i < 624; i++) {
+            this.mt[i] = _int32(1812433253 * (this.mt[i - 1] ^ (this.mt[i - 1] >>> 30)) + i);
+        }
+    }
+
+    extract() {
+        if (this.mti == 0) this.twist();
+
+        let y = this.mt[this.mti];
+        y = y ^ (y >>> 11);
+        y = y ^ ((y << 7) & 2636928640);
+        y = y ^ ((y << 15) & 4022730752);
+        y = y ^ (y >>> 18);
+        this.mti = (this.mti + 1) % 624;
+        return _int32(y);
+    }
+
+    random() {
+        return this.extract() * 2.3283064365386963e-10 + 0.5;  // 2.328e-10 = 2^(-32)
+    }
+
+    twist() {
+        for (let i = 0; i < 624; i++) {
+            let y = _int32((this.mt[i] & 0x80000000) + (this.mt[(i + 1) % 624] & 0x7fffffff)) >>> 1;
+            this.mt[i] = this.mt[(i + 397) % 624] ^ (y >> 1);
+
+            if (y % 2 != 0) {
+                this.mt[i] = this.mt[i] ^ 0x9908b0df;
+            }
+        }
+    }
+}
+let defaultGenerator: RandomGenerator = new RandomGenerator(_seed);
+
+export function seed(value: number | null = null) {
+    if (value === null) {
+        value = Date.now();
+    }
+    _seed = value;
+    defaultGenerator = new RandomGenerator(_seed);
+}
+
+export function random() {
+    return defaultGenerator.random();
+}
+
+export function randomInt(min: number, max: number) {
+    return Math.floor(random() * (max - min + 1)) + min;
+}
+
+export function fixedRandom(...data: (string | number)[]) {
+    const toNumber = (s: string | number) => {
+        if (typeof s === "number") return s;
+        let result = 0;
+        for (let i = 0; i < s.length; i++) {
+            result += s.charCodeAt(i);
+        }
+        return result;
+    };
+    let fixedSeed = _seed + data.map(toNumber).reduce((a, b) => a + b);
+    let rand = new RandomGenerator(fixedSeed).random();
+    console.log(data, "->"+rand.toString());
+    return rand;
+}
+import { pieces } from "./piece.js";
+import { showDefaultPiece } from "./pieceFrame.js";
+import { saveCurrent } from "./save.js";
+import { runAllSchedules } from "./schedule.js";
+import { getPlayerFromTeam, Team } from "./team.js";
+
+export let round = 0;
+export const roundMap = [Team.Red, Team.Black];
+
+export function nextRound() {
+    saveCurrent();
+    round++;
+    newRound();
+}
+
+/**
+ * 新的一轮次开始时，执行部分初始操作
+ */
+export function newRound() {
+    console.log(`Round ${round}`);
+
+    runAllSchedules();
+    // 展示技能卡
+    getPlayerFromTeam(getCurrentTeam()).showActionCards();
+    getPlayerFromTeam(Team.enemy(getCurrentTeam())).showActionCards(false);
+
+    // 轮次提示
+    let round_tip = document.querySelector("#round-tip > span") as HTMLElement;
+    round_tip.innerText = getCurrentTeam();
+
+    // 展示默认棋子
+    showDefaultPiece();
+
+    pieces.forEach((p) => {
+        // 执行状态效果持续动作
+        p.statusEffects.forEach((eff) => {
+            eff.runContinuedAction(p);
+        });
+
+        // 重绘棋子
+        p.draw();
+    });
+}
+
+export function getCurrentTeam() {
+    return roundMap[round % 2];
+}
+
+export function setRound(r: number) {
+    round = r;
+}
+import { modifyPieces, Piece, pieces } from "./piece.js";
+import { Player } from "./player.js";
+import { newRound, nextRound, round, setRound } from "./round.js";
+import { getPlayerFromTeam, mergePlayerFromTeam, Team } from "./team.js";
+import { deepCopy, deepMerge, notNull } from "./utils.js";
+import { DefaultMovingBehaviors, filterGrids } from "./defaultMovingBehaviors.js";
+import { getCallback, getCallbackRegistryKey } from "./callbackRegister.js";
+import { Trigger, TriggerManager } from "./trigger.js";
+import { schedules, Schedule } from "./schedule.js";
+import { StatusEffect } from "./effect.js";
+import { Serializable, TypeRegistry } from "./serialize.js";
+
+const saves: Save[] = [];
+
+@TypeRegistry.register()
+export class Save extends Serializable {
+    pieces: Piece[] = [];
+    players: { [key: string]: Player } = {};
+    round: number = 0;
+    triggers: Trigger[] = [];
+    schedules: Schedule[] = [];
+
+    constructor(
+        pieces: Piece[],
+        players: { [key: string]: Player },
+        round: number,
+        triggers: Trigger[],
+        schedules: Schedule[]
+    ) {
+        super();
+        this.pieces = deepCopy(pieces);
+        this.players = deepCopy(players);
+        this.round = round;
+        this.triggers = deepCopy(triggers);
+        this.schedules = deepCopy(schedules);
+    }
+
+    /**
+     * 将存档转换为 JSON 字符串。
+     * 这个过程可以通过 parse 方法无损复原。
+     */
+    stringify() {
+        let str = JSON.stringify(this, (key, value) => {
+            if (value instanceof Serializable) {
+                return value.serialize();
+            }
+            if (typeof value === "function") {
+                let registryKey = getCallbackRegistryKey(value);
+                if (registryKey) {
+                    return "<REGISTERED FUNCTION>" + registryKey;
+                }
+                console.warn("未注册的函数：" + value.name);
+                return "<STRINGIFIED FUNCTION>" + value.toString();
+            }
+            return value;
+        });
+        return str;
+    }
+
+    /**
+     * 将 JSON 字符串转换为存档。
+     *
+     * @param str JSON 字符串
+     */
+    static parse(str: string) {
+        let obj = JSON.parse(str, (key, value) => {
+            if (typeof value === "string") {
+                if (value.startsWith("<REGISTERED FUNCTION>")) {
+                    let key = value.substring("<REGISTERED FUNCTION>".length);
+                    return getCallback(key);
+                } else if (value.startsWith("<STRINGIFIED FUNCTION>")) { 
+                    let code = value.substring("<STRINGIFIED FUNCTION>".length);
+                    return new Function(code);
+                }
+            }
+            return value;
+        });
+        let result = TypeRegistry.revive(obj);
+
+        if (result instanceof Save) {
+            return result;
+        } else {
+            throw new Error("Cannot load save.");
+        }
+    }
+
+    /**
+     * 将存档应用到当前游戏局面
+     */
+    apply() {
+        mergePlayerFromTeam(Team.Black, this.players[Team.Black]);
+        mergePlayerFromTeam(Team.Red, this.players[Team.Red]);
+        deepMerge(pieces, this.pieces, true);
+        setRound(this.round);
+        newRound(); // 刷新显示
+    }
+}
+
+/**
+ * 保存当前的游戏局面。
+ */
+export function saveCurrent() {
+    let save = new Save(
+        pieces,
+        {
+            [Team.Red]: getPlayerFromTeam(Team.Red),
+            [Team.Black]: getPlayerFromTeam(Team.Black),
+        },
+        round,
+        TriggerManager.triggers,
+        schedules
+    );
+    saves.push(save);
+}
+
+/**
+ * 回退一次操作
+ */
+export function recall() {
+    if (saves.length === 0) return;
+    if (round === 0) return;
+    // 假设当前位于 Round n，玩家尚未操作。
+    // 当前的 saves 中，上一个元素应该是 Round n-1，存储着玩家现在看见的局面。
+    // 希望玩家位于 Round n-1，看到 Round n-1 开始的局面。
+    saves.pop();
+    // 现在上一个元素是 Round n-2，存储着 Round n-1 开始的局面。
+    if (saves.length === 0) throw new Error("无法找到上一个局面");
+    let save = saves[saves.length - 1];
+    save.round = round - 1;  // Round n-1 初始。
+    save.apply();
+}
+
+/**
+ * 把当前状态存储到 LocalStorage 中
+ */
+export function storeSave() {
+    console.log("storeSave");
+    let save = saves[saves.length - 1];
+    localStorage.setItem("save", save.stringify());
+    console.log("str: ", localStorage.getItem("save"));
+}
+
+export function loadSave() {
+    let str = localStorage.getItem("save");
+    if (str === null) return;
+    let save = Save.parse(str);
+    save.apply();
+}
+import * as round from "./round.js";
+
+export var schedules: Schedule[] = [];
+
+export class Schedule {
+    time: number;
+    action: () => void;
+
+    constructor(time: number, action: () => void) {
+        this.time = time;
+        this.action = action;
+    }
+}
+
+export function schedule(action: () => void, time: number, timeOffset: number | null = null) {
+    schedules.push(new Schedule(time + (timeOffset ? timeOffset + round.round : 0), action));
+}
+
+export function scheduleTimeout(action: () => void, time: number, timeOffset: number | null = -1) {
+    schedule(action, time, timeOffset);
+}
+
+export function runAllSchedules() {
+    // 执行所有计划
+    for (const schedule of schedules) {
+        if (schedule.time <= round.round) {
+            schedule.action();
+            //remove
+            schedules.splice(schedules.indexOf(schedule), 1);
+        }
+    }
+}
+
+export function setSchedules(schedules_: Schedule[]) {
+    schedules = schedules_;
+}
+import { Position } from "./position.js";
+import { Piece, pieces } from "./piece.js";
+import { getCurrentTeam, nextRound } from "./round.js";
+import { showPiece, showDefaultPiece } from "./pieceFrame.js";
+import { runAllSchedules } from "./schedule.js";
+
+/**
+ * 返回一个对象本身。
+ * //并没有什么用途，只是多套一层会显得很高级
+ * 用于统一直接传参和递推传参。
+ */
+const returnSelf = (obj: any) => obj;
+
+/**
+ * 正在进行的选择器。
+ */
+var currentSelection: SelectionManager | null = null;
+
+/**
+ * 用于监听棋子的点击事件。
+ * 将在棋子的eventListener中调用。见Piece.init函数(piece.ts)
+ * 如果当前不是在选择棋子则忽略，由其他监听器处理。
+ * @param piece 被点击的棋子。
+ * @returns 是否处理了该点击事件。
+ */
+var PieceClickListener = (piece: Piece) => {
+    let currentSingleSelection = currentSelection?.current;
+    let item = new SelectedItem(piece);
+    if (
+        currentSingleSelection instanceof SingleSelection && // 一并排除 null 和 undefined
+        currentSelection
+    ) {
+        if (currentSingleSelection.type == ItemType.Piece) {
+            // 如果当前不是在选择棋子则忽略
+            if (piece.selected) {
+                // 如果选择已经被选中的棋子，则视为取消选择。
+                piece.selected = false;
+                currentSelection?.stop();
+            } else if (currentSingleSelection.check(item)) {
+                piece.selected = true;
+                let r = null;
+                if (currentSingleSelection.nextCallback != null) r = currentSingleSelection.nextCallback(item);
+                currentSelection?.next(r);
+                return true;
+            } else if (currentSingleSelection.temp && currentSingleSelection.autoCancel) {
+                // 如果当前选择器允许临时选择，则立即停止并开始替换项。
+                currentSelection.stop(false);
+                currentSingleSelection = currentSelection?.current;
+                if (currentSelection === null) return false; // 没有替换项
+                if (currentSingleSelection == null) return false; // 替换项不工作
+                if (currentSingleSelection.type !== ItemType.Piece) {
+                    // 不匹配
+                    if (currentSingleSelection.type === ItemType.Grid) {
+                        // 特别地，棋子可以退化成格点
+                        // 即允许替换为一次格点点击
+
+                        // 计算实际作用的结果
+                        let r = null;
+                        if (currentSingleSelection.nextCallback) {
+                            r = currentSingleSelection.nextCallback(new SelectedItem(piece.position));
+                        }
+                        currentSelection.next(r);
+                        return true;
+                    }
+                    return false;
+                }
+
+                // 进行选择
+                piece.selected = true;
+                let r = null;
+                if (currentSingleSelection.nextCallback) {
+                    r = currentSingleSelection.nextCallback(item);
+                }
+                currentSelection.next(r);
+                return true;
+            } else {
+                if (currentSingleSelection.autoCancel) currentSelection?.stop();
+            }
+        }
+    }
+    return false;
+};
+
+/**
+ * 用于监听屏幕的点击事件。
+ * 将在棋盘的eventListener中调用。翻multiplayer.ts去，我记不得在哪。
+ * @param position 被点击的位置。
+ * @returns 是否处理了该点击事件。
+ */
+var GameboardClickListener = (position: Position) => {
+    let currentSingleSelection = currentSelection?.current;
+    let item = new SelectedItem(position);
+    if (currentSingleSelection instanceof SingleSelection && currentSingleSelection.type == ItemType.Grid) {
+        if (currentSingleSelection.check(item)) {
+            let r = null;
+            if (currentSingleSelection.nextCallback != null) r = currentSingleSelection.nextCallback(item);
+            currentSelection?.next(r);
+            return true;
+        } else {
+            if (currentSingleSelection.autoCancel) currentSelection?.stop();
+        }
+    }
+    return false;
+};
+
+/**
+ * 选择器。
+ *
+ * 选择器用于组织单选项（SingleSelection，见下文）。
+ */
+export class SelectionManager {
+    /**
+     * 完成选择之后将会调用的回调函数。
+     * 仅当所有单选项都正确选择后调用，中断选择不会调用该函数。
+     * 当此项为null时，完成选择后不会有更多行为。
+     */
+    private afterSelection: ((results: SelectedItem[]) => void | any) | null = null;
+    /**
+     * 选择中断或取消之后将会调用的回调函数。
+     * 当此项为null时，选择中断或取消后不会有更多行为。
+     */
+    private oncancelCallback: ((results: SelectedItem[]) => void | any) | null = null;
+    /**
+     * 回调函数的数组，每一项均用于递推计算下一个单选项。
+     * 每个回调函数输入先前的选择结果作为参数，返回下一个单选项。
+     *
+     * 特别地，如果数组项直接为一个单选项(SingleSelection)对象，则会省略调用的过程，恒定使用该单选项。
+     */
+    private recursions: (((past: SelectedItem[]) => SingleSelection) | SingleSelection)[];
+    /**
+     * 当前单选项在recursions数组中的索引。
+     * 可以用于确认当前的选择进度。
+     */
+    private index: number = 0;
+    /**
+     * 一个布尔值，表示选择器是否选择一次就结束。
+     * @see this.cycle
+     */
+    private doOnce: boolean;
+    /**
+     * 当前正在进行选择的单选项。当选择器停止后，该值为null。
+     */
+    public current: SingleSelection | null = null;
+    /**
+     * 直至现在所有选择的结果。
+     */
+    private results: SelectedItem[] = [];
+    /**
+     * 选择器停止后用于替换的另一个选择器。
+     * 如果为null，则不继续应用任何选择器
+     */
+    private _replaceWithFinally: SelectionManager | null = null;
+    
+    public temp: boolean = false;
+
+    constructor(...singleSelections: SingleSelection[]) {
+        this.recursions = singleSelections;
+        this.doOnce = true;
+        this.reset();
+    }
+
+    final(afterSelection: (results: SelectedItem[]) => void | any) {
+        this.afterSelection = afterSelection;
+        return this;
+    }
+
+    oncancel(oncancel: (results: SelectedItem[]) => void | any) {
+        this.oncancelCallback = oncancel;
+        return this;
+    }
+
+    then(recursion: ((past: SelectedItem[]) => SingleSelection) | SingleSelection) {
+        this.recursions.push(recursion);
+        return this;
+    }
+
+    once(once = true) {
+        this.doOnce = once;
+        return this;
+    }
+
+    cycle() {
+        return this.once(false);
+    }
+
+    replaceWithFinally(manager: SelectionManager | null) {
+        this._replaceWithFinally = manager;
+        return this;
+    }
+
+    reset() {
+        this.index = 0;
+        this.results = [];
+        let first = this.recursions[this.index];
+        this.current = first instanceof SingleSelection ? first : first([]);
+        // this.current.tip();
+    }
+
+    next(result: SelectedItem) {
+        this.results.push(result);
+        if (this.index >= this.recursions.length - 1) {
+            this.stop(true);
+        } else {
+            this.index++;
+            let future = this.recursions[this.index];
+            this.current = future instanceof SingleSelection ? future : future(this.results);
+            this.current.tip();
+        }
+    }
+
+    stop(done = false) {
+        // 删除现有的提示
+        let action_bar = document.querySelector("#action-bar");
+        if (action_bar instanceof HTMLElement) action_bar.style.display = "none";
+        let action_bar_span = document.querySelector("#action-bar span");
+        if (action_bar_span instanceof HTMLElement) action_bar_span.innerText = "";
+
+        let results = this.results;
+        this.reset();
+        if (this.doOnce) currentSelection = null;
+        else this.current?.tip();
+        if (this.afterSelection != null && done) this.afterSelection(results);
+        if (this.oncancelCallback != null && !done) this.oncancelCallback(results);
+        console.log("stop: ", this);
+
+        pieces.forEach((p) => (p.selected = false));
+
+        if (this._replaceWithFinally != null) {
+            this._replaceWithFinally.reset();
+            setCurrentSelection(this._replaceWithFinally);
+        }
+    }
+
+    setTemp(temp = true) {
+        this.temp = temp;
+        return this;
+    }
+}
+
+/**
+ * @description: Describe the type of single-selection item
+ */
+export class ItemType {
+    static Grid = "grid";
+
+    static Piece = "piece";
+
+    static Custom = "custom";
+}
+
+/**
+ * @property {string} type - the type of the item
+ * @property {Position|Piece} data - the selected position/piece
+ */
+export class SelectedItem {
+    data: Position | Piece;
+    type: string;
+
+    constructor(data: Position | Piece, type = null) {
+        if (type != null) this.type = type;
+        else {
+            if (data instanceof Position) this.type = ItemType.Grid;
+            else if (data instanceof Piece) this.type = ItemType.Piece;
+            else this.type = ItemType.Custom;
+        }
+        this.data = data;
+    }
+
+    position() {
+        return this.data instanceof Position ? this.data : this.data.position;
+    }
+}
+
+/**
+ * @property {Array{Position}} positions - the positions to be highlighted
+ * @property {Function} checkCallback - a function to check if the selection is valid
+ * @property {string} type - the type of the item
+ * @property {string} description - will show on action bar
+ * @property {Function?} nextCallback - a function to be called when the selection is valid
+ * @property {boolean} autoCancel - whether to cancel the selection automatically when the selection is not valid
+ */
+export class SingleSelection {
+    positions: Position[];
+    type: string;
+    description: string;
+    checkCallback: ((item: SelectedItem) => boolean) | null;
+    autoCancel: boolean;
+    nextCallback: Function | null;
+    /**
+     * 是否将选项标记为“临时”。
+     * 临时选项被取消后，则会把取消操作直接应用到进一步操作上（若有）。
+     */
+    temp: boolean = false;
+
+    constructor(
+        positions: Position[],
+        type: string,
+        description: string | null = null,
+        checkCallback: ((item: SelectedItem) => boolean) | null = null,
+        nextCallback: Function | null = null,
+        autoCancel = true
+    ) {
+        this.positions = positions;
+        this.type = type;
+        this.description =
+            description === null ? (type === ItemType.Piece ? "请选择一个棋子" : "请选择一个格点") : description;
+        this.checkCallback = checkCallback;
+        this.autoCancel = autoCancel;
+        this.nextCallback = nextCallback === null ? returnSelf : nextCallback;
+    }
+
+    check(item: SelectedItem) {
+        if (this.checkCallback != null) {
+            return this.checkCallback(item);
+        } else {
+            return this.positions.some((pos) => pos.nearby(item.position()));
+        }
+    }
+
+    tip() {
+        let element = document.querySelector("#action-bar span");
+        if (element instanceof HTMLElement) {
+            element.innerText = this.description;
+            if (element.parentElement instanceof HTMLElement) element.parentElement.style.display = "block";
+        }
+    }
+
+    setTemp(temp = true) {
+        this.temp = temp;
+        return this;
+    }
+}
+
+export class PieceMoveSelection extends SingleSelection {
+    constructor(piece: Piece) {
+        super(piece.destinations, ItemType.Piece);
+    }
+}
+
+export function setPieceClickListener(listener: (piece: Piece) => boolean) {
+    PieceClickListener = listener;
+}
+
+export function setGameboardClickListener(listener: (pos: Position) => boolean) {
+    GameboardClickListener = listener;
+}
+
+export function onPieceClick(piece: Piece) {
+    if (PieceClickListener != null) {
+        return PieceClickListener(piece);
+    }
+    return false;
+}
+
+export function onGameboardClick(pos: Position) {
+    if (GameboardClickListener != null) {
+        return GameboardClickListener(pos);
+    }
+    return false;
+}
+
+export function setCurrentSelection(selection: SelectionManager | null) {
+    currentSelection = selection;
+    currentSelection?.current?.tip();
+}
+
+export function getCurrentSelection() {
+    return currentSelection;
+}
+
+export function cancelCurrentSelection(continueMainSelection = true) {
+    currentSelection?.stop(false);
+    if (continueMainSelection) {
+        setCurrentSelection(mainSelection);
+    }
+}
+
+const cleanMainSelection = () => {
+    showDefaultPiece();
+    pieces.forEach((piece) => piece.exitDamageFrame());
+    const hiPos = document.getElementById("highlight-positions");
+    if (hiPos instanceof HTMLElement) {
+        hiPos.innerHTML = "";
+    }
+}
+
+/**
+ * @description 主要选择器，在几乎整个游戏周期内使用，用于移动棋子和控制攻击
+ */
+export const mainSelection = new SelectionManager(
+    new SingleSelection([], ItemType.Piece, "请选择要移动的棋子", (piece) => true)
+)
+    .then((past) => {
+        let selectedPiece = past[0].data as Piece;
+        if (getCurrentTeam() !== selectedPiece.team) {
+            showPiece(selectedPiece);
+            return new SingleSelection([], ItemType.Piece, "查看棋子信息", (grid) => false).setTemp();
+        }
+        let validMove = selectedPiece.destinations;
+        let validTarget = selectedPiece.attackTargets.filter((pos) => {
+            const piece = pos.integerGrid().owner;
+            return piece !== null && piece.team !== selectedPiece.team;
+        });
+        showPiece(selectedPiece);
+
+        for (const pos of validTarget) {
+            const piece = pos.integerGrid().owner;
+            if (piece === null) continue;
+            const damage = selectedPiece.SimulateAttack(piece);
+            piece.damageFrame(damage);
+        }
+
+        const highlightPosition = (pos: Position) => {
+            const element = document.createElement("div");
+            element.classList.add("highlight-position", "blink");
+
+            const x = pos.screenX;
+            const y = pos.screenY;
+
+            element.style.left = `${x}px`;
+            element.style.top = `${y}px`;
+            document.getElementById("highlight-positions")?.appendChild(element);
+        };
+
+        validMove.forEach(highlightPosition);
+        validTarget.forEach(highlightPosition);
+
+        return new SingleSelection(
+            validMove.concat(validTarget),
+            ItemType.Grid,
+            "请选择要移动到的位置",
+            (selectedGrid) => {
+                let pos = selectedGrid.data as Position;
+                if (pos.integerGrid().owner !== null) {
+                    return validTarget.some((item) => item.nearby(pos));
+                } else {
+                    return validMove.some((item) => item.nearby(pos));
+                }
+            }
+        );
+    })
+    .final((results) => {
+        let selectedPiece = results[0].data as Piece;
+        let selectedTarget = (results[1].data as Position).integerGrid();
+        let success = false;
+
+        if (selectedTarget.owner !== null) {
+            success = selectedPiece.attack(selectedTarget.owner);
+            console.log(selectedPiece, "attack", selectedTarget.owner, success);
+        } else {
+            success = selectedPiece.move(selectedTarget);
+            console.log(selectedPiece, "move", selectedTarget, success);
+        }
+
+        if (success) {
+            nextRound();
+            runAllSchedules();
+        }
+        cleanMainSelection();
+    })
+    .oncancel(cleanMainSelection)
+    .cycle();
+/**
+ * 处理对象的序列化与反序列化。
+ * 可以配合 JSON 模块使用。
+ */
+
+/**
+ * 用于处理循环引用。
+ * 作为序列化时的上下文。会为每个对象记录 id。
+ */
+class CircularRefManager {
+    private currentId: number = 0;
+    private objectToId = new WeakMap<object, number>();
+    private idToObject = new Map<number, object>();
+
+    hasObject(obj: object): boolean {
+        return this.objectToId.has(obj);
+    }
+    getId(obj: object): number {
+        if (!this.objectToId.has(obj)) {
+            this.objectToId.set(obj, this.currentId);
+            this.idToObject.set(this.currentId, obj);
+            this.currentId++;
+        }
+        return this.objectToId.get(obj) ?? -1;
+    }
+    getObject(id: number): object | undefined {
+        return this.idToObject.get(id);
+    }
+    // 添加对象到管理器中，返回 id
+    addObject(obj: object, id: number | null = null) {
+        id ??= this.currentId++;
+        this.objectToId.set(obj, id);
+        this.idToObject.set(id, obj);
+        return id;
+    }
+}
+
+export class SerializeError extends Error {
+    constructor(message: string) {
+        super(message);
+        this.name = "SerializeError";
+    }
+}
+
+/**
+ * 类型注册表，维护类型名称到构造函数的映射。
+ * 提供类型注册和反序列化时的对象恢复功能。
+ *
+ * @example 注册一个类，默认使用类名作为类型名
+ * @TypeRegistry.register()
+ * class MyClass extends Serializable {}
+ *
+ *
+ * @TypeRegistry.register("CustomType")
+ * class AnotherClass extends Serializable {}
+ */
+export class TypeRegistry {
+    static registry = new Map<string, new (...args: any[]) => any>();
+    /**
+     * 类装饰器工厂函数，用于将类注册到类型注册表。
+     * @param typeName 注册的类型名称，可选。若未提供，则使用类名。
+     * @returns 类装饰器
+     */
+    static register<T extends new (...args: any[]) => Serializable>(typeName?: string) {
+        return (ctor: T) => {
+            const name = typeName ?? ctor.name;
+            TypeRegistry.registry.set(name, ctor);
+            ctor.prototype.__registeredType = name;
+            return ctor;
+        };
+    }
+
+    /**
+     * 将 JSON 对象转换为对应的类型实例。
+     * 处理逻辑：
+     * 1. 若对象是数组，递归处理每个元素
+     * 2. 若对象含有 __registeredType 属性，视为 Serializable 类型：
+     *    a. 查找注册表中对应的构造函数
+     *    b. 若存在 fromJSON 方法（静态/实例），优先使用
+     *    d. 否则，若存在getConstructArgs，使用其返回值作为构造参数并直接返回
+     *    e. 否则，无参构造后赋值所有属性，最后调用afterRevive进行后处理
+     * 3. 普通对象直接返回
+     *
+     * @param obj 待转换的JSON对象
+     * @returns 转换后的对象实例
+     * @throws SerializeError 当遇到未注册类型或构造失败时
+     */
+    static revive(obj: any): any {
+        // if (obj === null || obj === undefined)  debugger;
+        let idToRevived = new Map<number, any>();
+
+        const revive_recursion = (obj: any): any => {
+            if (typeof obj !== "object" || obj === null) return obj;
+            if (Array.isArray(obj)) {
+                return obj.map(revive_recursion);
+            }
+            if (obj?.__registeredType) {
+                // 特判循环引用
+                if (obj.__registeredType === "__circleRef") {
+                    return obj;
+                }
+                // 转换为 Serializable
+                const Ctor = TypeRegistry.registry.get(obj.__registeredType);
+                if (Ctor) {
+                    // 如果存在 fromJson 方法，最优先使用
+                    // 静态方法
+                    if (typeof (Ctor as any).fromJSON === "function") {
+                        const result = (Ctor as any).fromJSON(obj);
+                        if (result instanceof Serializable) {
+                            if (obj?.__refId !== undefined) idToRevived.set(obj.__refId, result);
+                            return result;
+                        } else {
+                            throw new SerializeError(
+                                `Result of '${obj.__registeredType}'.fromJSON not extends Serializable.`
+                            );
+                        }
+                    }
+                    // 实例方法
+                    if (typeof Ctor.prototype.fromJSON === "function") {
+                        const result = Ctor.prototype.fromJSON.call(null, obj);
+                        if (result instanceof Serializable) {
+                            if (obj?.__refId !== undefined) idToRevived.set(obj.__refId, result);
+                            return result;
+                        } else {
+                            throw new SerializeError(
+                                `Result of '${obj.__registeredType}'.prototype.fromJSON not extends Serializable.`
+                            );
+                        }
+                    }
+
+                    let instance: any;
+                    if (Ctor.prototype.getConstructArgs) {
+                        // 尝试根据指定的构造函数参数创建实例
+                        const args = Ctor.prototype.getConstructArgs(obj);
+                        instance = new Ctor(...args);
+                    } else {
+                        try {
+                            // 尝试无参数构造
+                            instance = new Ctor();
+                        } catch {
+                            throw new SerializeError(
+                                `Cannot create instance of type '${obj.__registeredType}' with default constructor.`
+                            );
+                        }
+
+                        // 直接赋值所有属性
+                        Object.entries(obj).forEach(([key, value]) => {
+                            if (key !== "__registeredType" && key !== "__refId") {
+                                instance[key] = revive_recursion(value);
+                            }
+                        });
+
+                        // 可能需要调用 afterRevive 方法
+                        instance.afterRevive?.();
+                    }
+
+                    if (instance instanceof Serializable) {
+                        if (obj?.__refId !== undefined) idToRevived.set(obj.__refId, instance);
+                        return instance;
+                    } else {
+                        throw new SerializeError(
+                            `'${obj.__registeredType}' not extends Serializable.`
+                        );
+                    }
+                } else {
+                    console.log("Error on reviving object: ", obj);
+                    throw new SerializeError(
+                        `Cannot find type '${obj.__registeredType}' in registry.`
+                    );
+                }
+            } else {
+                let result: any = {};
+                for (let key in obj) {
+                    result[key] = revive_recursion(obj[key]);
+                }
+                if (obj?.__refId !== undefined) idToRevived.set(obj.__refId, result);
+                return result;
+            }
+        };
+        // 将 __toRefId 形式转化为循环引用形式，修改 obj 对象
+        const restore_ref_recursion = (obj: any): void => {
+            if (typeof obj !== "object" || obj === null) {
+                return;
+            }
+            if (Array.isArray(obj)) {
+                for (let i = 0; i != obj.length; i++) {
+                    if (obj[i]?.__toRefId !== undefined) {
+                        if (!idToRevived.has(obj[i].__toRefId)) {
+                            console.log("Error on restoring ref: ", obj);
+                            throw new SerializeError(
+                                `Cannot find object with refId ${obj[i].__toRefId}`
+                            );
+                        }
+                        obj[i] = idToRevived.get(obj[i].__toRefId);
+                    } else {
+                        restore_ref_recursion(obj[i]);
+                    }
+                }
+            } else {
+                for (let key in obj) {
+                    if (obj[key]?.__toRefId !== undefined) {
+                        if (!idToRevived.has(obj[key].__toRefId)) {
+                            console.log("Error on restoring ref: ", obj);
+                            throw new SerializeError(
+                                `Cannot find object with refId ${obj[key].__toRefId}`
+                            );
+                        }
+                        obj[key] = idToRevived.get(obj[key].__toRefId);
+                    } else {
+                        restore_ref_recursion(obj[key]);
+                    }
+                }
+            }
+        };
+        let revived = revive_recursion(obj);
+        restore_ref_recursion(revived);
+        return revived;
+    }
+}
+
+/**
+ * 可序列化类型基类，提供序列化框架。
+ * 派生类需注意：
+ * 1. 必须使用 @TypeRegistry.register 装饰器注册
+ * 2. 可选实现以下方法：
+ *    - toJSON(): 自定义序列化逻辑
+ *    - fromJSON(): 自定义反序列化逻辑
+ *    - getSerializeKeys(): 返回需要序列化的属性键
+ *    - getConstructArgs(): 提供构造参数
+ *    - afterRevive(): 反序列化后处理
+ *
+ * 如果违反了 (1)，反序列化之后将会变成最近的一层父类。
+ *
+ * 可以使用 serialize 和 deserialize 方法与合法 JSON 对象进行转换。
+ * 二者的具体行为见各自的文档。
+ */
+export abstract class Serializable {
+    /**
+     * 保留的键名，这些键名不会被序列化，而是用于存储类型信息等数据。
+     */
+    private static readonly RESERVED_KEYS = ["__registeredType"];
+    // static readonly __registeredType!: string;
+    /**
+     * 通过传入的 JSON 对象，获取构造函数需要的参数。
+     * 要求调用完构造函数即为需要的对象。
+     *
+     * @param obj JSON 对象
+     */
+    getConstructArgs?(obj: any): any[];
+    /**
+     * 部分情况下，在反序列化之后调用该方法。
+     * 具体见 TypeRegistry.revive()。
+     */
+    afterRevive?(): void;
+    /**
+     * 获取所有需要被存储在 JSON 中的键名。
+     */
+    getSerializeKeys?(): string[];
+    /**
+     * 自定义序列化逻辑。
+     * 如果有实现，会优先调用此方法。
+     */
+    toJSON?(): any;
+    /**
+     * 自定义反序列化逻辑。
+     * 如果有实现，会优先调用此方法。
+     * @param obj JSON 对象
+     */
+    static fromJSON?(obj: any): Serializable;
+
+    /**
+     * 通过给定上下文，序列化当前对象为 JSON 格式。
+     * 处理流程：
+     * 1. 若实现 toJSON，直接使用其返回值。
+     * 2. 否则如果有 getSerializeKeys，则包含对应键名。
+     * 3. 否则包含所有自有属性。
+     * 3. 递归序列化属性值。
+     *
+     * 使用以下方法处理循环引用：
+     * 1. 使用 WeakSet 记录已经序列化的对象。
+     * 2. 若对象已经序列化过，则返回：{
+     *      __registeredType: __circleRef,
+     *      __toRefId: (number id)
+     *  }
+     * 特别地，如果循环引用直接指向一个数组，无法处理。
+     *
+     * @returns 包含 __registeredType 的 JSON 对象。
+     * @throws SerializeError 当无法获取类型。
+     */
+    serialize(): any {
+        let context = new CircularRefManager();
+        let new_context = new CircularRefManager();
+        let need_record_id = new Set<number>(); // 需要记录在结果中的所有 __refId
+
+        const serialize_recursion = (obj: any): any => {
+            // 如果是平凡类型
+            if (typeof obj !== "object" || obj === null) {
+                return obj;
+            }
+
+            if (context.hasObject(obj)) {
+                // 循环引用
+                let id = context.getId(obj);
+                need_record_id.add(id); // 需要记录这个的 __refId
+                if (Array.isArray(obj)) {
+                    console.log(`Error occurred on following object: `, obj);
+                    throw new SerializeError(`Cannot serialize array with circular reference.`);
+                }
+                // 返回占位对象
+                return {
+                    __registeredType: "__circleRef",
+                    __toRefId: id,
+                };
+            }
+
+            let id = context.addObject(obj);
+
+            // 如果是数组
+            if (Array.isArray(obj)) {
+                // 递归序列化数组
+                let result = obj.map((item) => serialize_recursion(item));
+                new_context.addObject(result, id);
+                return result;
+            }
+
+            // 如果是 Serializable
+            if (obj instanceof Serializable) {
+                const typeName = (obj as any).__registeredType;
+                if (typeof typeName !== "string") {
+                    console.log(`Error occurred on following object: `, obj);
+                    throw new SerializeError("Cannot get type name from object.");
+                }
+
+                // 直接调用 toJSON 方法
+                if (obj.toJSON) {
+                    let res = serialize_recursion({
+                        __registeredType: typeName,
+                        ...obj.toJSON(),
+                    });
+                    new_context.addObject(res, id);
+                    return res;
+                }
+                // 筛选键名
+                const keys =
+                    obj.getSerializeKeys?.() ??
+                    Object.keys(obj).filter(
+                        (key) =>
+                            !Serializable.RESERVED_KEYS.includes(key) &&
+                            Object.prototype.hasOwnProperty.call(obj, key)
+                    );
+                let result: any = { __registeredType: typeName };
+                for (const key of keys) {
+                    result[key] = serialize_recursion((obj as any)[key]);
+                }
+                new_context.addObject(result, id);
+                return result;
+            }
+
+            // 如果是普通对象，递归深入
+            if (typeof obj === "object") {
+                let result: any = {};
+                for (const key in obj) {
+                    if (Object.prototype.hasOwnProperty.call(obj, key)) {
+                        result[key] = serialize_recursion(obj[key]);
+                    }
+                }
+                new_context.addObject(result, id);
+                return result;
+            }
+
+            // 其他类型，不做处理
+            return obj;
+        };
+        // 在结果中记录一些数的 id
+        const record_id_recursion = (obj: any): void => {
+            if (typeof obj !== "object" || obj === null) {
+                return;
+            }
+            if (new_context.hasObject(obj)) {
+                let id = new_context.getId(obj);
+                if (need_record_id.has(id)) {
+                    obj.__refId = id;
+                }
+            }
+            if (Array.isArray(obj)) {
+                for (const item of obj) {
+                    record_id_recursion(item);
+                }
+            } else {
+                for (const key in obj) {
+                    if (Object.prototype.hasOwnProperty.call(obj, key)) {
+                        record_id_recursion(obj[key]);
+                    }
+                }
+            }
+        };
+        let result = serialize_recursion(this);
+        record_id_recursion(result);
+        return result;
+    }
+
+    /**
+     * 从 JSON 对象反序列化。
+     * 内部会调用 TypeRegistry.revive 方法，具体行为见其文档。
+     * @param obj 包含 __registerType 的 JSON 对象
+     * @returns 反序列化的实例
+     * @throws SerializeError 当恢复失败时
+     */
+    static deserialize(obj: any): Serializable {
+        const result = TypeRegistry.revive(obj);
+        if (result instanceof Serializable) {
+            return result;
+        } else {
+            console.log("Error on deserializing object: ", obj);
+            throw new SerializeError("Cannot deserialize object to Serializable.");
+        }
+    }
+}
+
+import { Player } from "./player.js";
+import { deepMerge } from "./utils.js";
+
+export class Team {
+    static Red = "red";
+    static Black = "black";
+    static None = "none";
+
+    static enemy(to: string) {
+        switch (to) {
+            case Team.Red:
+                return Team.Black;
+            case Team.Black:
+                return Team.Red;
+            default:
+                return Team.None;
+        }
+    }
+}
+
+export const TeamPlayerMap = {
+    [Team.Red]: new Player(Team.Red),
+    [Team.Black]: new Player(Team.Black),
+    [Team.None]: new Player(Team.None),
+};
+
+export function getPlayerFromTeam(team: string) {
+    return TeamPlayerMap[team] ?? TeamPlayerMap[Team.None];
+}
+
+export function mergePlayerFromTeam(team: string, player: Player) {
+    deepMerge(TeamPlayerMap[team], player, true);
+}
+import { deepCopy } from "./utils.js";
+
+window.onload = () => {
+    // 测试循环引用
+    const obj: any = { name: "Object" };
+    obj.self = obj;
+    obj.data = [1, 2, 3];
+    obj.data.push(obj); // 数组中包含对象自身
+
+    const copy = deepCopy(obj);
+
+    console.log(copy !== obj); // true
+    console.log(copy.self === copy); // true (循环引用保持)
+    console.log(copy.data[3] === copy); // true (数组中的循环引用)
+
+}
+import { Serializable, TypeRegistry } from "./serialize.js";
+
+interface I {
+    apply(): void;
+}
+
+@TypeRegistry.register()
+class B extends Serializable implements I {
+    apply(): void {}
+    apply2(): void {}
+}
+
+class Box<T> {
+    item: T;
+    constructor(item: T) {
+        this.item = item;
+    }
+}
+
+class C<T> {
+    list: Array<Box<T>> = [];
+
+    add(item: Box<T>): void {
+        this.list.push(item);
+    }
+}
+
+function main() {
+    let container = new C<I>();
+    let box = new Box(new B);
+    container.add(box);
+}
+
+main();import { Damage } from "./damage.js";
+import { Serializable } from "./serialize.js";
+
+export abstract class Trigger extends Serializable {
+    public event: string;
+    abstract action(...args: any[]): void;
+
+    constructor(event: string) {
+        super();
+        this.event = event;
+    }
+}
+
+export class TriggerManager {
+    static triggers: Trigger[] = [];
+    static addTrigger(trigger: Trigger) {
+        this.triggers.push(trigger);
+    }
+    static trigger(event: string, ...args: any[]) {
+        for (let trigger of this.triggers) {
+            if (trigger.event === event) {
+                console.log(`Trigger: `, trigger);
+                trigger.action(...args);
+            }
+        }
+    }
+    static setTriggers(triggers: Trigger[]) {
+        this.triggers = triggers;
+    }
+}
+
+export abstract class DamageTrigger extends Trigger {
+    public static event: string = "DamageTrigger";
+    constructor() {
+        super("DamageTrigger");
+    }
+}
+
+function isObject(obj: unknown): obj is object {
+    return typeof obj === "object" && obj !== null;
+}
+
+/**
+ * 深拷贝一个对象
+ * @param value 原始值
+ * @param seen 用于存储中间状态
+ * @returns 生成的副本
+ */
+export function deepCopy<T>(value: T, seen: WeakMap<any, any> = new WeakMap()): T {
+    // 处理基本类型和函数
+    if (typeof value !== "object" || value === null) {
+        return value;
+    }
+
+    // 处理循环引用
+    if (seen.has(value)) {
+        return seen.get(value);
+    }
+
+    // 处理 Date 对象
+    if (value instanceof Date) {
+        const copy = new Date(value) as T;
+        seen.set(value, copy);
+        return copy;
+    }
+
+    // 处理 RegExp 对象
+    if (value instanceof RegExp) {
+        const copy = new RegExp(value.source, value.flags) as T;
+        seen.set(value, copy);
+        return copy;
+    }
+
+    // 处理 Set
+    if (value instanceof Set) {
+        const copy = new Set() as Set<any>;
+        seen.set(value, copy);
+        value.forEach((v) => copy.add(deepCopy(v, seen)));
+        return copy as T;
+    }
+
+    // 处理 Map
+    if (value instanceof Map) {
+        const copy = new Map() as Map<any, any>;
+        seen.set(value, copy);
+        value.forEach((v, k) => copy.set(deepCopy(k, seen), deepCopy(v, seen)));
+        return copy as T;
+    }
+
+    // 处理 Array
+    if (Array.isArray(value)) {
+        const copy: any[] = [];
+        seen.set(value, copy);
+        value.forEach((v, i) => (copy[i] = deepCopy(v, seen)));
+        return copy as T;
+    }
+
+    // 处理普通对象
+    const copy = Object.create(Object.getPrototypeOf(value));
+    seen.set(value, copy);
+
+    // 复制所有属性（包括 Symbol 属性）
+    Reflect.ownKeys(value).forEach((key) => {
+        copy[key] = deepCopy((value as any)[key], seen);
+    });
+
+    return copy;
+}
+
+export function notNull(value: any) {
+    return value !== null && value !== undefined;
+}
+
+export function deepMerge<T>(target: T, source: T, removeFuckingExtraArrayItems = false) {
+    const stack = new Set<any>();
+    /**
+     * @returns 是否可以合并
+     */
+    function mergeData(target: any, source: any): boolean {
+        if (!isObject(source) || !isObject(target)) return false;
+        if (source instanceof Array && target instanceof Array) {
+            if (removeFuckingExtraArrayItems) {
+                if (source.length < target.length) {
+                    target.length = source.length;
+                }
+            }
+            for (let i = 0; i < source.length; i++) {
+                if (!mergeData(target[i], source[i])) {
+                    target[i] = source[i];
+                }
+            }
+            return true;
+        }
+        if (source instanceof HTMLElement && target instanceof HTMLElement) {
+            return false;
+        }
+        if (source instanceof Date && target instanceof Date) {
+            return false;
+        }
+        if (source instanceof RegExp && target instanceof RegExp) {
+            return false;
+        }
+        if (source instanceof Map && target instanceof Map) {
+            source.forEach((value, key) => {
+                let mergedValue = mergeData(target.get(key), value);
+                target.set(key, mergedValue ? mergedValue : value);
+            });
+            return true;
+        }
+        if (source instanceof Set && target instanceof Set) {
+            return false;
+        }
+        if (stack.has(source)) {
+            throw new Error("循环引用的对象");
+        }
+        stack.add(source);
+        let keys = Reflect.ownKeys(source); // source 中所有的键名
+
+        keys.forEach((key: PropertyKey) => {
+            const value = source[key as keyof typeof source];
+            if (isObject(value)) {
+                if (target[key as keyof typeof target]) {
+                    // 如果已经存在
+                    mergeData(target[key as keyof typeof target], value);
+                } else {
+                    // 不存在，直接赋值
+                    target[key as keyof typeof target] = value;
+                }
+            } else {
+                // 如果不是对象，直接赋值
+                target[key as keyof typeof target] = value;
+            }
+        });
+
+        stack.delete(source);
+        return true;
+    }
+
+    mergeData(target, source);
+}
+import { Position } from "./position.js";
+import { PositionedItem } from "./positionedItem.js";
+
+export class Vector2 {
+    x: number;
+    y: number;
+
+    constructor(x: number, y: number) {
+        this.x = x;
+        this.y = y;
+    }
+
+    static point(origin: PositionedItem, target: PositionedItem) {
+        return new Vector2(target.x - origin.x, target.y - origin.y);
+    }
+
+    static of(source: PositionedItem) {
+        return new Vector2(source.x, source.y);
+    }
+
+    static zero() {
+        return new Vector2(0, 0);
+    }
+
+    add(v: PositionedItem) {
+        return new Vector2(this.x + v.x, this.y + v.y);
+    }
+
+    sub(v: PositionedItem) {
+        return new Vector2(this.x - v.x, this.y - v.y);
+    }
+
+    mul(s: number) {
+        return new Vector2(this.x * s, this.y * s);
+    }
+
+    div(s: number) {
+        return new Vector2(this.x / s, this.y / s);
+    }
+
+    get length() {
+        return Math.sqrt(this.x * this.x + this.y * this.y);
+    }
+
+    dot(v: Vector2) {
+        return this.x * v.x + this.y * v.y;
+    }
+
+    normalize() {
+        return this.div(this.length);
+    }
+    
+    equals(other: PositionedItem): boolean {
+        return this.x === other.x && this.y === other.y;
+    }
+}
